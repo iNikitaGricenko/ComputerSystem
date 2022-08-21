@@ -1,28 +1,21 @@
 package com.wolfhack.cloud.dto.mapper;
 
-import com.wolfhack.cloud.dto.FullUserDto;
-import com.wolfhack.cloud.dto.ShortUserDto;
+import com.wolfhack.cloud.dto.UserCreationDTO;
+import com.wolfhack.cloud.dto.UserResponseDTO;
 import com.wolfhack.cloud.model.User;
+import com.wolfhack.cloud.model.UserSecurity;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    UserResponseDTO toDto(User user);
 
-     FullUserDto toFullDto(User user);
+    User toUser(UserResponseDTO dto);
+    User toUser(UserCreationDTO dto);
 
-     ShortUserDto toShortDto(User user);
-
-     User toUser(FullUserDto dto);
-
-     User toUser(ShortUserDto dto);
-
-     List<FullUserDto> toFullDtos(List<User> users);
-
-     List<ShortUserDto> toShortDtos(List<User> users);
+    List<UserResponseDTO> toDtos(List<User> usesrs);
 
 }
