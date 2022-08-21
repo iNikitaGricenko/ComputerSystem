@@ -4,6 +4,8 @@ import com.wolfhack.cloud.customer.dto.mapper.OrderMapper;
 import com.wolfhack.cloud.customer.handler.error.ErrorBody;
 import com.wolfhack.cloud.customer.dto.OrderRequestDTO;
 import com.wolfhack.cloud.customer.dto.OrderResponseDTO;
+import com.wolfhack.cloud.customer.model.Order;
+import com.wolfhack.cloud.customer.service.implement.OrderKafkaSenderInterface;
 import com.wolfhack.cloud.customer.service.implement.OrderServiceInterface;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +27,7 @@ import javax.validation.Valid;
 public class OrderRestController {
     private final OrderServiceInterface orderService;
     private final OrderMapper orderMapper;
+    private final OrderKafkaSenderInterface orderKafkaSender;
 
     @GetMapping
     @PageableAsQueryParam
@@ -46,6 +49,10 @@ public class OrderRestController {
     @PostMapping
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
     public OrderResponseDTO add(@Valid @RequestBody OrderRequestDTO requestDTO) {
-        return orderMapper.toResponseDTO(orderService.save(orderMapper.toOrderFromRequest(requestDTO)));
+        Order order = orderMapper.toOrderFromRequest(requestDTO);
+        Order savedOrder = orderService.save(order);
+        OrderResponseDTO responseDTO = orderMapper.toResponseDTO(savedOrder);
+        orderKafkaSender.send(responseDTO.getProduct());
+        return responseDTO;
     }
 }
