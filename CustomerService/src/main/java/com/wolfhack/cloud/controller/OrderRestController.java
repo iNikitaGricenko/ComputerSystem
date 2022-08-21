@@ -3,6 +3,7 @@ package com.wolfhack.cloud.controller;
 import com.wolfhack.cloud.dto.OrderRequestDTO;
 import com.wolfhack.cloud.dto.OrderResponseDTO;
 import com.wolfhack.cloud.dto.mapper.OrderMapper;
+import com.wolfhack.cloud.handler.error.ErrorBody;
 import com.wolfhack.cloud.service.implement.OrderServiceInterface;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +37,7 @@ public class OrderRestController {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(
                     implementation = OrderResponseDTO.class))),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(
-                    implementation = OrderResponseDTO.class)))
+                    implementation = ErrorBody.class)))
     })
     public OrderResponseDTO getOne(@PathVariable("id") Long id) {
         return orderMapper.toResponseDTO(orderService.findById(id));
