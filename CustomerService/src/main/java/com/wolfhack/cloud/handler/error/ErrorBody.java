@@ -15,7 +15,7 @@ public class ErrorBody {
     private final int status;
     @Schema(example = "Bad Request")
     private final String error;
-    @Schema(example = "/api/v1/cpu")
+    @Schema(example = "/api/order")
     private final String path;
     @Schema(example = "Required String parameter 'name' is not present")
     private final String message;
