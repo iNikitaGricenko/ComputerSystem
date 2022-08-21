@@ -14,12 +14,6 @@ public class FullUserDto implements Serializable {
     private final String password;
     private final String photo;
     private final boolean active;
-    private final String activationCode;
-    private final String firstName;
-    private final String secondName;
-    private final String middleName;
-    private final String phone;
-    private final String city;
     private final Date registerDate;
     private final Role role;
 }

@@ -18,6 +18,7 @@ services:
   mongodb:
     image: mongo
     container_name: mongo-eshop
+    restart: always
     ports:
       - "27017:27017"
     volumes:
@@ -45,6 +46,7 @@ services:
     build:
       context: ./Eureka/
       dockerfile: Dockerfile-dev
+    restart: on-failure
     ports:
       - "8761:8761"
   gateway-server:
@@ -52,9 +54,9 @@ services:
     build:
       context: ./Gateway/
       dockerfile: Dockerfile-dev
+    restart: on-failure
     ports:
       - "8080:8080"
-    restart: on-failure
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
     depends_on:
@@ -65,13 +67,14 @@ services:
     build:
       context: ./OAuth2/
       dockerfile: Dockerfile-dev
+    restart: on-failure
     ports:
       - "8081:8081"
-    restart: on-failure
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
     depends_on:
       - eureka-server
+      - mysql
 # End Cloud
 
 # Start Services
@@ -80,15 +83,29 @@ services:
     build:
       context: ./ProductService/
       dockerfile: Dockerfile-dev
+    restart: on-failure
     ports:
       - "8091:8091"
-    restart: on-failure
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
     depends_on:
       - eureka-server
       - gateway-server
       - mongodb
+  customer-service:
+    container_name: customer-service
+    build:
+      context: ./CustomerService/
+      dockerfile: Dockerfile-dev
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    depends_on:
+      - eureka-server
+      - gateway-server
+      - mysql
 # End Services
 
 volumes:

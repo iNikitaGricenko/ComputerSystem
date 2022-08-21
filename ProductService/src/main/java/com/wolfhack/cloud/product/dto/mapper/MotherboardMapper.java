@@ -4,10 +4,11 @@ import com.wolfhack.cloud.product.dto.MotherboardFullDTO;
 import com.wolfhack.cloud.product.dto.MotherboardResponseDTO;
 import com.wolfhack.cloud.product.model.Motherboard;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface MotherboardMapper {
     MotherboardResponseDTO toMotherboardResponseDTO(Motherboard motherboard);
     Motherboard toMotherboard(MotherboardFullDTO dto);

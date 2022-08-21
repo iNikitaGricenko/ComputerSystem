@@ -18,12 +18,6 @@ public class UserResponseDTO implements Serializable {
     private final String username;
     @NotNull
     private final String password;
-    private final String firstName;
-    private final String secondName;
-    private final String middleName;
-    private final String phone;
-    private final String city;
-    private final Date registerDate;
     @NotNull
     private final Role role;
     @NotNull
