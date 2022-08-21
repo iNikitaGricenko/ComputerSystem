@@ -5,6 +5,7 @@ import com.wolfhack.cloud.exception.UserNotFoundException;
 import com.wolfhack.cloud.model.User;
 import com.wolfhack.cloud.model.UserSecurity;
 import com.wolfhack.cloud.repository.UserRepository;
+import com.wolfhack.cloud.service.implement.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
@@ -22,15 +23,15 @@ import static com.wolfhack.cloud.model.Role.USER;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
 
+    @Override
     public User save(User user) throws IOException {
         userRepository.findByLogin(user.getLogin())
                 .ifPresentOrElse(found -> {throw new UserExistsException();},
                         () -> {
-                            Date date = new Date(Calendar.getInstance().getTime().getTime());
                             String bcryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
                             user.setPassword(bcryptedPassword);
                             user.setRole(USER);
@@ -41,6 +42,7 @@ public class UserService {
     }
 
     @SneakyThrows
+    @Override
     public User edit(User user) {
         return userRepository.findById(user.getId())
                 .map(foundUser -> {
@@ -55,15 +57,18 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
+    @Override
     public Page<User> getAll(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
+    @Override
     public User getOne(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
     }
 
+    @Override
     public User findByLogin(String login) {
         return userRepository.findByLogin(login)
                 .orElseThrow(UserNotFoundException::new);
