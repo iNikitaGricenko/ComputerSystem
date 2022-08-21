@@ -28,11 +28,4 @@ public interface ProductMapper {
     List<ProductMiniDTO> toProductListDTOFromSsd(List<Ssd> ssd);
 
     List<ProductMiniDTO> toProductListDTOFromMotherboard(List<Motherboard> motherboard);
-
-    com.wolfhack.cloud.model.Product productResponseDTOToProduct(com.wolfhack.cloud.dto.ProductResponseDTO productResponseDTO);
-
-    com.wolfhack.cloud.dto.ProductResponseDTO productToProductResponseDTO(com.wolfhack.cloud.model.Product product);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Product updateProductFromProductResponseDTO(com.wolfhack.cloud.dto.ProductResponseDTO productResponseDTO, @MappingTarget Product product);
 }
