@@ -38,11 +38,11 @@ public class OrderRestController {
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(
                     implementation = OrderResponseDTO.class)))
     })
-    public OrderResponseDTO getAll(@PathVariable("id") Long id) {
+    public OrderResponseDTO getOne(@PathVariable("id") Long id) {
         return orderMapper.toResponseDTO(orderService.findById(id));
     }
 
-    @GetMapping
+    @PostMapping
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
     public OrderResponseDTO add(@Valid @RequestBody OrderRequestDTO requestDTO) {
         return orderMapper.toResponseDTO(orderService.save(orderMapper.toOrderFromRequest(requestDTO)));
