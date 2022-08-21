@@ -1,5 +1,7 @@
 package com.wolfhack.cloud.customer.service;
 
+import com.wolfhack.cloud.customer.dto.OrderResponseDTO;
+import com.wolfhack.cloud.customer.dto.ProductResponseDTO;
 import com.wolfhack.cloud.customer.repository.OrderRepository;
 import com.wolfhack.cloud.customer.enums.OrderStatus;
 import com.wolfhack.cloud.customer.model.Customer;
@@ -8,6 +10,7 @@ import com.wolfhack.cloud.customer.service.implement.OrderServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class OrderService implements OrderServiceInterface {
+
     private final OrderRepository orderRepository;
 
     @Override
