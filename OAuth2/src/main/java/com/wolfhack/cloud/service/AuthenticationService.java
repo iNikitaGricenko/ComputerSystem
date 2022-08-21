@@ -1,9 +1,8 @@
 package com.wolfhack.cloud.service;
 
-import com.wolfhack.cloud.client.UserClient;
-import com.wolfhack.cloud.dto.FullUserDto;
-import com.wolfhack.cloud.model.Role;
-import com.wolfhack.cloud.model.User;
+import com.wolfhack.cloud.exception.UserNotFoundException;
+import com.wolfhack.cloud.model.UserSecurity;
+import com.wolfhack.cloud.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,19 +15,20 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
 
-    private final UserClient userClient;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String login) {
-        FullUserDto user = userClient.findByLogin(login);
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getValue());
-        return User.builder()
-                .id(user.getId())
-                .username(user.getLogin())
-                .password(user.getPassword())
-                .authorities(Collections.singleton(authority))
-                .enabled(user.isActive())
-                .build();
+        return userRepository.findByLogin(login).map(user -> {
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getValue());
+            return UserSecurity.builder()
+                    .id(user.getId())
+                    .username(user.getLogin())
+                    .password(user.getPassword())
+                    .authorities(Collections.singleton(authority))
+                    .enabled(user.isActive())
+                    .build();
+        }).orElseThrow(UserNotFoundException::new);
     }
 
 }

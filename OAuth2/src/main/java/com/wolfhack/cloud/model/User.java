@@ -1,78 +1,73 @@
 package com.wolfhack.cloud.model;
 
-import lombok.Builder;
-import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.*;
 
-import java.util.Collection;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Data
-@Builder
-public class User implements UserDetails {
+@Getter @Setter
+@Entity(name = "users")
+public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
-    private String password;
+
+    @Column(name = "login")
+    private String login;
+
+    @Column(name = "username")
     private String username;
-    private Collection<? extends GrantedAuthority> authorities;
 
-    private final boolean accountNonExpired = true;
-    private final boolean accountNonLocked = true;
-    private final boolean credentialsNonExpired = true;
-    private boolean enabled;
+    @Column(name = "password")
+    private String password;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
+    @Column(name = "photo")
+    private String photo;
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+    @Column(name = "active")
+    private boolean active;
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
+    @Column(name = "activation_code")
+    private String activationCode;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
+    @Column(name = "second_name")
+    private String secondName;
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
+    @Column(name = "middle_name")
+    private String middleName;
 
-    @Override
-    public boolean isEnabled() {
-        return enabled;
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "register_date")
+    private LocalDateTime registerDate = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public boolean isAdmin() {
+        return Objects.equals(role.toString(), "ADMIN");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getPassword().equals(user.getPassword())
-                && getUsername().equals(user.getUsername());
+        return login.equals(user.login);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPassword(), getUsername());
+        return Objects.hash(id);
     }
-
 }

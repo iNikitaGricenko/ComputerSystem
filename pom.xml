@@ -22,7 +22,6 @@
         <module>OAuth2</module>
         <module>Eureka</module>
         <module>ProductService</module>
-        <module>UserService</module>
     </modules>
 
     <properties>

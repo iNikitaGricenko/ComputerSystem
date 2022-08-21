@@ -89,20 +89,6 @@ services:
       - eureka-server
       - gateway-server
       - mongodb
-  user-service:
-    container_name: user-service
-    build:
-      context: ./UserService/
-      dockerfile: Dockerfile-dev
-    ports:
-      - "8085:8085"
-    restart: on-failure
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
-    depends_on:
-      - eureka-server
-      - gateway-server
-      - mysql
 # End Services
 
 volumes:

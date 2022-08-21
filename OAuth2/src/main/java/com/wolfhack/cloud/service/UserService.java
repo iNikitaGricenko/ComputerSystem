@@ -3,6 +3,7 @@ package com.wolfhack.cloud.service;
 import com.wolfhack.cloud.exception.UserExistsException;
 import com.wolfhack.cloud.exception.UserNotFoundException;
 import com.wolfhack.cloud.model.User;
+import com.wolfhack.cloud.model.UserSecurity;
 import com.wolfhack.cloud.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class UserService {
                             String bcryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
                             user.setPassword(bcryptedPassword);
                             user.setRole(USER);
-                            user.setRegisterDate(date);
+                            user.setRegisterDate(LocalDateTime.now());
                             user.setPhoto("user-icon.png");
                         });
         return userRepository.save(user);
