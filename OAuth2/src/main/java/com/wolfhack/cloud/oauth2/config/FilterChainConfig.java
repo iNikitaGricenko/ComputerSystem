@@ -58,7 +58,9 @@ public class FilterChainConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests(authorizeRequest ->
-                        authorizeRequest.anyRequest().authenticated())
+                        authorizeRequest
+                                .antMatchers("/api/user").not().authenticated()
+                                .anyRequest().authenticated())
                 .formLogin(withDefaults());
         return http.build();
     }
