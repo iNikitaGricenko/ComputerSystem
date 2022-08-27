@@ -1,10 +1,10 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.dto.SsdFullDTO;
-import com.wolfhack.cloud.product.dto.SsdResponseDTO;
-import com.wolfhack.cloud.product.dto.mapper.SsdMapper;
-import com.wolfhack.cloud.product.handler.error.ErrorBody;
-import com.wolfhack.cloud.product.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.model.dto.SsdFullDTO;
+import com.wolfhack.cloud.product.model.dto.SsdResponseDTO;
+import com.wolfhack.cloud.product.mapper.SsdMapper;
+import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
+import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.service.SsdService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +35,7 @@ public class SsdRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SsdResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public SsdResponseDTO getSsdById(@PathVariable("id") Double id) {
+    public SsdResponseDTO getSsdById(@PathVariable("id") Long id) {
         return ssdMapper.toSsdResponseDTO(ssdService.findById(id));
     }
 

@@ -1,11 +1,39 @@
 version: "3.7"
 services:
+  # Start Zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+  # End Zookeeper
+  # Start Kafka
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  # End Kafka
   # Start Mysql
   mysql:
     image: mysql
     container_name: mysql-eshop
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: unless-stopped
     environment:
       - MYSQL_ROOT_USERNAME=boss
       - MYSQL_ROOT_PASSWORD=WolFHacK702
@@ -13,12 +41,11 @@ services:
     ports:
       - "3306:3306"
   # End Mysql
-
   # Start Mongo
   mongodb:
     image: mongo
     container_name: mongo-eshop
-    restart: always
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
@@ -29,7 +56,7 @@ services:
   mongo-express:
     image: mongo-express
     container_name: mongo-express-eshop
-    restart: always
+    restart: unless-stopped
     ports:
       - "8082:8081"
     environment:
@@ -46,7 +73,7 @@ services:
     build:
       context: ./Eureka/
       dockerfile: Dockerfile-dev
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "8761:8761"
   gateway-server:
@@ -54,7 +81,7 @@ services:
     build:
       context: ./Gateway/
       dockerfile: Dockerfile-dev
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
@@ -67,7 +94,7 @@ services:
     build:
       context: ./OAuth2/
       dockerfile: Dockerfile-dev
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "8081:8081"
     environment:
@@ -83,7 +110,7 @@ services:
     build:
       context: ./ProductService/
       dockerfile: Dockerfile-dev
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "8091:8091"
     environment:
@@ -97,7 +124,7 @@ services:
     build:
       context: ./CustomerService/
       dockerfile: Dockerfile-dev
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "8085:8085"
     environment:

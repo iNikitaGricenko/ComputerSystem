@@ -1,10 +1,10 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.dto.CpuFullDTO;
-import com.wolfhack.cloud.product.dto.CpuResponseDTO;
-import com.wolfhack.cloud.product.dto.mapper.CpuMapper;
-import com.wolfhack.cloud.product.handler.error.ErrorBody;
-import com.wolfhack.cloud.product.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
+import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
+import com.wolfhack.cloud.product.mapper.CpuMapper;
+import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
+import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.service.CpuService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,7 +34,7 @@ public class CpuRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CpuResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public CpuResponseDTO getCpuById(@PathVariable("id") Double id) {
+    public CpuResponseDTO getCpuById(@PathVariable("id") Long id) {
         return cpuMapper.toCpuResponseDTO(cpuService.findById(id));
     }
 

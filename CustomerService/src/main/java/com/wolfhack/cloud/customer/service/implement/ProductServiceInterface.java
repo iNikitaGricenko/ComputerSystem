@@ -1,13 +1,13 @@
 package com.wolfhack.cloud.customer.service.implement;
 
-import com.wolfhack.cloud.customer.model.Product;
+import com.wolfhack.cloud.customer.model.OrderItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductServiceInterface {
-    Product save(Product product);
+    OrderItem save(OrderItem orderItem);
 
-    Product findById(Long id);
+    OrderItem findById(Long id);
 
-    Page<Product> findAll(Pageable pageable);
+    Page<OrderItem> findAll(Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package com.wolfhack.cloud.product.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -13,19 +14,19 @@ import javax.validation.constraints.Size;
 @Document("cpus")
 public class Cpu {
 
-    @MongoId(FieldType.DOUBLE)
-    @NotNull
-    @Min(0)
-    private Double id;
+    @MongoId(FieldType.DECIMAL128)
+    @NotNull @Min(0)
+    private Long id;
     @NotNull
     @Size(min = 5)
     private String name;
     @NotNull
     @Size(min = 5)
     private String model;
-    @NotNull
-    @Min(5)
-    private double cost;
+    @NotNull @Min(5)
+    private int quantity;
+    @NotNull @Min(0)
+    private float unitPrice;
     private String[] photosNames;
 
     private long cores;

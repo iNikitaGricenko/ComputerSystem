@@ -9,8 +9,10 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "users")
 public class User {
 

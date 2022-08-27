@@ -1,19 +1,18 @@
 package com.wolfhack.cloud.oauth2.service.implement;
 
-import com.wolfhack.cloud.oauth2.model.User;
+import com.wolfhack.cloud.oauth2.model.dto.UserCreationDTO;
+import com.wolfhack.cloud.oauth2.model.dto.UserResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.io.IOException;
-
 public interface UserServiceInterface {
-    User save(User user) throws IOException;
+    UserResponseDTO save(UserCreationDTO user);
 
-    User edit(User user);
+    UserResponseDTO edit(UserResponseDTO user);
 
-    Page<User> getAll(Pageable pageable);
+    Page<UserResponseDTO> getAll(Pageable pageable);
 
-    User getOne(Long id);
+    UserResponseDTO getOne(Long id);
 
-    User findByLogin(String login);
+    UserResponseDTO findByLogin(String login);
 }

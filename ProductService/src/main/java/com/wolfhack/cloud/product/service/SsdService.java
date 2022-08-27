@@ -28,7 +28,7 @@ public class SsdService implements SsdServiceInterface {
     }
 
     @Override
-    public Ssd findById(Double id) {
+    public Ssd findById(Long id) {
         return ssdRepository.findById(id)
                 .orElseThrow(SsdNotFoundException::new);
     }
