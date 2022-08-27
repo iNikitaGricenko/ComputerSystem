@@ -1,6 +1,7 @@
 package com.wolfhack.cloud.oauth2.service;
 
 import com.wolfhack.cloud.oauth2.exception.UserNotFoundException;
+import com.wolfhack.cloud.oauth2.model.User;
 import com.wolfhack.cloud.oauth2.model.UserSecurity;
 import com.wolfhack.cloud.oauth2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +20,20 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) {
-        return userRepository.findByLogin(login).map(user -> {
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getValue());
-            return UserSecurity.builder()
-                    .id(user.getId())
-                    .username(user.getLogin())
-                    .password(user.getPassword())
-                    .authorities(Collections.singleton(authority))
-                    .enabled(user.isActive())
-                    .build();
-        }).orElseThrow(UserNotFoundException::new);
+        return userRepository.findByLogin(login)
+                .map(AuthenticationService::buildSecurityUser)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    private static UserSecurity buildSecurityUser(User user) {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getValue());
+        return UserSecurity.builder()
+                .id(user.getId())
+                .username(user.getLogin())
+                .password(user.getPassword())
+                .authorities(Collections.singleton(authority))
+                .enabled(user.isActive())
+                .build();
     }
 
 }

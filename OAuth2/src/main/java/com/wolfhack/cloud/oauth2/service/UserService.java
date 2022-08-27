@@ -1,73 +1,55 @@
 package com.wolfhack.cloud.oauth2.service;
 
+import com.wolfhack.cloud.oauth2.model.dto.UserCreationDTO;
+import com.wolfhack.cloud.oauth2.model.dto.UserResponseDTO;
 import com.wolfhack.cloud.oauth2.exception.UserExistsException;
 import com.wolfhack.cloud.oauth2.exception.UserNotFoundException;
-import com.wolfhack.cloud.oauth2.model.User;
+import com.wolfhack.cloud.oauth2.factory.implement.UserFactoryInterface;
 import com.wolfhack.cloud.oauth2.repository.UserRepository;
 import com.wolfhack.cloud.oauth2.service.implement.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static com.wolfhack.cloud.oauth2.model.Role.USER;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
+    private final UserFactoryInterface userFactory;
 
     @Override
-    public User save(User user) throws IOException {
+    public UserResponseDTO save(UserCreationDTO user) {
         userRepository.findByLogin(user.getLogin())
-                .ifPresentOrElse(found -> {throw new UserExistsException();},
-                        () -> {
-                            String bcryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-                            user.setPassword(bcryptedPassword);
-                            user.setRole(USER);
-                            user.setRegisterDate(LocalDateTime.now());
-                            user.setPhoto("user-icon.png");
-                        });
-        return userRepository.save(user);
+                .ifPresent(found -> {throw new UserExistsException();});
+
+        return userFactory.create(userRepository.save(userFactory.create(user)));
     }
 
     @SneakyThrows
     @Override
-    public User edit(User user) {
-        return userRepository.findById(user.getId())
-                .map(foundUser -> {
-                    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                    Optional.ofNullable(user.getPassword())
-                            .ifPresent(password -> foundUser.setPassword(bCryptPasswordEncoder.encode(password)));
-                    Optional.ofNullable(user.getUsername()).ifPresent(foundUser::setUsername);
-                    Optional.ofNullable(user.getRole()).ifPresent(foundUser::setRole);
-                    Optional.ofNullable(user.getPhoto()).ifPresent(foundUser::setPhoto);
-                    return userRepository.save(user);
-                })
-                .orElseThrow(UserNotFoundException::new);
+    public UserResponseDTO edit(UserResponseDTO user) {
+        return userFactory.create(userRepository.save(userRepository.findById(user.getId())
+                .map(foundUser -> userFactory.edit(foundUser, userFactory.create(user)))
+                .orElseThrow(UserNotFoundException::new)));
     }
 
     @Override
-    public Page<User> getAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserResponseDTO> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userFactory::create);
     }
 
     @Override
-    public User getOne(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+    public UserResponseDTO getOne(Long id) {
+        return userFactory.create(userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new));
     }
 
     @Override
-    public User findByLogin(String login) {
-        return userRepository.findByLogin(login)
-                .orElseThrow(UserNotFoundException::new);
+    public UserResponseDTO findByLogin(String login) {
+        return userFactory.create(userRepository.findByLogin(login)
+                .orElseThrow(UserNotFoundException::new));
     }
 }

@@ -28,7 +28,7 @@ public class GpuService implements GpuServiceInterface {
     }
 
     @Override
-    public Gpu findById(Double id) {
+    public Gpu findById(Long id) {
         return gpuRepository.findById(id)
                 .orElseThrow(GpuNotFoundException::new);
     }
