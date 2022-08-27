@@ -39,6 +39,9 @@ public class User {
     @Column(name = "activation_code")
     private String activationCode;
 
+    @Column(name = "activation_url")
+    private String activationUrl;
+
     @Column(name = "register_date")
     private LocalDateTime registerDate = LocalDateTime.now();
 
