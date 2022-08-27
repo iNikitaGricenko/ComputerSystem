@@ -1,16 +1,17 @@
 package com.wolfhack.cloud.customer.service.implement;
 
-import com.wolfhack.cloud.customer.enums.OrderStatus;
-import com.wolfhack.cloud.customer.model.Order;
+import com.wolfhack.cloud.customer.model.dto.CustomerOrderRequestDTO;
+import com.wolfhack.cloud.customer.model.dto.CustomerOrderResponseDTO;
+import com.wolfhack.cloud.customer.model.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderServiceInterface {
-    Order save(Order order);
+    CustomerOrderResponseDTO save(CustomerOrderRequestDTO requestDTO);
 
-    Order changeStatus(Long id, OrderStatus status);
+    CustomerOrderResponseDTO changeStatus(Long id, OrderStatus status);
 
-    Order findById(Long id);
+    CustomerOrderResponseDTO findById(Long id);
 
-    Page<Order> findAll(Pageable pageable);
+    Page<CustomerOrderResponseDTO> findAll(Pageable pageable);
 }

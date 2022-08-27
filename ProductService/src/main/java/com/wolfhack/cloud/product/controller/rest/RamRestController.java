@@ -1,10 +1,10 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.dto.RamFullDTO;
-import com.wolfhack.cloud.product.dto.RamResponseDTO;
-import com.wolfhack.cloud.product.dto.mapper.RamMapper;
-import com.wolfhack.cloud.product.handler.error.ErrorBody;
-import com.wolfhack.cloud.product.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.model.dto.RamFullDTO;
+import com.wolfhack.cloud.product.model.dto.RamResponseDTO;
+import com.wolfhack.cloud.product.mapper.RamMapper;
+import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
+import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.service.RamService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

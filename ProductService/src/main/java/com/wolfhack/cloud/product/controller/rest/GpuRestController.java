@@ -1,10 +1,10 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.dto.GpuFullDTO;
-import com.wolfhack.cloud.product.dto.GpuResponseDTO;
-import com.wolfhack.cloud.product.dto.mapper.GpuMapper;
-import com.wolfhack.cloud.product.handler.error.ErrorBody;
-import com.wolfhack.cloud.product.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.model.dto.GpuFullDTO;
+import com.wolfhack.cloud.product.model.dto.GpuResponseDTO;
+import com.wolfhack.cloud.product.mapper.GpuMapper;
+import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
+import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.service.GpuService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

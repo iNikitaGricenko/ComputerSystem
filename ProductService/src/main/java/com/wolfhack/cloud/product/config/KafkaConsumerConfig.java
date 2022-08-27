@@ -26,7 +26,7 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, ProductPOJO> consumerFactory() {
         JsonDeserializer<ProductPOJO> deserializer = new JsonDeserializer<>(ProductPOJO.class);
         deserializer.setRemoveTypeHeaders(false);
-        deserializer.addTrustedPackages("*");
+        deserializer.addTrustedPackages("com.wolfhack.cloud.customer.*");
         deserializer.setUseTypeMapperForKey(true);
 
         Map<String, Object> properties = new HashMap<>();
