@@ -2,21 +2,26 @@ package com.wolfhack.cloud.customer.model;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity(name = "customers")
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@Entity(name = "customers")
+@SQLDelete(sql = "UPDATE customer_order e " +
+        "SET deleted=true, deleted_at=now() " +
+        "WHERE e.customer_order_id=?")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
+    @Column(name = "customer_id", unique = true)
     private Long id;
 
     @Column(name = "first_name")

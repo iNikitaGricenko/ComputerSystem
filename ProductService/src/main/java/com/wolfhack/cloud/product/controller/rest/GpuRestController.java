@@ -1,10 +1,10 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.dto.GpuFullDTO;
-import com.wolfhack.cloud.product.dto.GpuResponseDTO;
-import com.wolfhack.cloud.product.dto.mapper.GpuMapper;
-import com.wolfhack.cloud.product.handler.error.ErrorBody;
-import com.wolfhack.cloud.product.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.model.dto.GpuFullDTO;
+import com.wolfhack.cloud.product.model.dto.GpuResponseDTO;
+import com.wolfhack.cloud.product.mapper.GpuMapper;
+import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
+import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.service.GpuService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +35,7 @@ public class GpuRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GpuResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public GpuResponseDTO getGpuById(@PathVariable("id") Double id) {
+    public GpuResponseDTO getGpuById(@PathVariable("id") Long id) {
         return gpuMapper.toGpuResponseDTO(gpuService.findById(id));
     }
 

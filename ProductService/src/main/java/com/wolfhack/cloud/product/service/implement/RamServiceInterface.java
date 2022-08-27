@@ -9,7 +9,7 @@ public interface RamServiceInterface {
 
     Ram save(Ram ram);
 
-    Ram findById(Double id);
+    Ram findById(Long id);
 
     Page<Ram> searchByQuery(String query, Pageable pageable);
 }

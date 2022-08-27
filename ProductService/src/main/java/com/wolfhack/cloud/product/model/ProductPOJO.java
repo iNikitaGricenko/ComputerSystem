@@ -6,9 +6,10 @@ import java.io.Serializable;
 
 @Data
 public class ProductPOJO implements Serializable {
-    private Double id;
+    private Long id;
     private String name;
     private String model;
-    private double cost;
-    private Class className;
+    private int quantity;
+    private float unitPrice;
+    private String className;
 }

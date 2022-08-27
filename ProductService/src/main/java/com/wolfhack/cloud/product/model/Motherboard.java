@@ -3,6 +3,7 @@ package com.wolfhack.cloud.product.model;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -16,15 +17,17 @@ import java.util.HashMap;
 @Document("motherboards")
 public class Motherboard {
 
-    @MongoId(FieldType.DOUBLE)
+    @MongoId(FieldType.DECIMAL128)
     @NotNull @Min(0)
-    private Double id;
+    private Long id;
     @NotNull @Size(min = 5)
     private String name;
     @NotNull @Size(min = 5)
     private String model;
     @NotNull @Min(5)
-    private double cost;
+    private int quantity;
+    @NotNull @Min(0)
+    private float unitPrice;
     private String[] photosNames;
 
     private String type;

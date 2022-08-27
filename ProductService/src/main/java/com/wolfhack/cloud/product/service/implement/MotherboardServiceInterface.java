@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 public interface MotherboardServiceInterface {
     Page<Motherboard> findAll(Pageable pageable);
 
-    Motherboard findById(Double id);
+    Motherboard findById(Long id);
 
     Motherboard save(Motherboard motherboard);
 

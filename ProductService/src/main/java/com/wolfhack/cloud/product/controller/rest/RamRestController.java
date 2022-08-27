@@ -1,10 +1,10 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.dto.RamFullDTO;
-import com.wolfhack.cloud.product.dto.RamResponseDTO;
-import com.wolfhack.cloud.product.dto.mapper.RamMapper;
-import com.wolfhack.cloud.product.handler.error.ErrorBody;
-import com.wolfhack.cloud.product.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.model.dto.RamFullDTO;
+import com.wolfhack.cloud.product.model.dto.RamResponseDTO;
+import com.wolfhack.cloud.product.mapper.RamMapper;
+import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
+import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.service.RamService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +35,7 @@ public class RamRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RamResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public RamResponseDTO getRamById(@PathVariable("id") Double id) {
+    public RamResponseDTO getRamById(@PathVariable("id") Long id) {
         return ramMapper.toRamResponseDTO(ramService.findById(id));
     }
 
