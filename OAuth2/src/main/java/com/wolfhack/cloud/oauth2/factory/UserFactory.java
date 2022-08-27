@@ -6,14 +6,23 @@ import com.wolfhack.cloud.oauth2.factory.mapper.UserMapper;
 import com.wolfhack.cloud.oauth2.factory.implement.UserFactoryInterface;
 import com.wolfhack.cloud.oauth2.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.id.UUIDGenerator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 import static com.wolfhack.cloud.oauth2.model.Role.USER;
+import static java.lang.String.format;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserFactory implements UserFactoryInterface {
@@ -23,11 +32,21 @@ public class UserFactory implements UserFactoryInterface {
     @Override
     public User create(UserCreationDTO requestDTO) {
         User user = userMapper.toUser(requestDTO);
+
+        Object[] args = new Random().ints(9, 1, 10).mapToObj(value -> --value).toArray();
+        String activationCode = format("%d%d%d-%d%d%d-%d%d%d", args);
+        String activationUrl = UUID.randomUUID().toString().replace("-", "/").toLowerCase();
+
+        String defaultPhotoName = "user-icon.png";
         String bcryptedPassword = getPasswordEncoder().encode(user.getPassword());
+
         user.setPassword(bcryptedPassword);
         user.setRole(USER);
         user.setRegisterDate(LocalDateTime.now());
-        user.setPhoto("user-icon.png");
+        user.setPhoto(defaultPhotoName);
+        user.setActivationCode(activationCode);
+        user.setActivationUrl(activationUrl);
+        user.setActive(false);
         return user;
     }
 
