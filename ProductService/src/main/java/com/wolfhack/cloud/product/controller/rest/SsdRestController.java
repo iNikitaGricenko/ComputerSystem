@@ -35,7 +35,7 @@ public class SsdRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SsdResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public SsdResponseDTO getSsdById(@PathVariable("id") Double id) {
+    public SsdResponseDTO getSsdById(@PathVariable("id") Long id) {
         return ssdMapper.toSsdResponseDTO(ssdService.findById(id));
     }
 

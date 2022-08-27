@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MotherboardRepository extends MongoRepository<Motherboard, Double> {
+public interface MotherboardRepository extends MongoRepository<Motherboard, Long> {
 
     @Query("{ $text: { $search: ?0 }}")
     Page<Motherboard> searchCpusByQuery(String query, Pageable pageable);

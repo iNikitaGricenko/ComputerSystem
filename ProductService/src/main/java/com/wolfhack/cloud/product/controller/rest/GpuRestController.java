@@ -35,7 +35,7 @@ public class GpuRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GpuResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public GpuResponseDTO getGpuById(@PathVariable("id") Double id) {
+    public GpuResponseDTO getGpuById(@PathVariable("id") Long id) {
         return gpuMapper.toGpuResponseDTO(gpuService.findById(id));
     }
 

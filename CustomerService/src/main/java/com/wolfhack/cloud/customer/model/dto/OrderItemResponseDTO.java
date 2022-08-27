@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Data
 public class OrderItemResponseDTO implements Serializable {
     @Schema(example = "3")
-    private final String id;
+    private final Long id;
     @Schema(example = "Intel Core i3")
     private final String name;
     @Schema(example = "i83da")

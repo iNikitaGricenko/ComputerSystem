@@ -9,7 +9,7 @@ public interface CpuServiceInterface {
 
     Cpu save(Cpu cpu);
 
-    Cpu findById(Double id);
+    Cpu findById(Long id);
 
     Page<Cpu> searchByQuery(String query, Pageable pageable);
 }

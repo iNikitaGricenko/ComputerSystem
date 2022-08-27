@@ -8,7 +8,8 @@ import java.io.Serializable;
 public class CpuFullDTO implements Serializable {
     private final String name;
     private final String model;
-    private final double cost;
+    private final int quantity;
+    private final float unitPrice;
     private final String[] photosNames;
     private final long cores;
     private final long threads;

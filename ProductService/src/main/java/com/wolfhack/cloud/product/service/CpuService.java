@@ -28,7 +28,7 @@ public class CpuService implements CpuServiceInterface {
     }
 
     @Override
-    public Cpu findById(Double id) {
+    public Cpu findById(Long id) {
         return cpuRepository.findById(id)
                 .orElseThrow(CpuNotFoundException::new);
     }

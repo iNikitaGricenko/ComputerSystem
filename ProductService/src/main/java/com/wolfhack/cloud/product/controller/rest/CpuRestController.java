@@ -34,7 +34,7 @@ public class CpuRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CpuResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public CpuResponseDTO getCpuById(@PathVariable("id") Double id) {
+    public CpuResponseDTO getCpuById(@PathVariable("id") Long id) {
         return cpuMapper.toCpuResponseDTO(cpuService.findById(id));
     }
 

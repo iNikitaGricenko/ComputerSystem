@@ -9,6 +9,7 @@ public class ProductPOJO implements Serializable {
     private Long id;
     private String name;
     private String model;
-    private double cost;
+    private int quantity;
+    private float unitPrice;
     private String className;
 }

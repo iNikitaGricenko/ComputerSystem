@@ -9,7 +9,7 @@ public interface SsdServiceInterface {
 
     Ssd save(Ssd ssd);
 
-    Ssd findById(Double id);
+    Ssd findById(Long id);
 
     Page<Ssd> searchByQuery(String query, Pageable pageable);
 }

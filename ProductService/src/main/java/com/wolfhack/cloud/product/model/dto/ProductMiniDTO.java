@@ -6,10 +6,11 @@ import java.io.Serializable;
 
 @Data
 public class ProductMiniDTO implements Serializable {
-    private final Double id;
+    private final Long id;
     private final String name;
     private final String model;
-    private final double cost;
+    private int quantity;
+    private float unitPrice;
     private final String[] photosNames;
-    private final Class className;
+    private final String className;
 }

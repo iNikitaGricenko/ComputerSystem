@@ -28,7 +28,7 @@ public class RamService implements RamServiceInterface {
     }
 
     @Override
-    public Ram findById(Double id) {
+    public Ram findById(Long id) {
         return ramRepository.findById(id)
                 .orElseThrow(RamNotFoundException::new);
     }

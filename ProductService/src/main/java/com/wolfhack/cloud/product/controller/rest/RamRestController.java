@@ -35,7 +35,7 @@ public class RamRestController {
     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RamResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public RamResponseDTO getRamById(@PathVariable("id") Double id) {
+    public RamResponseDTO getRamById(@PathVariable("id") Long id) {
         return ramMapper.toRamResponseDTO(ramService.findById(id));
     }
 

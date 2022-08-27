@@ -9,7 +9,7 @@ public interface GpuServiceInterface {
 
     Gpu save(Gpu gpu);
 
-    Gpu findById(Double id);
+    Gpu findById(Long id);
 
     Page<Gpu> searchByQuery(String query, Pageable pageable);
 }

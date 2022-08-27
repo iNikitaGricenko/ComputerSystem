@@ -36,7 +36,7 @@ public class MotherboardRestController {
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation =
             MotherboardResponseDTO.class)))
     @Parameter(name = "id", example = "1")
-    public MotherboardResponseDTO getMotherboardById(@PathVariable("id") Double id) {
+    public MotherboardResponseDTO getMotherboardById(@PathVariable("id") Long id) {
         return motherboardMapper.toMotherboardResponseDTO(motherboardService.findById(id));
     }
 

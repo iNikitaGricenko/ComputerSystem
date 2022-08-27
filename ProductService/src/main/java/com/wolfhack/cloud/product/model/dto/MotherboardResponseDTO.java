@@ -7,10 +7,11 @@ import java.util.HashMap;
 
 @Data
 public class MotherboardResponseDTO implements Serializable {
-    private final Double id;
+    private final Long id;
     private final String name;
     private final String model;
-    private final double cost;
+    private final int quantity;
+    private final float unitPrice;
     private final String[] photosNames;
     private final String type;
     private final String socket;

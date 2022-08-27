@@ -23,7 +23,7 @@ public class MotherboardService implements MotherboardServiceInterface {
     }
 
     @Override
-    public Motherboard findById(Double id) {
+    public Motherboard findById(Long id) {
         return motherboardRepository.findById(id)
                 .orElseThrow(MotherboardNotFoundException::new);
     }
