@@ -5,6 +5,8 @@ import com.wolfhack.cloud.product.model.Motherboard;
 import com.wolfhack.cloud.product.repository.MotherboardRepository;
 import com.wolfhack.cloud.product.service.implement.MotherboardServiceInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,17 +20,20 @@ public class MotherboardService implements MotherboardServiceInterface {
     private final MotherboardRepository motherboardRepository;
 
     @Override
+    @Cacheable(cacheNames = "motherboard")
     public Page<Motherboard> findAll(Pageable pageable) {
         return motherboardRepository.findAll(pageable);
     }
 
     @Override
+    @Cacheable(cacheNames = "motherboard", key = "#id")
     public Motherboard findById(Long id) {
         return motherboardRepository.findById(id)
                 .orElseThrow(MotherboardNotFoundException::new);
     }
 
     @Override
+    @CachePut(cacheNames = "motherboard", key = "#motherboard.id")
     public Motherboard save(Motherboard motherboard) {
         return motherboardRepository.save(motherboard);
     }

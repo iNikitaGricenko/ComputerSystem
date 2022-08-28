@@ -5,6 +5,8 @@ import com.wolfhack.cloud.product.model.Ssd;
 import com.wolfhack.cloud.product.repository.SsdRepository;
 import com.wolfhack.cloud.product.service.implement.SsdServiceInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,16 +20,19 @@ public class SsdService implements SsdServiceInterface {
     private final SsdRepository ssdRepository;
 
     @Override
+    @Cacheable(cacheNames = "ssd")
     public Page<Ssd> findAll(Pageable pageable) {
         return ssdRepository.findAll(pageable);
     }
 
     @Override
+    @CachePut(cacheNames = "ssd", key = "#ssd.id")
     public Ssd save(Ssd ssd) {
         return ssdRepository.save(ssd);
     }
 
     @Override
+    @Cacheable(cacheNames = "ssd", key = "#id")
     public Ssd findById(Long id) {
         return ssdRepository.findById(id)
                 .orElseThrow(SsdNotFoundException::new);
