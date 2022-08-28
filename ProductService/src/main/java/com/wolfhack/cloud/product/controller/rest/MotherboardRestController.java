@@ -40,7 +40,7 @@ public class MotherboardRestController {
         return motherboardMapper.toMotherboardResponseDTO(motherboardService.findById(id));
     }
 
-    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<MotherboardResponseDTO> getMotherboards(Pageable pageable) {
         return motherboardService.findAll(pageable).map(motherboardMapper::toMotherboardResponseDTO);
