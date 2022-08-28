@@ -16,7 +16,6 @@ import javax.validation.constraints.Size;
 @Document("gpus")
 public class Gpu {
 
-    @MongoId(FieldType.DECIMAL128)
     @NotNull @Min(0)
     private Long id;
     @NotNull @Size(min = 5)

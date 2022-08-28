@@ -17,7 +17,6 @@ import java.util.HashSet;
 @Document("ssds")
 public class Ssd {
 
-    @MongoId(FieldType.DECIMAL128)
     @NotNull @Min(0)
     private Long id;
     @NotNull @Size(min = 5)
