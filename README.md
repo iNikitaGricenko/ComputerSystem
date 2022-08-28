@@ -21,6 +21,7 @@ Microservices for e-commerce computer components store
 * Spring Mail
 * Apache Kafka
 * Swagger
+* Redis
 
 ## Frontend
 * Thymeleaf (HTML + CSS)
