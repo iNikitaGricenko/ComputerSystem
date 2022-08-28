@@ -1,10 +1,10 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
-import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
-import com.wolfhack.cloud.product.mapper.CpuMapper;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.mapper.CpuMapper;
+import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
+import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
 import com.wolfhack.cloud.product.service.CpuService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,7 +38,7 @@ public class CpuRestController {
         return cpuMapper.toCpuResponseDTO(cpuService.findById(id));
     }
 
-    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<CpuResponseDTO> getCpus(Pageable pageable) {
         return cpuService.findAll(pageable).map(cpuMapper::toCpuResponseDTO);

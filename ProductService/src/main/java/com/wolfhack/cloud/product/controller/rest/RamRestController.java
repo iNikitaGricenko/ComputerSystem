@@ -39,7 +39,7 @@ public class RamRestController {
         return ramMapper.toRamResponseDTO(ramService.findById(id));
     }
 
-    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<RamResponseDTO> getRams(Pageable pageable) {
         return ramService.findAll(pageable).map(ramMapper::toRamResponseDTO);

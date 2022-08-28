@@ -17,7 +17,6 @@ import java.util.HashMap;
 @Document("motherboards")
 public class Motherboard {
 
-    @MongoId(FieldType.DECIMAL128)
     @NotNull @Min(0)
     private Long id;
     @NotNull @Size(min = 5)

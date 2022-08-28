@@ -39,7 +39,7 @@ public class GpuRestController {
         return gpuMapper.toGpuResponseDTO(gpuService.findById(id));
     }
 
-    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<GpuResponseDTO> getGpus(Pageable pageable) {
         return gpuService.findAll(pageable).map(gpuMapper::toGpuResponseDTO);

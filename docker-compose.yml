@@ -65,9 +65,19 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongo-eshop
     depends_on:
       - mongodb
-# End Mongo
+  # End Mongo
+  # Start Redis
+  redis:
+    image: 'bitnami/redis:latest'
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - redis-network
+  # End Redis
 
-# Start Cloud
+  # Start Cloud
   eureka-server:
     container_name: eureka
     build:
@@ -102,9 +112,9 @@ services:
     depends_on:
       - eureka-server
       - mysql
-# End Cloud
+  # End Cloud
 
-# Start Services
+  # Start Services
   product-service:
     container_name: product-service
     build:
@@ -140,3 +150,5 @@ volumes:
 networks:
   default:
     name: mongo-eshop_network
+  redis-network:
+    driver: bridge

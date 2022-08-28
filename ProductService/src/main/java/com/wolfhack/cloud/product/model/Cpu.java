@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 @Document("cpus")
 public class Cpu {
 
-    @MongoId(FieldType.DECIMAL128)
     @NotNull @Min(0)
     private Long id;
     @NotNull
