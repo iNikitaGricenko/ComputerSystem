@@ -13,33 +13,35 @@ Microservices for e-commerce computer components store
 * Spring Boot
 * Spring Web
 * Spring Cloud
-* Netflix Eureka
-* Gateway
+* Discovery Server (Netflix Eureka)
+* Gateway Server
 * OAuth2 Authorization Server
 * OAuth2 Resource Server
 * Spring Validation
 * Spring Mail
 * Apache Kafka
 * Swagger
+* Redis Caching
+* JPA
+
+#### Mail Templates
+* Template Engine - Thymeleaf
+
+### Databases
+#### RDBMS
+* MySQL
+
+#### NoSQL
+* MongoDB
 * Redis
 
-## Frontend
-* Thymeleaf (HTML + CSS)
-
-<br>
-
-## Databases
-### RDBMS
-* MySQL
-* MongoDB
-* JPA
-### Migrations
+#### Migrations
 * Flyway
 
-## Code Write
+### Code Write
 * Lombok
 * Mapstruct
 
-## Services
+### Services
 * Github actions
-* Docker & docker compose
+* Docker & Docker-compose
