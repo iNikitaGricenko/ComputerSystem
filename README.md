@@ -28,7 +28,7 @@ Microservices for e-commerce computer components store
 * Template Engine - Thymeleaf
 
 ### Databases
-#### RDBMS
+#### SQL
 * MySQL
 
 #### NoSQL
