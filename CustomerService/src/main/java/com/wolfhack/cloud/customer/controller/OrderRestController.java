@@ -1,5 +1,7 @@
 package com.wolfhack.cloud.customer.controller;
 
+import com.wolfhack.cloud.customer.model.dto.AnalyticsResponseDTO;
+import com.wolfhack.cloud.customer.model.dto.AnalyticsSearchDTO;
 import com.wolfhack.cloud.customer.model.dto.CustomerOrderResponseDTO;
 import com.wolfhack.cloud.customer.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.customer.model.dto.CustomerOrderRequestDTO;
@@ -36,10 +38,19 @@ public class OrderRestController {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(
                     implementation = CustomerOrderResponseDTO.class))),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(
-                    implementation = ErrorBody.class)))
-    })
+                    implementation = ErrorBody.class)))})
     public CustomerOrderResponseDTO getOne(@PathVariable("id") Long id) {
         return orderService.findById(id);
+    }
+
+    @GetMapping("/analytics")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(
+                    implementation = AnalyticsResponseDTO.class))),
+            @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(
+                    implementation = ErrorBody.class)))})
+    public AnalyticsResponseDTO getAnalytics(@ModelAttribute @Valid AnalyticsSearchDTO analyticsSearchDTO) {
+        return orderService.getAnalytics(analyticsSearchDTO);
     }
 
     @PostMapping

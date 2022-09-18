@@ -21,10 +21,10 @@ public class OrderItem {
     private String model;
 
     @Column(name = "quantity")
-    private int quantity;
+    private long quantity;
 
     @Column(name = "unit_price")
-    private float unitPrice;
+    private double unitPrice;
 
     @Column(name = "order_item_class_name")
     private String className;

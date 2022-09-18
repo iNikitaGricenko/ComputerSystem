@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.customer.model;
 
+import com.wolfhack.cloud.customer.model.enums.Currency;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -29,6 +30,10 @@ public class CustomerOrder {
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_currency", nullable = false)
+    private Currency paymentCurrency = Currency.EUR;
+
     @Column(name = "address", nullable = false)
     private String address;
 
@@ -53,6 +58,9 @@ public class CustomerOrder {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatus status = OrderStatus.INPROGRESS;
+
+    @Column(name = "completed", insertable = false)
+    private LocalDateTime completed;
 
     @ManyToOne(
             targetEntity = Customer.class,
