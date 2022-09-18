@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.search;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.Ram;
 import com.wolfhack.cloud.product.service.RamService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,7 @@ public class RamSearchController {
     @GetMapping
     @PageableAsQueryParam
     public Page<Ram> getCpusByQuery(Pageable pageable, @RequestParam("query") String query) {
-        return ramService.searchByQuery(query, pageable);
+        return new RestPage<>(ramService.searchByQuery(query, pageable));
     }
 
 }

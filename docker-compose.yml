@@ -35,7 +35,6 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_USERNAME=boss
       - MYSQL_ROOT_PASSWORD=WolFHacK702
       - MYSQL_DATABASE=eshop
     ports:
@@ -86,6 +85,8 @@ services:
     restart: unless-stopped
     ports:
       - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
   gateway-server:
     container_name: gateway
     build:
@@ -96,6 +97,7 @@ services:
       - "8080:8080"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - auth-server
@@ -109,6 +111,7 @@ services:
       - "8081:8081"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - mysql
@@ -125,6 +128,7 @@ services:
       - "8091:8091"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - gateway-server
@@ -139,6 +143,7 @@ services:
       - "8085:8085"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - gateway-server

@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.search;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.Ssd;
 import com.wolfhack.cloud.product.service.SsdService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,7 @@ public class SsdSearchController {
     @GetMapping
     @PageableAsQueryParam
     public Page<Ssd> getCpusByQuery(Pageable pageable, @RequestParam("query") String query) {
-        return ssdService.searchByQuery(query, pageable);
+        return new RestPage<>(ssdService.searchByQuery(query, pageable));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.rest;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.dto.GpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.GpuResponseDTO;
 import com.wolfhack.cloud.product.mapper.GpuMapper;
@@ -42,7 +43,7 @@ public class GpuRestController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<GpuResponseDTO> getGpus(Pageable pageable) {
-        return gpuService.findAll(pageable).map(gpuMapper::toGpuResponseDTO);
+        return new RestPage<>(gpuService.findAll(pageable).map(gpuMapper::toGpuResponseDTO));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

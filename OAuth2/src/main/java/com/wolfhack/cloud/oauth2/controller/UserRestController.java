@@ -5,6 +5,7 @@ import com.wolfhack.cloud.oauth2.model.dto.UserResponseDTO;
 import com.wolfhack.cloud.oauth2.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.oauth2.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.oauth2.service.implement.UserServiceInterface;
+import com.wolfhack.cloud.oauth2.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,7 +47,7 @@ public class UserRestController {
 
     @GetMapping
     public Page<UserResponseDTO> findAll(Pageable pageable) {
-        return userService.getAll(pageable);
+        return new RestPage<>(userService.getAll(pageable));
     }
 
     @GetMapping("/{id}")

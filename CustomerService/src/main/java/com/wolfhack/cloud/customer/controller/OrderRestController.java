@@ -4,6 +4,7 @@ import com.wolfhack.cloud.customer.model.dto.CustomerOrderResponseDTO;
 import com.wolfhack.cloud.customer.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.customer.model.dto.CustomerOrderRequestDTO;
 import com.wolfhack.cloud.customer.service.implement.OrderServiceInterface;
+import com.wolfhack.cloud.customer.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +28,7 @@ public class OrderRestController {
     @GetMapping
     @PageableAsQueryParam
     public Page<CustomerOrderResponseDTO> getAll(Pageable pageable) {
-        return orderService.findAll(pageable);
+        return new RestPage<>(orderService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

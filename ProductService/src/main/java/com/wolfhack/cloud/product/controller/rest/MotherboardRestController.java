@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.rest;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.dto.MotherboardFullDTO;
 import com.wolfhack.cloud.product.model.dto.MotherboardResponseDTO;
 import com.wolfhack.cloud.product.mapper.MotherboardMapper;
@@ -43,7 +44,7 @@ public class MotherboardRestController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<MotherboardResponseDTO> getMotherboards(Pageable pageable) {
-        return motherboardService.findAll(pageable).map(motherboardMapper::toMotherboardResponseDTO);
+        return new RestPage<>(motherboardService.findAll(pageable).map(motherboardMapper::toMotherboardResponseDTO));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
