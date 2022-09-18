@@ -2,6 +2,8 @@ package com.wolfhack.cloud.oauth2.config;
 
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.wolfhack.cloud.oauth2.handler.FailureAuthorizationHandler;
+import com.wolfhack.cloud.oauth2.handler.SuccessAuthorizationHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
@@ -28,6 +30,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class FilterChainConfig {
+
+    private final SuccessAuthorizationHandler successAuthorizationHandler;
+    private final FailureAuthorizationHandler failureAuthorizationHandler;
 
     @Bean
     @Order(1)
@@ -61,7 +66,12 @@ public class FilterChainConfig {
                         authorizeRequest
                                 .antMatchers("/api/user").not().authenticated()
                                 .anyRequest().authenticated())
+                .formLogin()
+                .successHandler(successAuthorizationHandler)
+                .failureHandler(failureAuthorizationHandler)
+                .and()
                 .formLogin(withDefaults());
+
         return http.build();
     }
 

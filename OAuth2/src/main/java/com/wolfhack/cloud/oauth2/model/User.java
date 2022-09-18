@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.oauth2.model;
 
+import com.wolfhack.cloud.oauth2.enums.Role;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -44,6 +45,9 @@ public class User {
 
     @Column(name = "register_date")
     private LocalDateTime registerDate = LocalDateTime.now();
+
+    @Column(name = "last_login_date")
+    private LocalDateTime lastLoginDate = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     private Role role;

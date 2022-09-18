@@ -1,6 +1,6 @@
 package com.wolfhack.cloud.oauth2.model.dto;
 
-import com.wolfhack.cloud.oauth2.model.Role;
+import com.wolfhack.cloud.oauth2.enums.Role;
 import lombok.Data;
 
 import javax.validation.constraints.Min;

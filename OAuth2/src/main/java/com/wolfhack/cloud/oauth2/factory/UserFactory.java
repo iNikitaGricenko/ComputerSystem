@@ -7,19 +7,15 @@ import com.wolfhack.cloud.oauth2.factory.implement.UserFactoryInterface;
 import com.wolfhack.cloud.oauth2.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.id.UUIDGenerator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
-import static com.wolfhack.cloud.oauth2.model.Role.USER;
+import static com.wolfhack.cloud.oauth2.enums.Role.USER;
 import static java.lang.String.format;
 
 @Slf4j

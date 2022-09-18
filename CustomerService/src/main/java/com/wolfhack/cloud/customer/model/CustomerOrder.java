@@ -62,7 +62,8 @@ public class CustomerOrder {
     private Customer customer;
 
     @Column(name = "deleted")
-    private boolean isDeleted = Boolean.FALSE;
+    private boolean isDeleted = false;
+
     @Column(name = "deleted_at", insertable = false)
     private LocalDateTime deletedAt;
 
