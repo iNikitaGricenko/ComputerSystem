@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.rest;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.dto.SsdFullDTO;
 import com.wolfhack.cloud.product.model.dto.SsdResponseDTO;
 import com.wolfhack.cloud.product.mapper.SsdMapper;
@@ -42,7 +43,7 @@ public class SsdRestController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<SsdResponseDTO> getSsds(Pageable pageable) {
-        return ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO);
+        return new RestPage<>(ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

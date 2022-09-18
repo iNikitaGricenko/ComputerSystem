@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.rest;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.mapper.CpuMapper;
@@ -41,7 +42,7 @@ public class CpuRestController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<CpuResponseDTO> getCpus(Pageable pageable) {
-        return cpuService.findAll(pageable).map(cpuMapper::toCpuResponseDTO);
+        return new RestPage<>(cpuService.findAll(pageable).map(cpuMapper::toCpuResponseDTO));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

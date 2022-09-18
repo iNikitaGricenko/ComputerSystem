@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.search;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.Cpu;
 import com.wolfhack.cloud.product.service.CpuService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,7 @@ public class CpuSearchController {
     @GetMapping
     @PageableAsQueryParam
     public Page<Cpu> getCpusByQuery(Pageable pageable, @RequestParam("query") String query) {
-        return cpuService.searchByQuery(query, pageable);
+        return new RestPage<>(cpuService.searchByQuery(query, pageable));
     }
 
 }

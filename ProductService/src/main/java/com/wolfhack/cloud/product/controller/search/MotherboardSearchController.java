@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.search;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.Motherboard;
 import com.wolfhack.cloud.product.service.MotherboardService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,7 @@ public class MotherboardSearchController {
     @GetMapping
     @PageableAsQueryParam
     public Page<Motherboard> getCpusByQuery(Pageable pageable, @RequestParam("query") String query) {
-        return motherboardService.searchByQuery(query, pageable);
+        return new RestPage<>(motherboardService.searchByQuery(query, pageable));
     }
 
 }

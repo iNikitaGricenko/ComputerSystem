@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.search;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.Gpu;
 import com.wolfhack.cloud.product.service.GpuService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,7 @@ public class GpuSearchController {
     @GetMapping
     @PageableAsQueryParam
     public Page<Gpu> getCpusByQuery(Pageable pageable, @RequestParam("query") String query) {
-        return gpuService.searchByQuery(query, pageable);
+        return new RestPage<>(gpuService.searchByQuery(query, pageable));
     }
 
 }

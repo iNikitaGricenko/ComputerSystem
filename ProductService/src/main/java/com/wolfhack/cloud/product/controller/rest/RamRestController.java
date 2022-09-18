@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.controller.rest;
 
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.dto.RamFullDTO;
 import com.wolfhack.cloud.product.model.dto.RamResponseDTO;
 import com.wolfhack.cloud.product.mapper.RamMapper;
@@ -42,7 +43,7 @@ public class RamRestController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<RamResponseDTO> getRams(Pageable pageable) {
-        return ramService.findAll(pageable).map(ramMapper::toRamResponseDTO);
+        return new RestPage<>(ramService.findAll(pageable).map(ramMapper::toRamResponseDTO));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
