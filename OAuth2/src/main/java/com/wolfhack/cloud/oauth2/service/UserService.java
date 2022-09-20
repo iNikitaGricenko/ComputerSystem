@@ -5,7 +5,7 @@ import com.wolfhack.cloud.oauth2.model.dto.UserCreationDTO;
 import com.wolfhack.cloud.oauth2.model.dto.UserResponseDTO;
 import com.wolfhack.cloud.oauth2.exception.UserExistsException;
 import com.wolfhack.cloud.oauth2.exception.UserNotFoundException;
-import com.wolfhack.cloud.oauth2.factory.implement.UserFactoryInterface;
+import com.wolfhack.cloud.oauth2.factory.UserFactory;
 import com.wolfhack.cloud.oauth2.repository.UserRepository;
 import com.wolfhack.cloud.oauth2.service.implement.EmailSender;
 import com.wolfhack.cloud.oauth2.service.implement.UserServiceInterface;
@@ -16,12 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 @Slf4j
 @Service
@@ -30,7 +28,7 @@ import java.util.concurrent.Executor;
 public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
-    private final UserFactoryInterface userFactory;
+    private final UserFactory userFactory;
     private final EmailSender emailSender;
 
     @Override

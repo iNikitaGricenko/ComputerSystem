@@ -1,11 +1,12 @@
 package com.wolfhack.cloud.customer.controller;
 
+import com.wolfhack.cloud.customer.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.customer.model.dto.AnalyticsResponseDTO;
 import com.wolfhack.cloud.customer.model.dto.AnalyticsSearchDTO;
-import com.wolfhack.cloud.customer.model.dto.CustomerOrderResponseDTO;
-import com.wolfhack.cloud.customer.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.customer.model.dto.CustomerOrderRequestDTO;
-import com.wolfhack.cloud.customer.service.implement.OrderServiceInterface;
+import com.wolfhack.cloud.customer.model.dto.CustomerOrderResponseDTO;
+import com.wolfhack.cloud.customer.model.enums.OrderStatus;
+import com.wolfhack.cloud.customer.service.OrderService;
 import com.wolfhack.cloud.customer.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +26,7 @@ import javax.validation.Valid;
 @Tag(name = "Order API")
 @RequiredArgsConstructor
 public class OrderRestController {
-    private final OrderServiceInterface orderService;
+    private final OrderService orderService;
 
     @GetMapping
     @PageableAsQueryParam
@@ -58,5 +59,12 @@ public class OrderRestController {
             schema = @Schema(implementation = CustomerOrderResponseDTO.class)))
     public CustomerOrderResponseDTO add(@Valid @RequestBody CustomerOrderRequestDTO requestDTO) {
         return orderService.save(requestDTO);
+    }
+
+    @PutMapping("/{id}")
+    @ApiResponse(responseCode = "200", content = @Content(
+            schema = @Schema(implementation = CustomerOrderResponseDTO.class)))
+    public CustomerOrderResponseDTO update(@PathVariable Long id, @RequestParam("status") OrderStatus status) {
+        return orderService.changeStatus(id, status);
     }
 }

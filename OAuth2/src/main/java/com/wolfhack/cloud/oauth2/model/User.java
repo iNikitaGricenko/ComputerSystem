@@ -1,12 +1,16 @@
 package com.wolfhack.cloud.oauth2.model;
 
 import com.wolfhack.cloud.oauth2.enums.Role;
+import com.wolfhack.cloud.oauth2.factory.UpdateFactory;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Getter
 @Setter
@@ -16,6 +20,22 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity(name = "users")
 public class User {
+
+    @RequiredArgsConstructor
+    final class UserUpdateFactory implements UpdateFactory {
+
+        private final User user;
+
+        @Override
+        public <U, T> UserUpdateFactory update(U editor, Function<U, T> getMethod, Consumer<T> setMethod) {
+            Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
+            return this;
+        }
+
+        public User build() {
+            return user;
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +74,10 @@ public class User {
 
     public boolean isAdmin() {
         return Objects.equals(role.toString(), "ADMIN");
+    }
+
+    public UpdateFactory renovator() {
+        return new UserUpdateFactory(this);
     }
 
     @Override

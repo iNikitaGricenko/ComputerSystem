@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.customer.model;
 
+import com.wolfhack.cloud.customer.factory.UpdateFactory;
 import com.wolfhack.cloud.customer.model.enums.Currency;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
 import lombok.*;
@@ -8,9 +9,11 @@ import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Builder
 @Getter @Setter
@@ -22,6 +25,23 @@ import java.util.Set;
 @NoArgsConstructor
 public class CustomerOrder {
 
+    @RequiredArgsConstructor
+    final class CustomerOrderUpdateFactory implements UpdateFactory {
+
+        private final CustomerOrder customerOrder;
+
+        @Override
+        public <T, U> UpdateFactory edit(T editor, Function<T, U> getMethod, Consumer<U> setMethod) {
+            Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
+            return this;
+        }
+
+        @Override
+        public CustomerOrder update() {
+            return customerOrder;
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_order_id")
@@ -30,6 +50,7 @@ public class CustomerOrder {
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_currency", nullable = false)
     private Currency paymentCurrency = Currency.EUR;
@@ -52,9 +73,11 @@ public class CustomerOrder {
     @Column(name = "description", length = 1024)
     private String description;
 
+    @Builder.Default
     @Column(name = "created", insertable = false)
     private LocalDateTime created = LocalDateTime.now();
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatus status = OrderStatus.INPROGRESS;
@@ -79,6 +102,10 @@ public class CustomerOrder {
     @CollectionTable(name = "customer_order_items", joinColumns = {
             @JoinColumn(name = "customer_order_id", referencedColumnName = "customer_order_id")})
     private Set<OrderItem> orderItems;
+
+    public UpdateFactory renovator() {
+        return new CustomerOrderUpdateFactory(this);
+    }
 
     @Override
     public boolean equals(Object o) {
