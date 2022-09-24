@@ -52,8 +52,8 @@ public class FilterChainConfig {
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-                )
+                                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                                  )
                 .apply(authorizationServerConfigurer);
         return http.build();
     }
@@ -64,13 +64,17 @@ public class FilterChainConfig {
         http.csrf().disable();
         http.authorizeRequests(authorizeRequest ->
                         authorizeRequest
+                                .antMatchers("/login/**").permitAll()
+                                .antMatchers("/register/**").permitAll()
                                 .antMatchers("/api/user").not().authenticated()
                                 .anyRequest().authenticated())
                 .formLogin()
                 .successHandler(successAuthorizationHandler)
                 .failureHandler(failureAuthorizationHandler)
                 .and()
-                .formLogin(withDefaults());
+                .formLogin(form -> form
+                        .loginPage("/login").failureForwardUrl("/login?error")
+                        .permitAll());
 
         return http.build();
     }
