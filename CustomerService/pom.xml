@@ -31,10 +31,12 @@
 
     <modules>
         <module>customer</module>
-        <module>business</module>
-        <module>persistence</module>
-        <module>usecase</module>
-        <module>controller</module>
+
+        <module>enterprise-business</module>
+        <module>application-business</module>
+
+        <module>adapter-controllers-web</module>
+        <module>adapter-persistence-gateway</module>
     </modules>
 
     <dependencyManagement>

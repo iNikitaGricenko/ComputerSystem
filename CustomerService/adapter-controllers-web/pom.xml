@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>controller</artifactId>
+    <artifactId>adapter-controllers-web</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,12 +37,12 @@
     <dependencies>
         <dependency>
             <groupId>com.wolfhack.cloud</groupId>
-            <artifactId>business</artifactId>
+            <artifactId>enterprise-business</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.wolfhack.cloud</groupId>
-            <artifactId>usecase</artifactId>
+            <artifactId>application-business</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

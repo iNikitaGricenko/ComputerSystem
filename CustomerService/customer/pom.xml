@@ -38,12 +38,12 @@
     <dependencies>
         <dependency>
             <groupId>com.wolfhack.cloud</groupId>
-            <artifactId>controller</artifactId>
+            <artifactId>adapter-controllers-web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.wolfhack.cloud</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>adapter-persistence-gateway</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- Spring Cloud -->
