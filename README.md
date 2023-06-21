@@ -1,6 +1,4 @@
-$\Large{\color{green}\textrm{Portfolio} \ \textrm{Project}}$
-
-# ComputerSystem
+# ComputerSystem ``Portfolio project``
 Microservices for e-commerce computer components store
 
 ![build](https://img.shields.io/github/actions/workflow/status/iNikitaGricenko/ComputerSystem/build.yml?style=for-the-badge/badge.svg)
