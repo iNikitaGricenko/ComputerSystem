@@ -3,7 +3,7 @@ $\Large{\color{green}\textrm{Portfolio} \ \textrm{Project}}$
 # ComputerSystem
 Microservices for e-commerce computer components store
 
-![build](https://img.shields.io/github/workflow/status/iNikitaGricenko/ComputerSystem/CI?style=for-the-badge)
+![build](https://img.shields.io/github/actions/workflow/status/iNikitaGricenko/ComputerSystem/build.yml?branch=main&style=for-the-badge)
 <br>
 
 # Technologies
