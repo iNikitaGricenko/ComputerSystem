@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.model.dto.ProductMiniDTO;
 import com.wolfhack.cloud.product.mapper.ProductMapper;
 import com.wolfhack.cloud.product.service.implement.SearchServiceInterface;
@@ -24,6 +25,7 @@ public class SearchService implements SearchServiceInterface {
 
     private final ProductMapper productMapper;
 
+    @AopLog
     @Override
     public Map<String, Object> search(String query, Pageable pageable) {
         List<ProductMiniDTO> products = new ArrayList<>();
@@ -37,26 +39,31 @@ public class SearchService implements SearchServiceInterface {
                 "content", products);
     }
 
+    @AopLog
     private Page<ProductMiniDTO> searchMotherboard(String query, Pageable pageable) {
         return motherboardService.searchByQuery(query, pageable)
                 .map(productMapper::toProductDTO);
     }
 
+    @AopLog
     private Page<ProductMiniDTO> searchRam(String query, Pageable pageable) {
         return ramService.searchByQuery(query, pageable)
                 .map(productMapper::toProductDTO);
     }
 
+    @AopLog
     private Page<ProductMiniDTO> searchSsd(String query, Pageable pageable) {
         return ssdService.searchByQuery(query, pageable)
                 .map(productMapper::toProductDTO);
     }
 
+    @AopLog
     private Page<ProductMiniDTO> searchGpu(String query, Pageable pageable) {
         return gpuService.searchByQuery(query, pageable)
                 .map(productMapper::toProductDTO);
     }
 
+    @AopLog
     private Page<ProductMiniDTO> searchCpu(String query, Pageable pageable) {
         return cpuService.searchByQuery(query, pageable)
                 .map(productMapper::toProductDTO);

@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.MotherboardNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Motherboard;
@@ -30,12 +31,14 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
         }
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "motherboard_Response_Page")
     public Page<Motherboard> findAll(Pageable pageable) {
         return motherboardRepository.findAll(pageable);
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "motherboard", key = "#id")
     public Motherboard findById(Long id) {
@@ -43,6 +46,7 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
                 .orElseThrow(MotherboardNotFoundException::new);
     }
 
+    @AopLog
     @Override
     @CachePut(cacheNames = {"motherboard_Response_Page", "motherboard"}, key = "#motherboard.id")
     public Motherboard save(Motherboard motherboard) {
@@ -50,6 +54,7 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
         return motherboardRepository.save(motherboard);
     }
 
+    @AopLog
     @Override
     public Page<Motherboard> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);
