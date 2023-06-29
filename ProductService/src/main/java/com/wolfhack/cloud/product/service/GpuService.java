@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.GpuNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Gpu;
@@ -30,12 +31,14 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
         }
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "gpu_Response_Page")
     public Page<Gpu> findAll(Pageable pageable) {
         return gpuRepository.findAll(pageable);
     }
 
+    @AopLog
     @Override
     @CachePut(cacheNames = {"gpu_Response_Page", "gpu"}, key = "#gpu.id")
     public Gpu save(Gpu gpu) {
@@ -43,6 +46,7 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
         return gpuRepository.save(gpu);
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "gpu", key = "#id")
     public Gpu findById(Long id) {
@@ -50,6 +54,7 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
                 .orElseThrow(GpuNotFoundException::new);
     }
 
+    @AopLog
     @Override
     public Page<Gpu> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);

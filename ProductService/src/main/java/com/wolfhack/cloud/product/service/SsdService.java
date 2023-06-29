@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.SsdNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Ssd;
@@ -30,13 +31,14 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
         }
     }
 
-
+    @AopLog
     @Override
     @Cacheable(cacheNames = "ssd_Response_Page")
     public Page<Ssd> findAll(Pageable pageable) {
         return ssdRepository.findAll(pageable);
     }
 
+    @AopLog
     @Override
     @CachePut(cacheNames = {"ssd_Response_Page", "ssd"}, key = "#ssd.id")
     public Ssd save(Ssd ssd) {
@@ -44,6 +46,7 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
         return ssdRepository.save(ssd);
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "ssd", key = "#id")
     public Ssd findById(Long id) {
@@ -51,6 +54,7 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
                 .orElseThrow(SsdNotFoundException::new);
     }
 
+    @AopLog
     @Override
     public Page<Ssd> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);

@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.RamNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Ram;
@@ -30,13 +31,14 @@ public class RamService extends AbstractMongoEventListener<Ram> implements RamSe
         }
     }
 
-
+    @AopLog
     @Override
     @Cacheable(cacheNames = "ram_Response_Page")
     public Page<Ram> findAll(Pageable pageable) {
         return ramRepository.findAll(pageable);
     }
 
+    @AopLog
     @Override
     @CachePut(cacheNames = {"ram_Response_Page", "ram"}, key = "#ram.id")
     public Ram save(Ram ram) {
@@ -44,6 +46,7 @@ public class RamService extends AbstractMongoEventListener<Ram> implements RamSe
         return ramRepository.save(ram);
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "ram", key = "#id")
     public Ram findById(Long id) {
@@ -51,6 +54,7 @@ public class RamService extends AbstractMongoEventListener<Ram> implements RamSe
                 .orElseThrow(RamNotFoundException::new);
     }
 
+    @AopLog
     @Override
     public Page<Ram> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);

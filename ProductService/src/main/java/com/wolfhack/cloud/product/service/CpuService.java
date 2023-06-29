@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.CpuNotFoundException;
 import com.wolfhack.cloud.product.model.Cpu;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
@@ -30,12 +31,14 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
         }
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "cpu_Response_Page")
     public Page<Cpu> findAll(Pageable pageable) {
         return cpuRepository.findAll(pageable);
     }
 
+    @AopLog
     @Override
     @CachePut(cacheNames = {"cpu_Response_Page", "cpu"}, key = "#cpu.id")
     public Cpu save(Cpu cpu) {
@@ -43,6 +46,7 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
         return cpuRepository.save(cpu);
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "cpu", key = "#id")
     public Cpu findById(Long id) {
@@ -50,6 +54,7 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
                 .orElseThrow(CpuNotFoundException::new);
     }
 
+    @AopLog
     @Override
     public Page<Cpu> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);
