@@ -23,6 +23,7 @@ Microservices for e-commerce computer components store
 * Swagger
 * Redis Caching
 * JPA
+* AspectJ
 
 #### Mail Templates
 * Template Engine - Thymeleaf
