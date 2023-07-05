@@ -13,11 +13,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>application</module>
-        <module>gateway</module>
-        <module>web</module>
-        <module>enterprise</module>
-        <module>server</module>
+        <module>oauth2-application-logic</module>
+        <module>oauth2-persistence-gateway</module>
+        <module>oauth2-adapter-web</module>
+        <module>oauth2-business-logic</module>
+        <module>oauth2-server</module>
     </modules>
 
     <properties>

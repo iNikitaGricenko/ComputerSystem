@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>adapter-controllers-web</artifactId>
+    <artifactId>customer-persistence-gateway</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,6 +20,11 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <spring.boot.maven.plugin.version>2.7.3</spring.boot.maven.plugin.version>
         <spring.boot.dependecies.version>2.7.3</spring.boot.dependecies.version>
+
+        <mapstruct.version>1.5.2.Final</mapstruct.version>
+        <junit-jupiter-api.version>5.9.1</junit-jupiter-api.version>
+        <lombok.version>1.18.24</lombok.version>
+        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -37,13 +42,24 @@
     <dependencies>
         <dependency>
             <groupId>com.wolfhack.cloud</groupId>
-            <artifactId>enterprise-business</artifactId>
+            <artifactId>customer-business-logic</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <!--  Database  -->
         <dependency>
-            <groupId>com.wolfhack.cloud</groupId>
-            <artifactId>application-business</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>9.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

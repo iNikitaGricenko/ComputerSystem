@@ -30,13 +30,11 @@
     </properties>
 
     <modules>
-        <module>customer</module>
-
-        <module>enterprise-business</module>
-        <module>application-business</module>
-
-        <module>adapter-controllers-web</module>
-        <module>adapter-persistence-gateway</module>
+        <module>customer-server</module>
+        <module>customer-business-logic</module>
+        <module>customer-application-logic</module>
+        <module>customer-adapter-web</module>
+        <module>customer-persistence-gateway</module>
     </modules>
 
     <dependencyManagement>
