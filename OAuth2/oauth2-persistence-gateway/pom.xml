@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.wolfhack.cloud.adapter-persistence</groupId>
-    <artifactId>gateway</artifactId>
+    <artifactId>oauth2-persistence-gateway</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,7 +42,7 @@
     <dependencies>
         <dependency>
             <groupId>com.wolfhack.cloud.business</groupId>
-            <artifactId>enterprise</artifactId>
+            <artifactId>oauth2-business-logic</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
