@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.wolfhack.cloud.business</groupId>
-    <artifactId>enterprise</artifactId>
+    <artifactId>oauth2-application-logic</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,18 +41,18 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-            <version>2.7.3</version>
+            <groupId>com.wolfhack.cloud.business</groupId>
+            <artifactId>oauth2-business-logic</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- Mail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
-            <version>1.6.11</version>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
     </dependencies>
 
@@ -88,4 +88,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

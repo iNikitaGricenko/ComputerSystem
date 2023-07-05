@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>OAuth2</artifactId>
+        <artifactId>CustomerService</artifactId>
         <groupId>com.wolfhack.cloud</groupId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wolfhack.cloud.adapter-controllers</groupId>
-    <artifactId>web</artifactId>
+    <artifactId>customer-adapter-web</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,20 +36,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.wolfhack.cloud.business</groupId>
-            <artifactId>enterprise</artifactId>
+            <groupId>com.wolfhack.cloud</groupId>
+            <artifactId>customer-business-logic</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.wolfhack.cloud.business</groupId>
-            <artifactId>application</artifactId>
+            <groupId>com.wolfhack.cloud</groupId>
+            <artifactId>customer-application-logic</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <!-- OAuth -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-authorization-server</artifactId>
-            <version>0.3.1</version>
         </dependency>
     </dependencies>
 
@@ -72,7 +66,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct-binding.version}</version>
+                            <version>${lombok-mapstruct.version}</version>
                         </path>
                         <!-- Mapstruct should follow the lombok path(s) -->
                         <path>

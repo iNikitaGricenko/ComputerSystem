@@ -39,6 +39,8 @@ services:
       - MYSQL_DATABASE=eshop
     ports:
       - "3306:3306"
+    networks:
+      - mysql-eshop
   # End Mysql
   # Start Mongo
   mongodb:
@@ -52,6 +54,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    networks:
+      - mongo-eshop
   mongo-express:
     image: mongo-express
     container_name: mongo-express-eshop
@@ -64,6 +68,8 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongo-eshop
     depends_on:
       - mongodb
+    networks:
+      - mongo-eshop
   # End Mongo
   # Start Elastic
   elasticsearch-main-chain:
@@ -207,6 +213,8 @@ services:
     depends_on:
       - eureka-server
       - mysql
+    networks:
+      - mysql-eshop
   # End Cloud
 
   # Start Services
@@ -225,6 +233,8 @@ services:
       - eureka-server
       - gateway-server
       - mongodb
+    networks:
+      - mongo-eshop
   customer-service:
     container_name: customer-service
     build:
@@ -240,6 +250,8 @@ services:
       - eureka-server
       - gateway-server
       - mysql
+    networks:
+      - mysql-eshop
 # End Services
 
 volumes:
@@ -249,7 +261,9 @@ volumes:
     driver: local
   data: {}
 networks:
-  default:
+  mysql-eshop:
+    name: mysql
+  mongo-eshop:
     name: mongo-eshop_network
   redis-network:
     driver: bridge

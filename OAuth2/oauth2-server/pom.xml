@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>server</artifactId>
+    <artifactId>oauth2-server</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -36,12 +36,12 @@
     <dependencies>
         <dependency>
             <groupId>com.wolfhack.cloud.adapter-controllers</groupId>
-            <artifactId>web</artifactId>
+            <artifactId>oauth2-adapter-web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.wolfhack.cloud.adapter-persistence</groupId>
-            <artifactId>gateway</artifactId>
+            <artifactId>oauth2-persistence-gateway</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- Spring Cloud -->
@@ -67,5 +67,18 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.wolfhack.cloud.OAuth2Application</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
