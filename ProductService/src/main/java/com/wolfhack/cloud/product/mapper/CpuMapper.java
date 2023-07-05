@@ -23,7 +23,7 @@ public interface CpuMapper {
     CpuSearch toSearchModel(Cpu cpu);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Cpu partialUpdate(@MappingTarget CpuSearch toBeUpdated,  Cpu cpu);
+    CpuSearch partialUpdate(@MappingTarget CpuSearch toBeUpdated,  Cpu cpu);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Cpu partialUpdate(@MappingTarget Cpu toBeUpdated,  Cpu cpu);

@@ -72,7 +72,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct.version}</version>
+                            <version>${lombok-mapstruct-binding.version}</version>
                         </path>
                         <!-- Mapstruct should follow the lombok path(s) -->
                         <path>
