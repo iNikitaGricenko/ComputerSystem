@@ -8,8 +8,6 @@ import com.wolfhack.cloud.product.repository.search.CpuSearchRepository;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.Operator;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +19,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -44,17 +44,32 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 
 	@AopLog
 	@Override
-	public List<Cpu> findByAllFields(String line, Pageable pageable) {
+	public List<Cpu> findByAllTextFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Cpu.class.getFields())
+				.filter(field -> field.getType().isInstance(String.class))
+				.map(Field::getName)
+				.toArray(String[]::new);
+
 		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.field("microarchitecture")
-						.field("series")
-						.field("graphics")
-						.field("socket")
-						.field("compatibility")
-						.field("productLine")
+				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
+						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
+						.fuzziness(Fuzziness.ONE)
+						.prefixLength(3)).build();
+
+		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product"));
+
+		return cpus.map(SearchHit::getContent).map(cpuMapper::toEntity).toList();
+	}
+	
+	@AopLog
+	@Override
+	public List<Cpu> findByAllFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Cpu.class.getFields())
+				.map(Field::getName)
+				.toArray(String[]::new);
+
+		Query searchQuery = new NativeSearchQueryBuilder()
+				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
 						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
 						.fuzziness(Fuzziness.ONE)
 						.prefixLength(3)).build();
