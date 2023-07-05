@@ -22,7 +22,7 @@ public class Ram {
     private int quantity;
     @NotNull @Min(0)
     private float unitPrice;
-    private String[] photosNames;
+    private String description;
 
     private String type;
     private long size;
