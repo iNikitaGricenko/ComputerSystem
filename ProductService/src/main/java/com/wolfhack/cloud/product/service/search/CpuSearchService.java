@@ -1,6 +1,7 @@
 package com.wolfhack.cloud.product.service.search;
 
 import com.wolfhack.cloud.product.annotations.AopLog;
+import com.wolfhack.cloud.product.exception.CpuNotFoundException;
 import com.wolfhack.cloud.product.mapper.CpuMapper;
 import com.wolfhack.cloud.product.model.Cpu;
 import com.wolfhack.cloud.product.model.search.CpuSearch;
@@ -32,7 +33,7 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public Long save(Cpu cpu) {
+	public long save(Cpu cpu) {
 		CpuSearch searchModel = cpuMapper.toSearchModel(cpu);
 		return cpuSearchRepository.save(searchModel).getId();
 	}
@@ -77,6 +78,20 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product"));
 
 		return cpus.map(SearchHit::getContent).map(cpuMapper::toEntity).toList();
+	}
+
+	@Override
+	public long update(Cpu cpu) {
+		CpuSearch cpuSearch = cpuSearchRepository.findById(cpu.getId()).orElseThrow(CpuNotFoundException::new);
+
+		cpuMapper.partialUpdate(cpuSearch, cpu);
+
+		return cpuSearchRepository.save(cpuSearch).getId();
+	}
+
+	@Override
+	public void delete(long cpuId) {
+		cpuSearchRepository.deleteById(cpuId);
 	}
 
 }

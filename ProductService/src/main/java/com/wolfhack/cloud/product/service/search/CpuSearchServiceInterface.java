@@ -9,12 +9,15 @@ import java.util.List;
 
 public interface CpuSearchServiceInterface {
 
-	Long save(Cpu cpu);
+	long save(Cpu cpu);
 
 	Page<Cpu> findByProductLine(String productLine, Pageable pageable);
 
 	List<Cpu> findByAllTextFields(String line, Pageable pageable);
 
-	@AopLog
 	List<Cpu> findByAllFields(String line, Pageable pageable);
+
+	long update(Cpu cpu);
+
+	void delete(long cpuId);
 }

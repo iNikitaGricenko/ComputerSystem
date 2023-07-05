@@ -6,6 +6,7 @@ import com.wolfhack.cloud.product.model.Cpu;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.repository.CpuRepository;
 import com.wolfhack.cloud.product.service.implement.CpuServiceInterface;
+import com.wolfhack.cloud.product.service.search.CpuSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,7 @@ import static java.lang.String.format;
 public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuServiceInterface {
 
     private final CpuRepository cpuRepository;
+    private final CpuSearchService cpuSearchService;
     private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
@@ -47,7 +49,9 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
     @CachePut(cacheNames = {"cpu_Response_Page", "cpu"}, key = "#cpu.id")
     public Long save(Cpu cpu) {
         cpu.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return cpuRepository.save(cpu).getId();
+        Cpu saved = cpuRepository.save(cpu);
+        cpuSearchService.save(saved);
+        return saved.getId();
     }
 
     @AopLog
@@ -70,5 +74,18 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
     public Page<Cpu> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);
         return cpuRepository.searchCpusByQuery(query, pageable);
+    }
+
+    @Override
+    public void delete(long id) {
+        cpuSearchService.delete(id);
+        cpuRepository.deleteById(id);
+    }
+
+    @Override
+    public long update(Cpu cpu) {
+        Cpu saved = cpuRepository.save(cpu);
+        cpuSearchService.update(cpu);
+        return saved.getId();
     }
 }

@@ -17,4 +17,8 @@ public interface CpuServiceInterface {
     Cpu findById(Long id);
 
     Page<Cpu> searchByQuery(String query, Pageable pageable);
+
+    void delete(long id);
+
+    long update(Cpu cpu);
 }
