@@ -48,10 +48,10 @@ public class RamRestController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RamResponseDTO.class)))
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
     @ResponseStatus(HttpStatus.CREATED)
-    public RamResponseDTO addRam(@Valid @RequestBody RamFullDTO ram) {
-        return ramMapper.toRamResponseDTO(ramService.save(ramMapper.toRam(ram)));
+    public Long addRam(@Valid @RequestBody RamFullDTO ram) {
+        return ramService.save(ramMapper.toRam(ram));
     }
 
 }

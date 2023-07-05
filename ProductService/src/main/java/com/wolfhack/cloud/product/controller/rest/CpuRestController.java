@@ -47,9 +47,9 @@ public class CpuRestController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CpuResponseDTO.class)))
-    public CpuResponseDTO addCpu(@Valid @RequestBody CpuFullDTO cpu) {
-        return cpuMapper.toCpuResponseDTO(cpuService.save(cpuMapper.toCpu(cpu)));
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+    public Long addCpu(@Valid @RequestBody CpuFullDTO cpu) {
+        return cpuService.save(cpuMapper.toCpu(cpu));
     }
 
 }

@@ -49,12 +49,10 @@ public class MotherboardRestController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation =
-            MotherboardResponseDTO.class)))
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
     @ResponseStatus(HttpStatus.OK)
-    public MotherboardResponseDTO addMotherboard(@Valid @RequestBody MotherboardFullDTO motherboard) {
-        return motherboardMapper.toMotherboardResponseDTO(
-                motherboardService.save(motherboardMapper.toMotherboard(motherboard)));
+    public Long addMotherboard(@Valid @RequestBody MotherboardFullDTO motherboard) {
+        return motherboardService.save(motherboardMapper.toMotherboard(motherboard));
     }
 
 }
