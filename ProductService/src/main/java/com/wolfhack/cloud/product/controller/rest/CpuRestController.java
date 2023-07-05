@@ -1,12 +1,12 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.mapper.CpuMapper;
 import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
 import com.wolfhack.cloud.product.service.CpuService;
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,9 +47,9 @@ public class CpuRestController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CpuResponseDTO.class)))
-    public CpuResponseDTO addCpu(@Valid @RequestBody CpuFullDTO cpu) {
-        return cpuMapper.toCpuResponseDTO(cpuService.save(cpuMapper.toCpu(cpu)));
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+    public Long addCpu(@Valid @RequestBody CpuFullDTO cpu) {
+        return cpuService.save(cpuMapper.toCpu(cpu));
     }
 
 }

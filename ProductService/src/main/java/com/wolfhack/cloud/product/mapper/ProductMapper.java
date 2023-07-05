@@ -1,8 +1,9 @@
 package com.wolfhack.cloud.product.mapper;
 
-import com.wolfhack.cloud.product.model.dto.ProductMiniDTO;
 import com.wolfhack.cloud.product.model.*;
-import org.mapstruct.*;
+import com.wolfhack.cloud.product.model.dto.ProductMiniDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 

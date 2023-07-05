@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static java.lang.String.format;
 
@@ -22,6 +25,7 @@ import static java.lang.String.format;
 public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuServiceInterface {
 
     private final CpuRepository cpuRepository;
+    private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
@@ -41,9 +45,16 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
     @AopLog
     @Override
     @CachePut(cacheNames = {"cpu_Response_Page", "cpu"}, key = "#cpu.id")
-    public Cpu save(Cpu cpu) {
+    public Long save(Cpu cpu) {
         cpu.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return cpuRepository.save(cpu);
+        return cpuRepository.save(cpu).getId();
+    }
+
+    @AopLog
+    @Override
+    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+        Cpu cpu = findById(id);
+        return storageService.saveFileAndThen(multipartFile, cpu.getPhotos(), () -> save(cpu));
     }
 
     @AopLog
@@ -51,7 +62,7 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
     @Cacheable(cacheNames = "cpu", key = "#id")
     public Cpu findById(Long id) {
         return cpuRepository.findById(id)
-                .orElseThrow(CpuNotFoundException::new);
+            .orElseThrow(CpuNotFoundException::new);
     }
 
     @AopLog

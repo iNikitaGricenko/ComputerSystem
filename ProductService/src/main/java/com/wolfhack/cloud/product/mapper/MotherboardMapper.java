@@ -1,8 +1,8 @@
 package com.wolfhack.cloud.product.mapper;
 
+import com.wolfhack.cloud.product.model.Motherboard;
 import com.wolfhack.cloud.product.model.dto.MotherboardFullDTO;
 import com.wolfhack.cloud.product.model.dto.MotherboardResponseDTO;
-import com.wolfhack.cloud.product.model.Motherboard;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

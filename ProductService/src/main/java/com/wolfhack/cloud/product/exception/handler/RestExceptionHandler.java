@@ -1,8 +1,8 @@
 package com.wolfhack.cloud.product.exception.handler;
 
 import com.wolfhack.cloud.product.exception.*;
-import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
+import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +19,7 @@ import javax.validation.ValidationException;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
