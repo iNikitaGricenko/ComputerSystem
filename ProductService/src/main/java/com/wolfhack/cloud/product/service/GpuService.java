@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.GpuNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Gpu;
@@ -13,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static java.lang.String.format;
 
@@ -21,6 +25,7 @@ import static java.lang.String.format;
 public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuServiceInterface {
 
     private final GpuRepository gpuRepository;
+    private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
@@ -30,19 +35,29 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
         }
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "gpu_Response_Page")
     public Page<Gpu> findAll(Pageable pageable) {
         return gpuRepository.findAll(pageable);
     }
 
+    @AopLog
     @Override
     @CachePut(cacheNames = {"gpu_Response_Page", "gpu"}, key = "#gpu.id")
-    public Gpu save(Gpu gpu) {
+    public Long save(Gpu gpu) {
         gpu.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return gpuRepository.save(gpu);
+        return gpuRepository.save(gpu).getId();
     }
 
+    @AopLog
+    @Override
+    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+        Gpu gpu = findById(id);
+        return storageService.saveFileAndThen(multipartFile, gpu.getPhotos(), () -> save(gpu));
+    }
+
+    @AopLog
     @Override
     @Cacheable(cacheNames = "gpu", key = "#id")
     public Gpu findById(Long id) {
@@ -50,6 +65,7 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
                 .orElseThrow(GpuNotFoundException::new);
     }
 
+    @AopLog
     @Override
     public Page<Gpu> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);

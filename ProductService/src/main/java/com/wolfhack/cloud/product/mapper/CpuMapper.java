@@ -1,8 +1,8 @@
 package com.wolfhack.cloud.product.mapper;
 
+import com.wolfhack.cloud.product.model.Cpu;
 import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
-import com.wolfhack.cloud.product.model.Cpu;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

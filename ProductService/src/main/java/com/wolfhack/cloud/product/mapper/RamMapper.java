@@ -1,8 +1,8 @@
 package com.wolfhack.cloud.product.mapper;
 
+import com.wolfhack.cloud.product.model.Ram;
 import com.wolfhack.cloud.product.model.dto.RamFullDTO;
 import com.wolfhack.cloud.product.model.dto.RamResponseDTO;
-import com.wolfhack.cloud.product.model.Ram;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

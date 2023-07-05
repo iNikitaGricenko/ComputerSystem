@@ -1,12 +1,12 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.wrapper.RestPage;
-import com.wolfhack.cloud.product.model.dto.MotherboardFullDTO;
-import com.wolfhack.cloud.product.model.dto.MotherboardResponseDTO;
-import com.wolfhack.cloud.product.mapper.MotherboardMapper;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.mapper.MotherboardMapper;
+import com.wolfhack.cloud.product.model.dto.MotherboardFullDTO;
+import com.wolfhack.cloud.product.model.dto.MotherboardResponseDTO;
 import com.wolfhack.cloud.product.service.MotherboardService;
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -49,12 +49,10 @@ public class MotherboardRestController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation =
-            MotherboardResponseDTO.class)))
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
     @ResponseStatus(HttpStatus.OK)
-    public MotherboardResponseDTO addMotherboard(@Valid @RequestBody MotherboardFullDTO motherboard) {
-        return motherboardMapper.toMotherboardResponseDTO(
-                motherboardService.save(motherboardMapper.toMotherboard(motherboard)));
+    public Long addMotherboard(@Valid @RequestBody MotherboardFullDTO motherboard) {
+        return motherboardService.save(motherboardMapper.toMotherboard(motherboard));
     }
 
 }

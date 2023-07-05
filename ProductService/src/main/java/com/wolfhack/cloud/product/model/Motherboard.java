@@ -1,17 +1,13 @@
 package com.wolfhack.cloud.product.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
+import java.util.List;
 
 @Data
 @Document("motherboards")
@@ -54,4 +50,6 @@ public class Motherboard {
     private HashMap<String, Integer> externalPorts = new HashMap<>();
 
     private String formFactor;
+
+    private List<FileStorage> photos;
 }

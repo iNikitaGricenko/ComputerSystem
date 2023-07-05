@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service;
 
+import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.MotherboardNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Motherboard;
@@ -13,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static java.lang.String.format;
 
@@ -21,6 +25,7 @@ import static java.lang.String.format;
 public class MotherboardService extends AbstractMongoEventListener<Motherboard> implements MotherboardServiceInterface {
 
     private final MotherboardRepository motherboardRepository;
+    private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
@@ -30,12 +35,14 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
         }
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "motherboard_Response_Page")
     public Page<Motherboard> findAll(Pageable pageable) {
         return motherboardRepository.findAll(pageable);
     }
 
+    @AopLog
     @Override
     @Cacheable(cacheNames = "motherboard", key = "#id")
     public Motherboard findById(Long id) {
@@ -43,13 +50,22 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
                 .orElseThrow(MotherboardNotFoundException::new);
     }
 
+    @AopLog
     @Override
     @CachePut(cacheNames = {"motherboard_Response_Page", "motherboard"}, key = "#motherboard.id")
-    public Motherboard save(Motherboard motherboard) {
+    public Long save(Motherboard motherboard) {
         motherboard.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return motherboardRepository.save(motherboard);
+        return motherboardRepository.save(motherboard).getId();
     }
 
+    @AopLog
+    @Override
+    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+        Motherboard motherboard = findById(id);
+        return storageService.saveFileAndThen(multipartFile, motherboard.getPhotos(), () -> save(motherboard));
+    }
+
+    @AopLog
     @Override
     public Page<Motherboard> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);

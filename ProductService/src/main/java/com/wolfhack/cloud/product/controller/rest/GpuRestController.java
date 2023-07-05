@@ -1,12 +1,12 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.wrapper.RestPage;
-import com.wolfhack.cloud.product.model.dto.GpuFullDTO;
-import com.wolfhack.cloud.product.model.dto.GpuResponseDTO;
-import com.wolfhack.cloud.product.mapper.GpuMapper;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.mapper.GpuMapper;
+import com.wolfhack.cloud.product.model.dto.GpuFullDTO;
+import com.wolfhack.cloud.product.model.dto.GpuResponseDTO;
 import com.wolfhack.cloud.product.service.GpuService;
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,10 +48,10 @@ public class GpuRestController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GpuResponseDTO.class)))
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
     @ResponseStatus(HttpStatus.CREATED)
-    public GpuResponseDTO addGpu(@Valid @RequestBody GpuFullDTO gpu) {
-        return  gpuMapper.toGpuResponseDTO(gpuService.save(gpuMapper.toGpu(gpu)));
+    public Long addGpu(@Valid @RequestBody GpuFullDTO gpu) {
+        return gpuService.save(gpuMapper.toGpu(gpu));
     }
 
 }
