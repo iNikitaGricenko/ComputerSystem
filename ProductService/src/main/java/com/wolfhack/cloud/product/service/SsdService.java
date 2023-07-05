@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static java.lang.String.format;
 
@@ -22,6 +25,7 @@ import static java.lang.String.format;
 public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdServiceInterface {
 
     private final SsdRepository ssdRepository;
+    private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
@@ -41,9 +45,16 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
     @AopLog
     @Override
     @CachePut(cacheNames = {"ssd_Response_Page", "ssd"}, key = "#ssd.id")
-    public Ssd save(Ssd ssd) {
+    public Long save(Ssd ssd) {
         ssd.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return ssdRepository.save(ssd);
+        return ssdRepository.save(ssd).getId();
+    }
+
+    @AopLog
+    @Override
+    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+        Ssd ssd = findById(id);
+        return storageService.saveFileAndThen(multipartFile, ssd.getPhotos(), () -> save(ssd));
     }
 
     @AopLog
@@ -51,7 +62,7 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
     @Cacheable(cacheNames = "ssd", key = "#id")
     public Ssd findById(Long id) {
         return ssdRepository.findById(id)
-                .orElseThrow(SsdNotFoundException::new);
+            .orElseThrow(SsdNotFoundException::new);
     }
 
     @AopLog

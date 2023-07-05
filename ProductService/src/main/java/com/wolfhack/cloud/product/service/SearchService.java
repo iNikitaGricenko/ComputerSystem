@@ -1,8 +1,8 @@
 package com.wolfhack.cloud.product.service;
 
 import com.wolfhack.cloud.product.annotations.AopLog;
-import com.wolfhack.cloud.product.model.dto.ProductMiniDTO;
 import com.wolfhack.cloud.product.mapper.ProductMapper;
+import com.wolfhack.cloud.product.model.dto.ProductMiniDTO;
 import com.wolfhack.cloud.product.service.implement.SearchServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

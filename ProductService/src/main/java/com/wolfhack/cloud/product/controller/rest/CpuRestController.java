@@ -1,12 +1,12 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
 import com.wolfhack.cloud.product.mapper.CpuMapper;
 import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
 import com.wolfhack.cloud.product.service.CpuService;
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

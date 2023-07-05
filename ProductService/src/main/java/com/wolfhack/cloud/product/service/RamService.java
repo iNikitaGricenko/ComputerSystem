@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static java.lang.String.format;
 
@@ -22,6 +25,7 @@ import static java.lang.String.format;
 public class RamService extends AbstractMongoEventListener<Ram> implements RamServiceInterface {
 
     private final RamRepository ramRepository;
+    private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
@@ -41,9 +45,16 @@ public class RamService extends AbstractMongoEventListener<Ram> implements RamSe
     @AopLog
     @Override
     @CachePut(cacheNames = {"ram_Response_Page", "ram"}, key = "#ram.id")
-    public Ram save(Ram ram) {
+    public Long save(Ram ram) {
         ram.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return ramRepository.save(ram);
+        return ramRepository.save(ram).getId();
+    }
+
+    @AopLog
+    @Override
+    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+        Ram ram = findById(id);
+        return storageService.saveFileAndThen(multipartFile, ram.getPhotos(), () -> save(ram));
     }
 
     @AopLog

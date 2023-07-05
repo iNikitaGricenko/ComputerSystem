@@ -2,7 +2,7 @@ package com.wolfhack.cloud.product.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import com.wolfhack.cloud.product.model.Storage;
+import com.wolfhack.cloud.product.model.FileStorage;
 import com.wolfhack.cloud.product.service.implement.AmazonStorageServiceInterface;
 import com.wolfhack.cloud.product.service.implement.FileDataStorageServiceInterface;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,15 +38,13 @@ public class StorageService implements AmazonStorageServiceInterface {
 		amazonS3Client.putObject(request);
 		String pathToFile = amazonS3Client.getUrl(bucket, DEFAULT_STORAGE_KEY).getFile();
 
-		saveToLocalStorage(file, pathToFile);
-
-		return pathToFile;
+		return saveToLocalStorage(file, pathToFile);
 	}
 
 	@Override
 	public S3ObjectInputStream download(String fileId) {
-		Storage storage = fileDataStorage.get(fileId);
-		String key = DEFAULT_STORAGE_KEY + storage.getName();
+		FileStorage fileStorage = fileDataStorage.get(fileId);
+		String key = DEFAULT_STORAGE_KEY + fileStorage.getName();
 
 		S3Object object = amazonS3Client.getObject(bucket, key);
 		return object.getObjectContent();
@@ -54,7 +53,7 @@ public class StorageService implements AmazonStorageServiceInterface {
 	@Override
 	public void delete(List<String> fileIds) {
 		List<String> collect = fileDataStorage.getAll(fileIds).stream()
-				.map(Storage::getName)
+				.map(FileStorage::getName)
 				.map(name -> DEFAULT_STORAGE_KEY + name)
 				.collect(Collectors.toList());
 
@@ -70,6 +69,16 @@ public class StorageService implements AmazonStorageServiceInterface {
 		amazonS3Client.deleteObject(bucket, key);
 	}
 
+	public String saveFileAndThen(MultipartFile multipartFile, List<FileStorage> storageList, Runnable then) throws IOException {
+		String fileId = upload(multipartFile);
+		FileStorage fileStorage = fileDataStorage.get(fileId);
+
+		Optional.ofNullable(storageList).filter(Predicate.not(List::isEmpty)).ifPresent(storages -> storages.add(fileStorage));
+		then.run();
+
+		return fileStorage.getUrl();
+	}
+
 	private PutObjectRequest convertFileToPutRequest(MultipartFile file) throws IOException {
 		ObjectMetadata metadata = new ObjectMetadata();
 		InputStream inputStream = file.getInputStream();
@@ -82,8 +91,8 @@ public class StorageService implements AmazonStorageServiceInterface {
 		return new PutObjectRequest(bucket, key, inputStream, metadata);
 	}
 
-	private void saveToLocalStorage(MultipartFile file, String pathToFile) {
-		Storage storage = Storage.builder()
+	private String saveToLocalStorage(MultipartFile file, String pathToFile) {
+		FileStorage fileStorage = FileStorage.builder()
 				.key(StorageService.DEFAULT_STORAGE_KEY)
 				.name(file.getName())
 				.type(file.getContentType())
@@ -91,6 +100,6 @@ public class StorageService implements AmazonStorageServiceInterface {
 				.url(pathToFile)
 				.build();
 
-		fileDataStorage.save(storage);
+		return fileDataStorage.save(fileStorage);
 	}
 }

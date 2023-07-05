@@ -1,12 +1,12 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.wrapper.RestPage;
-import com.wolfhack.cloud.product.model.dto.MotherboardFullDTO;
-import com.wolfhack.cloud.product.model.dto.MotherboardResponseDTO;
-import com.wolfhack.cloud.product.mapper.MotherboardMapper;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.mapper.MotherboardMapper;
+import com.wolfhack.cloud.product.model.dto.MotherboardFullDTO;
+import com.wolfhack.cloud.product.model.dto.MotherboardResponseDTO;
 import com.wolfhack.cloud.product.service.MotherboardService;
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Builder
 @Document("file_storage")
-public class Storage {
+public class FileStorage {
 
 	private String id;
 

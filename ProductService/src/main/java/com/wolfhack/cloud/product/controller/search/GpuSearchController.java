@@ -1,8 +1,8 @@
 package com.wolfhack.cloud.product.controller.search;
 
-import com.wolfhack.cloud.product.wrapper.RestPage;
 import com.wolfhack.cloud.product.model.Gpu;
 import com.wolfhack.cloud.product.service.GpuService;
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
