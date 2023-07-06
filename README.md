@@ -14,7 +14,8 @@ Microservices for e-commerce computer components store
   - Execute comand: "mvn clean package"
   - Execute command: "docker-compose build"
   - Execute command: "docker-compose up -d"
-* Open "http://localhost:8761/" in browser to enter eureka
+* Open [Eureka](http://localhost:8761/) in browser to enter eureka
+* Open [Swagger](http://localhost:8080/webjars/swagger-ui/index.html) in browser to open swagger for all services
 
 To stop docker containers exxecute command (in console from previous steps) "docker-compose stope"
 
