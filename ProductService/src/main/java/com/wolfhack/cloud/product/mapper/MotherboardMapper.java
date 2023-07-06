@@ -23,5 +23,5 @@ public interface MotherboardMapper {
 	MotherboardSearch toSearch(Motherboard motherboard);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	Motherboard partialUpdate(@MappingTarget MotherboardSearch motherboardSearch, Motherboard motherboard);
+	MotherboardSearch partialUpdate(@MappingTarget MotherboardSearch motherboardSearch, Motherboard motherboard);
 }
