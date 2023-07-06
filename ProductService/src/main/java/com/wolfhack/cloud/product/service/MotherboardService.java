@@ -6,6 +6,7 @@ import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Motherboard;
 import com.wolfhack.cloud.product.repository.MotherboardRepository;
 import com.wolfhack.cloud.product.service.implement.MotherboardServiceInterface;
+import com.wolfhack.cloud.product.service.search.MotherboardSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,7 @@ import static java.lang.String.format;
 public class MotherboardService extends AbstractMongoEventListener<Motherboard> implements MotherboardServiceInterface {
 
     private final MotherboardRepository motherboardRepository;
+    private final MotherboardSearchService motherboardSearchService;
     private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
@@ -55,7 +57,9 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
     @CachePut(cacheNames = {"motherboard_Response_Page", "motherboard"}, key = "#motherboard.id")
     public Long save(Motherboard motherboard) {
         motherboard.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return motherboardRepository.save(motherboard).getId();
+        Motherboard saved = motherboardRepository.save(motherboard);
+        motherboardSearchService.save(saved);
+        return saved.getId();
     }
 
     @AopLog
@@ -70,5 +74,18 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
     public Page<Motherboard> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);
         return motherboardRepository.searchCpusByQuery(query, pageable);
+    }
+
+    @Override
+    public void delete(long id) {
+        motherboardSearchService.delete(id);
+        motherboardRepository.deleteById(id);
+    }
+
+    @Override
+    public long update(Motherboard motherboard) {
+        Motherboard saved = motherboardRepository.save(motherboard);
+        motherboardSearchService.update(motherboard);
+        return saved.getId();
     }
 }

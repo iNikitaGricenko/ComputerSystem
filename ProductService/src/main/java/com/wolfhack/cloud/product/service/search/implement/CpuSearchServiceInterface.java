@@ -1,6 +1,5 @@
-package com.wolfhack.cloud.product.service.search;
+package com.wolfhack.cloud.product.service.search.implement;
 
-import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.model.Cpu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +11,8 @@ public interface CpuSearchServiceInterface {
 	long save(Cpu cpu);
 
 	Page<Cpu> findByProductLine(String productLine, Pageable pageable);
+
+	List<Cpu> findByTitle(String line, Pageable pageable);
 
 	List<Cpu> findByAllTextFields(String line, Pageable pageable);
 

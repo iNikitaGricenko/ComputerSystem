@@ -17,4 +17,8 @@ public interface SsdServiceInterface {
 	Ssd findById(Long id);
 
 	Page<Ssd> searchByQuery(String query, Pageable pageable);
+
+	void delete(long id);
+
+	long update(Ssd ssd);
 }

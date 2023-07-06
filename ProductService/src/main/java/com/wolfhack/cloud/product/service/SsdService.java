@@ -6,6 +6,7 @@ import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Ssd;
 import com.wolfhack.cloud.product.repository.SsdRepository;
 import com.wolfhack.cloud.product.service.implement.SsdServiceInterface;
+import com.wolfhack.cloud.product.service.search.SsdSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,7 @@ import static java.lang.String.format;
 public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdServiceInterface {
 
     private final SsdRepository ssdRepository;
+    private final SsdSearchService ssdSearchService;
     private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
@@ -47,7 +49,9 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
     @CachePut(cacheNames = {"ssd_Response_Page", "ssd"}, key = "#ssd.id")
     public Long save(Ssd ssd) {
         ssd.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return ssdRepository.save(ssd).getId();
+        Ssd saved = ssdRepository.save(ssd);
+        ssdSearchService.save(saved);
+        return saved.getId();
     }
 
     @AopLog
@@ -70,5 +74,19 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
     public Page<Ssd> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);
         return ssdRepository.searchCpusByQuery(query, pageable);
+    }
+
+    @Override
+    public void delete(long id) {
+        ssdSearchService.delete(id);
+        ssdRepository.deleteById(id);
+
+    }
+
+    @Override
+    public long update(Ssd ssd) {
+        Ssd saved = ssdRepository.save(ssd);
+        ssdSearchService.update(ssd);
+        return saved.getId();
     }
 }

@@ -17,4 +17,8 @@ public interface MotherboardServiceInterface {
     String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
     Page<Motherboard> searchByQuery(String query, Pageable pageable);
+
+    void delete(long id);
+
+    long update(Motherboard motherboard);
 }
