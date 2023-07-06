@@ -11,6 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 
 /**
  * Search model for {@link Ssd}
@@ -66,7 +67,6 @@ public class SsdSearch implements Serializable {
 	@Field(type = FieldType.Text, fielddata = true)
 	String storageTemperature;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String additionally;
+	HashSet<String> additionally;
 
 }
