@@ -5,7 +5,7 @@ Microservices for e-commerce computer components store
 <br>
 
 # Requirements:
-- Java 11 or above
+- Java 17 or above
 - Apache Maven 3.6.3 or above
 - docker 24.0.2+ and docker-compose v2.17.2+
 
