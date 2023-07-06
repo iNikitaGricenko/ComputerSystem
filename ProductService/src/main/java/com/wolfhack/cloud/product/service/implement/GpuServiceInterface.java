@@ -17,4 +17,8 @@ public interface GpuServiceInterface {
     Gpu findById(Long id);
 
     Page<Gpu> searchByQuery(String query, Pageable pageable);
+
+    void delete(long id);
+
+    long update(Gpu gpu);
 }

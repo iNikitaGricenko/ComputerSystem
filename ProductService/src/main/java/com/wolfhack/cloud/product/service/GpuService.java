@@ -6,6 +6,7 @@ import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Gpu;
 import com.wolfhack.cloud.product.repository.GpuRepository;
 import com.wolfhack.cloud.product.service.implement.GpuServiceInterface;
+import com.wolfhack.cloud.product.service.search.GpuSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,7 @@ import static java.lang.String.format;
 public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuServiceInterface {
 
     private final GpuRepository gpuRepository;
+    private final GpuSearchService gpuSearchService;
     private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
@@ -47,7 +49,9 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
     @CachePut(cacheNames = {"gpu_Response_Page", "gpu"}, key = "#gpu.id")
     public Long save(Gpu gpu) {
         gpu.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return gpuRepository.save(gpu).getId();
+        Gpu saved = gpuRepository.save(gpu);
+        gpuSearchService.save(saved);
+        return saved.getId();
     }
 
     @AopLog
@@ -70,5 +74,18 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
     public Page<Gpu> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);
         return gpuRepository.searchCpusByQuery(query, pageable);
+    }
+
+    @Override
+    public void delete(long id) {
+        gpuSearchService.delete(id);
+        gpuRepository.deleteById(id);
+    }
+
+    @Override
+    public long update(Gpu gpu) {
+        Gpu saved = gpuRepository.save(gpu);
+        gpuSearchService.update(gpu);
+        return saved.getId();
     }
 }

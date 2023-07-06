@@ -17,4 +17,8 @@ public interface RamServiceInterface {
     Ram findById(Long id);
 
     Page<Ram> searchByQuery(String query, Pageable pageable);
+
+    void delete(long id);
+
+    long update(Ram ram);
 }
