@@ -11,6 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Search model for {@link Motherboard}
@@ -69,14 +70,11 @@ public class MotherboardSearch implements Serializable {
 	@Field(type = FieldType.Float)
 	float soundScheme;
 
-	@Field(type = FieldType.Integer)
-	Integer injectedPorts;
+	HashMap<String, Integer> injectedPorts = new HashMap<>();
 
-	@Field(type = FieldType.Integer)
-	Integer powerConnectors;
+	HashMap<String, Integer> powerConnectors = new HashMap<>();
 
-	@Field(type = FieldType.Integer)
-	Integer externalPorts;
+	HashMap<String, Integer> externalPorts = new HashMap<>();
 
 	@Field(type = FieldType.Text, fielddata = true)
 	String formFactor;
