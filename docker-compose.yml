@@ -10,6 +10,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
+    networks:
+      - default
   # End Zookeeper
   # Start Kafka
   kafka:
@@ -27,6 +29,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - default
   # End Kafka
   # Start Mysql
   mysql:
@@ -185,6 +189,8 @@ services:
       - "8761:8761"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - default
   gateway-server:
     container_name: gateway
     build:
@@ -199,6 +205,8 @@ services:
     depends_on:
       - eureka-server
       - auth-server
+    networks:
+      - default
   auth-server:
     container_name: auth-server
     build:
@@ -215,6 +223,7 @@ services:
       - mysql
     networks:
       - mysql-eshop
+      - default
   # End Cloud
 
   # Start Services
@@ -235,6 +244,8 @@ services:
       - mongodb
     networks:
       - mongo-eshop
+      - esnet
+      - default
   customer-service:
     container_name: customer-service
     build:
@@ -252,6 +263,7 @@ services:
       - mysql
     networks:
       - mysql-eshop
+      - default
 # End Services
 
 volumes:
@@ -261,6 +273,7 @@ volumes:
     driver: local
   data: {}
 networks:
+  default: {}
   mysql-eshop:
     name: mysql
   mongo-eshop:
