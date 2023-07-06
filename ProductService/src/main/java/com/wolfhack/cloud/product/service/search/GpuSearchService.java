@@ -2,11 +2,17 @@ package com.wolfhack.cloud.product.service.search;
 
 import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.CpuNotFoundException;
+import com.wolfhack.cloud.product.exception.GpuNotFoundException;
 import com.wolfhack.cloud.product.mapper.CpuMapper;
+import com.wolfhack.cloud.product.mapper.GpuMapper;
 import com.wolfhack.cloud.product.model.Cpu;
+import com.wolfhack.cloud.product.model.Gpu;
 import com.wolfhack.cloud.product.model.search.CpuSearch;
+import com.wolfhack.cloud.product.model.search.GpuSearch;
 import com.wolfhack.cloud.product.repository.search.CpuSearchRepository;
+import com.wolfhack.cloud.product.repository.search.GpuSearchRepository;
 import com.wolfhack.cloud.product.service.search.implement.CpuSearchServiceInterface;
+import com.wolfhack.cloud.product.service.search.implement.GpuSearchServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
@@ -27,43 +33,37 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CpuSearchService implements CpuSearchServiceInterface {
+public class GpuSearchService implements GpuSearchServiceInterface {
 
-	private final CpuMapper cpuMapper;
-	private final CpuSearchRepository cpuSearchRepository;
+	private final GpuMapper gpuMapper;
+	private final GpuSearchRepository gpuSearchRepository;
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Cpu cpu) {
-		CpuSearch searchModel = cpuMapper.toSearchModel(cpu);
-		return cpuSearchRepository.save(searchModel).getId();
+	public long save(Gpu gpu) {
+		GpuSearch searchModel = gpuMapper.toSearch(gpu);
+		return gpuSearchRepository.save(searchModel).getId();
 	}
 
 	@Override
-	public Page<Cpu> findByProductLine(String productLine, Pageable pageable) {
-		return cpuSearchRepository.findByProductLine(productLine, pageable).map(cpuMapper::toEntity);
-	}
-
-	@Override
-	public List<Cpu> findByTitle(String line, Pageable pageable) {
+	public List<Gpu> findByTitle(String line, Pageable pageable) {
 		Query searchQuery = new NativeSearchQueryBuilder()
 				.withQuery(QueryBuilders.multiMatchQuery(line)
 						.field("name")
 						.field("model")
-						.field("productLine")
 						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
 						.fuzziness(Fuzziness.ONE)
 						.prefixLength(3)).build();
 
-		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
+		SearchHits<GpuSearch> gpus = elasticsearchOperations.search(searchQuery, GpuSearch.class, IndexCoordinates.of("product-gpu"));
 
-		return cpus.map(SearchHit::getContent).map(cpuMapper::toEntity).toList();
+		return gpus.map(SearchHit::getContent).map(gpuMapper::toEntity).toList();
 	}
 
 	@AopLog
 	@Override
-	public List<Cpu> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Cpu.class.getFields())
+	public List<Gpu> findByAllTextFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Gpu.class.getFields())
 				.filter(field -> field.getType().isInstance(String.class))
 				.map(Field::getName)
 				.toArray(String[]::new);
@@ -74,15 +74,15 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 						.fuzziness(Fuzziness.ONE)
 						.prefixLength(3)).build();
 
-		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
+		SearchHits<GpuSearch> gpus = elasticsearchOperations.search(searchQuery, GpuSearch.class, IndexCoordinates.of("product-gpu"));
 
-		return cpus.map(SearchHit::getContent).map(cpuMapper::toEntity).toList();
+		return gpus.map(SearchHit::getContent).map(gpuMapper::toEntity).toList();
 	}
 	
 	@AopLog
 	@Override
-	public List<Cpu> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Cpu.class.getFields())
+	public List<Gpu> findByAllFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Gpu.class.getFields())
 				.map(Field::getName)
 				.toArray(String[]::new);
 
@@ -92,23 +92,23 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 						.fuzziness(Fuzziness.ONE)
 						.prefixLength(3)).build();
 
-		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
+		SearchHits<GpuSearch> gpus = elasticsearchOperations.search(searchQuery, GpuSearch.class, IndexCoordinates.of("product-gpu"));
 
-		return cpus.map(SearchHit::getContent).map(cpuMapper::toEntity).toList();
+		return gpus.map(SearchHit::getContent).map(gpuMapper::toEntity).toList();
 	}
 
 	@Override
-	public long update(Cpu cpu) {
-		CpuSearch cpuSearch = cpuSearchRepository.findById(cpu.getId()).orElseThrow(CpuNotFoundException::new);
+	public long update(Gpu gpu) {
+		GpuSearch gpuSearch = gpuSearchRepository.findById(gpu.getId()).orElseThrow(GpuNotFoundException::new);
 
-		cpuMapper.partialUpdate(cpuSearch, cpu);
+		gpuMapper.partialUpdate(gpuSearch, gpu);
 
-		return cpuSearchRepository.save(cpuSearch).getId();
+		return gpuSearchRepository.save(gpuSearch).getId();
 	}
 
 	@Override
-	public void delete(long cpuId) {
-		cpuSearchRepository.deleteById(cpuId);
+	public void delete(long gpuId) {
+		gpuSearchRepository.deleteById(gpuId);
 	}
 
 }

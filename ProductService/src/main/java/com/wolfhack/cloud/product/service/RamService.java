@@ -6,6 +6,7 @@ import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Ram;
 import com.wolfhack.cloud.product.repository.RamRepository;
 import com.wolfhack.cloud.product.service.implement.RamServiceInterface;
+import com.wolfhack.cloud.product.service.search.RamSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,7 @@ import static java.lang.String.format;
 public class RamService extends AbstractMongoEventListener<Ram> implements RamServiceInterface {
 
     private final RamRepository ramRepository;
+    private final RamSearchService ramSearchService;
     private final StorageService storageService;
     private final DatabaseSequenceService databaseSequenceService;
 
@@ -47,7 +49,9 @@ public class RamService extends AbstractMongoEventListener<Ram> implements RamSe
     @CachePut(cacheNames = {"ram_Response_Page", "ram"}, key = "#ram.id")
     public Long save(Ram ram) {
         ram.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        return ramRepository.save(ram).getId();
+        Ram saved = ramRepository.save(ram);
+        ramSearchService.save(saved);
+        return saved.getId();
     }
 
     @AopLog
@@ -70,5 +74,18 @@ public class RamService extends AbstractMongoEventListener<Ram> implements RamSe
     public Page<Ram> searchByQuery(String query, Pageable pageable) {
         query = format("\"%s\"", query);
         return ramRepository.searchCpusByQuery(query, pageable);
+    }
+
+    @Override
+    public void delete(long id) {
+        ramSearchService.delete(id);
+        ramRepository.deleteById(id);
+    }
+
+    @Override
+    public long update(Ram ram) {
+        Ram saved = ramRepository.save(ram);
+        ramSearchService.update(ram);
+        return saved.getId();
     }
 }
