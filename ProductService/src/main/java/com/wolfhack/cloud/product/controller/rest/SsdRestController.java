@@ -1,11 +1,12 @@
 package com.wolfhack.cloud.product.controller.rest;
 
-import com.wolfhack.cloud.product.model.dto.SsdFullDTO;
-import com.wolfhack.cloud.product.model.dto.SsdResponseDTO;
-import com.wolfhack.cloud.product.mapper.SsdMapper;
 import com.wolfhack.cloud.product.exception.handler.error.ErrorBody;
 import com.wolfhack.cloud.product.exception.handler.error.ValidationErrorBody;
+import com.wolfhack.cloud.product.mapper.SsdMapper;
+import com.wolfhack.cloud.product.model.dto.SsdFullDTO;
+import com.wolfhack.cloud.product.model.dto.SsdResponseDTO;
 import com.wolfhack.cloud.product.service.SsdService;
+import com.wolfhack.cloud.product.wrapper.RestPage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,14 +43,14 @@ public class SsdRestController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @PageableAsQueryParam
     public Page<SsdResponseDTO> getSsds(Pageable pageable) {
-        return ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO);
+        return new RestPage<>(ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SsdResponseDTO.class)))
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
     @ResponseStatus(HttpStatus.CREATED)
-    public SsdResponseDTO addSsd(@Valid @RequestBody SsdFullDTO ssd) {
-        return ssdMapper.toSsdResponseDTO(ssdService.save(ssdMapper.toSsd(ssd)));
+    public Long addSsd(@Valid @RequestBody SsdFullDTO ssd) {
+        return ssdService.save(ssdMapper.toSsd(ssd));
     }
 }
