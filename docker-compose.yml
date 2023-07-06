@@ -35,11 +35,12 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_USERNAME=boss
       - MYSQL_ROOT_PASSWORD=WolFHacK702
       - MYSQL_DATABASE=eshop
     ports:
       - "3306:3306"
+    networks:
+      - mysql-eshop
   # End Mysql
   # Start Mongo
   mongodb:
@@ -53,6 +54,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    networks:
+      - mongo-eshop
   mongo-express:
     image: mongo-express
     container_name: mongo-express-eshop
@@ -65,7 +68,101 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongo-eshop
     depends_on:
       - mongodb
+    networks:
+      - mongo-eshop
   # End Mongo
+  # Start Elastic
+  elasticsearch-main-chain:
+    image: elasticsearch:7.16.2
+    container_name: elasticsearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    environment:
+      - node.name=es01
+      - cluster.name=docker-cluster
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=elasticsearch-second-chain
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - discovery.zen.minimum_master_nodes=2
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+  elasticsearch-second-chain:
+    image: elasticsearch:7.16.2
+    container_name: elasticsearch-second-chain
+    restart: unless-stopped
+    environment:
+      - node.name=es02
+      - cluster.name=docker-cluster
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - discovery.zen.minimum_master_nodes=2
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata2:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+  kibana:
+    image: kibana:7.16.2
+    container_name: kibana
+    environment:
+      - SERVER_NAME=kibana.local
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+    ports:
+      - '5601:5601'
+    networks:
+      - esnet
+  headPlugin:
+    image: mobz/elasticsearch-head:5
+    container_name: elastic-head
+    ports:
+      - '9100:9100'
+    networks:
+      - esnet
+  # End Elastic
   # Start Redis
   redis:
     image: 'bitnami/redis:latest'
@@ -86,6 +183,8 @@ services:
     restart: unless-stopped
     ports:
       - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
   gateway-server:
     container_name: gateway
     build:
@@ -96,6 +195,7 @@ services:
       - "8080:8080"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - auth-server
@@ -109,9 +209,12 @@ services:
       - "8081:8081"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - mysql
+    networks:
+      - mysql-eshop
   # End Cloud
 
   # Start Services
@@ -125,10 +228,13 @@ services:
       - "8091:8091"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - gateway-server
       - mongodb
+    networks:
+      - mongo-eshop
   customer-service:
     container_name: customer-service
     build:
@@ -139,16 +245,27 @@ services:
       - "8085:8085"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
       - gateway-server
       - mysql
+    networks:
+      - mysql-eshop
 # End Services
 
 volumes:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local
   data: {}
 networks:
-  default:
+  mysql-eshop:
+    name: mysql
+  mongo-eshop:
     name: mongo-eshop_network
   redis-network:
     driver: bridge
+  esnet:
+    name: esnet

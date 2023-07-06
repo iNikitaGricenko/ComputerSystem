@@ -1,0 +1,6 @@
+<select th:fragment="choicer" onchange="location = this.value;" style="position: absolute; top: 10px; right: 10px; z-index: 1000;">
+    <option th:value="'?' + ${param.lang}" th:text="${null == param.lang ? #strings.toUpperCase(param.lang) : #strings.toUpperCase(param.lang).replace('UA_', '')}"></option>
+    <option th:unless="${#strings.equals(param.lang, 'ua')}" value="?lang=ua">UA</option>
+    <option th:unless="${#strings.equals(param.lang, 'ua_ru')}" value="?lang=ua_ru">RU</option>
+    <option th:unless="${#strings.equals(param.lang, 'eng')}" value="?lang=eng">ENG</option>
+</select>
