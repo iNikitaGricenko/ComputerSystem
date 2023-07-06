@@ -3,13 +3,22 @@ package com.wolfhack.cloud.product.service.implement;
 import com.wolfhack.cloud.product.model.Ssd;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface SsdServiceInterface {
-    Page<Ssd> findAll(Pageable pageable);
+	Page<Ssd> findAll(Pageable pageable);
 
-    Ssd save(Ssd ssd);
+	Long save(Ssd ssd);
 
-    Ssd findById(Long id);
+	String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    Page<Ssd> searchByQuery(String query, Pageable pageable);
+	Ssd findById(Long id);
+
+	Page<Ssd> searchByQuery(String query, Pageable pageable);
+
+	void delete(long id);
+
+	long update(Ssd ssd);
 }
