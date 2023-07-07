@@ -116,7 +116,7 @@ public class InMemoryOrderRepository implements OrderRepository {
 
 	@Override
 	public <S extends EntityCustomerOrder> boolean exists(Example<S> example) {
-		return fakeTable.values().contains(example.getProbe());
+		return fakeTable.containsValue(example.getProbe());
 	}
 
 	@Override
@@ -196,8 +196,8 @@ public class InMemoryOrderRepository implements OrderRepository {
 	public List<EntityCustomerOrder> findAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to) {
 		return fakeTable.values().stream()
 				.filter(entityCustomerOrder -> entityCustomerOrder.getStatus().equals(status))
-				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() != null ? entityCustomerOrder.getCompleted().isAfter(from) : true)
-				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() != null ? entityCustomerOrder.getCompleted().isBefore(to) : true)
+				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() == null || entityCustomerOrder.getCompleted().isAfter(from))
+				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() == null || entityCustomerOrder.getCompleted().isBefore(to))
 				.toList();
 	}
 }

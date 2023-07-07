@@ -43,6 +43,7 @@ public class Customer {
 
     private String email;
 
+    @EqualsAndHashCode.Exclude
     private LocalDateTime registerDate = LocalDateTime.now();
 
     public UpdateFactory renovator() {
