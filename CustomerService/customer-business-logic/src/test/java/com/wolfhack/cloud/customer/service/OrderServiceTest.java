@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OrderServiceTest {
 
-	private static IOrderService orderService;
+	private static OrderService orderService;
 	private static CustomerOrder defaultCustomerOrder;
 	private static List<CustomerOrder> defaultCustomerOrders;
 
@@ -154,16 +154,18 @@ class OrderServiceTest {
 				.flatMap(Collection::stream)
 				.toList();
 
-		DoubleSummaryStatistics doubleSummaryStatistics = list.stream().mapToDouble(OrderItem::getUnitPrice).summaryStatistics();
+		double totalPrice = list.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).sum();
+		double maxOrderPrice = list.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).max().orElse(0);
+		double minOrderPrice = list.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).min().orElse(0);
 		long totalQuantity = list.stream().mapToLong(OrderItem::getQuantity).sum();
 
 		AnalyticsResponse analytics = orderService.getAnalytics(analyticsSearch);
 		assertDoesNotThrow(() -> new InterruptedException());
 
 		assertNotNull(analytics);
-		assertEquals(doubleSummaryStatistics.getMin(), analytics.getMinPrice());
-		assertEquals(doubleSummaryStatistics.getMax(), analytics.getMaxPrice());
-		assertEquals(doubleSummaryStatistics.getSum(), analytics.getTotalPrice());
+		assertEquals(minOrderPrice, analytics.getMinOrderPrice());
+		assertEquals(maxOrderPrice, analytics.getMaxOrderPrice());
+		assertEquals(totalPrice, analytics.getTotalPrice());
 		assertEquals(totalQuantity, analytics.getTotalQuantity());
 	}
 

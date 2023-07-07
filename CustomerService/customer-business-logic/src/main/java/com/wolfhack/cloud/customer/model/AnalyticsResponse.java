@@ -10,7 +10,7 @@ public class AnalyticsResponse implements Serializable {
     private final double totalPrice;
     private final long totalQuantity;
 
-    private final double maxPrice;
-    private final double minPrice;
+    private final double maxOrderPrice;
+    private final double minOrderPrice;
 
 }

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 class CustomerServiceTest {
 
-	private static ICustomerService customerService;
+	private static CustomerService customerService;
 	private static Customer defaultCustomer;
 
 	@BeforeAll

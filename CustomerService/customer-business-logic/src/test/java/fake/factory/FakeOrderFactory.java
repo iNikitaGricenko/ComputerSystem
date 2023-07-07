@@ -5,24 +5,20 @@ import com.wolfhack.cloud.customer.model.AnalyticsResponse;
 import com.wolfhack.cloud.customer.model.CustomerOrder;
 import com.wolfhack.cloud.customer.model.OrderItem;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
 
 public class FakeOrderFactory implements IOrderFactory {
 	@Override
 	public AnalyticsResponse create(List<CustomerOrder> customerOrders) throws ExecutionException, InterruptedException {
 		List<OrderItem> orderItems = customerOrders.stream().map(CustomerOrder::getOrderItems).flatMap(Collection::stream).toList();
 
-		DoubleSummaryStatistics doubleSummaryStatistics = orderItems.stream().mapToDouble(OrderItem::getUnitPrice).summaryStatistics();
+		double totalPrice = orderItems.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).sum();
+		double maxPricePerOrder = orderItems.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).max().orElse(0);
+		double minPricePerOrder = orderItems.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).min().orElse(0);
 		long totalQuantity = orderItems.stream().mapToLong(OrderItem::getQuantity).sum();
-
-		double totalPrice = doubleSummaryStatistics.getSum();
-		double maxPrice = doubleSummaryStatistics.getMax();
-		double minPrice = doubleSummaryStatistics.getMin();
-		return new AnalyticsResponse(totalPrice, totalQuantity, maxPrice, minPrice);
+		return new AnalyticsResponse(totalPrice, totalQuantity, maxPricePerOrder, minPricePerOrder);
 	}
 
 	@Override
