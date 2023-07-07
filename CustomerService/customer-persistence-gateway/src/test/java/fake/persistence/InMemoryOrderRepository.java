@@ -1,21 +1,23 @@
 package fake.persistence;
 
-import com.wolfhack.cloud.entity.EntityCustomer;
+import com.wolfhack.cloud.customer.model.enums.OrderStatus;
+import com.wolfhack.cloud.entity.EntityCustomerOrder;
 import com.wolfhack.cloud.repository.CustomerRepository;
+import com.wolfhack.cloud.repository.OrderRepository;
 import org.springframework.data.domain.*;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
-public class InMemoryCustomerRepository implements CustomerRepository {
+public class InMemoryOrderRepository implements OrderRepository {
 
-	private final static Map<Long, EntityCustomer> fakeTable = new HashMap<Long, EntityCustomer>();
+	private final static Map<Long, EntityCustomerOrder> fakeTable = new HashMap<Long, EntityCustomerOrder>();
 	private static long id = 1;
 
 	@Override
-	public <S extends EntityCustomer> S save(S entity) {
+	public <S extends EntityCustomerOrder> S save(S entity) {
 		Long entityId = Optional.ofNullable(entity.getId()).orElse(id);
 		entity.setId(entityId);
 		fakeTable.put(id, entity);
@@ -24,7 +26,7 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	}
 
 	@Override
-	public <S extends EntityCustomer> List<S> saveAll(Iterable<S> entities) {
+	public <S extends EntityCustomerOrder> List<S> saveAll(Iterable<S> entities) {
 		List<S> entityCustomers = new ArrayList<>();
 		entities.iterator().forEachRemaining(entity -> {
 			Long entityId = Optional.ofNullable(entity.getId()).orElse(id);
@@ -42,14 +44,14 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	}
 
 	@Override
-	public <S extends EntityCustomer> S saveAndFlush(S entity) {
+	public <S extends EntityCustomerOrder> S saveAndFlush(S entity) {
 		S saved = save(entity);
 		entity = saved;
 		return saved;
 	}
 
 	@Override
-	public <S extends EntityCustomer> List<S> saveAllAndFlush(Iterable<S> entities) {
+	public <S extends EntityCustomerOrder> List<S> saveAllAndFlush(Iterable<S> entities) {
 		List<S> entityCustomers = new ArrayList<>();
 		entities.forEach(this::saveAndFlush);
 		entities.forEach(entityCustomers::add);
@@ -57,7 +59,7 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	}
 
 	@Override
-	public void deleteAllInBatch(Iterable<EntityCustomer> entities) {
+	public void deleteAllInBatch(Iterable<EntityCustomerOrder> entities) {
 		deleteAll(entities);
 	}
 
@@ -72,58 +74,58 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	}
 
 	@Override
-	public EntityCustomer getOne(Long aLong) {
+	public EntityCustomerOrder getOne(Long aLong) {
 		return findById(aLong).get();
 	}
 
 	@Override
-	public EntityCustomer getById(Long aLong) {
+	public EntityCustomerOrder getById(Long aLong) {
 		return findById(aLong).get();
 	}
 
 	@Override
-	public EntityCustomer getReferenceById(Long aLong) {
+	public EntityCustomerOrder getReferenceById(Long aLong) {
 		return findById(aLong).get();
 	}
 
 	@Override
-	public <S extends EntityCustomer> Optional<S> findOne(Example<S> example) {
+	public <S extends EntityCustomerOrder> Optional<S> findOne(Example<S> example) {
 		return (Optional<S>) findById(example.getProbe().getId());
 	}
 
 	@Override
-	public <S extends EntityCustomer> List<S> findAll(Example<S> example) {
+	public <S extends EntityCustomerOrder> List<S> findAll(Example<S> example) {
 		return findAll(example);
 	}
 
 	@Override
-	public <S extends EntityCustomer> List<S> findAll(Example<S> example, Sort sort) {
+	public <S extends EntityCustomerOrder> List<S> findAll(Example<S> example, Sort sort) {
 		return findAll(example);
 	}
 
 	@Override
-	public <S extends EntityCustomer> Page<S> findAll(Example<S> example, Pageable pageable) {
+	public <S extends EntityCustomerOrder> Page<S> findAll(Example<S> example, Pageable pageable) {
 		List<S> all = findAll(example);
 		return new PageImpl<>(all, pageable, all.size());
 	}
 
 	@Override
-	public <S extends EntityCustomer> long count(Example<S> example) {
+	public <S extends EntityCustomerOrder> long count(Example<S> example) {
 		return fakeTable.values().size();
 	}
 
 	@Override
-	public <S extends EntityCustomer> boolean exists(Example<S> example) {
+	public <S extends EntityCustomerOrder> boolean exists(Example<S> example) {
 		return fakeTable.values().contains(example.getProbe());
 	}
 
 	@Override
-	public <S extends EntityCustomer, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+	public <S extends EntityCustomerOrder, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
 		return (R) findById(example.getProbe().getId());
 	}
 
 	@Override
-	public Optional<EntityCustomer> findById(Long aLong) {
+	public Optional<EntityCustomerOrder> findById(Long aLong) {
 		return Optional.ofNullable(fakeTable.get(aLong));
 	}
 
@@ -133,26 +135,26 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	}
 
 	@Override
-	public List<EntityCustomer> findAll() {
+	public List<EntityCustomerOrder> findAll() {
 		return new ArrayList<>(fakeTable.values());
 	}
 
 	@Override
-	public List<EntityCustomer> findAll(Sort sort) {
+	public List<EntityCustomerOrder> findAll(Sort sort) {
 		return new ArrayList<>(fakeTable.values());
 	}
 
 	@Override
-	public Page<EntityCustomer> findAll(Pageable pageable) {
-		List<EntityCustomer> all = findAll(pageable.getSort());
+	public Page<EntityCustomerOrder> findAll(Pageable pageable) {
+		List<EntityCustomerOrder> all = findAll(pageable.getSort());
 		return new PageImpl<>(all, pageable, all.size());
 	}
 
 	@Override
-	public List<EntityCustomer> findAllById(Iterable<Long> longs) {
-		ArrayList<EntityCustomer> customers = new ArrayList<>();
+	public List<EntityCustomerOrder> findAllById(Iterable<Long> longs) {
+		ArrayList<EntityCustomerOrder> customers = new ArrayList<>();
 		longs.forEach(id -> {
-			Optional<EntityCustomer> customer = findById(id);
+			Optional<EntityCustomerOrder> customer = findById(id);
 			customer.ifPresent(customers::add);
 		});
 		return customers;
@@ -169,7 +171,7 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	}
 
 	@Override
-	public void delete(EntityCustomer entity) {
+	public void delete(EntityCustomerOrder entity) {
 		fakeTable.remove(entity.getId(), entity);
 	}
 
@@ -179,7 +181,7 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends EntityCustomer> entities) {
+	public void deleteAll(Iterable<? extends EntityCustomerOrder> entities) {
 		entities.iterator().forEachRemaining(entity -> {
 			fakeTable.remove(entity.getId(), entity);
 		});
@@ -188,5 +190,14 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	@Override
 	public void deleteAll() {
 		fakeTable.clear();
+	}
+
+	@Override
+	public List<EntityCustomerOrder> findAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to) {
+		return fakeTable.values().stream()
+				.filter(entityCustomerOrder -> entityCustomerOrder.getStatus().equals(status))
+				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() != null ? entityCustomerOrder.getCompleted().isAfter(from) : true)
+				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() != null ? entityCustomerOrder.getCompleted().isBefore(to) : true)
+				.toList();
 	}
 }

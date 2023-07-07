@@ -35,6 +35,7 @@ public class CustomerOrder {
         }
     }
 
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     private String paymentMethod;

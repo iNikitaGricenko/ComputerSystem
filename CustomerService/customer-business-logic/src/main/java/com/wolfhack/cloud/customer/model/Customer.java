@@ -2,6 +2,7 @@ package com.wolfhack.cloud.customer.model;
 
 import com.wolfhack.cloud.customer.factory.UpdateFactory;
 import lombok.*;
+import org.apache.commons.lang3.builder.EqualsExclude;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -31,6 +32,7 @@ public class Customer {
         }
     }
 
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     private String firstName;
