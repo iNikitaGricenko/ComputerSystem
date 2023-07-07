@@ -1,12 +1,11 @@
 package com.wolfhack.cloud.customer.service;
 
 import com.wolfhack.cloud.customer.model.Customer;
-import fake.adapter.FakeInputCustomer;
-import fake.adapter.FakeOutputCustomer;
+import fake.adapter.FakeInputOutputCustomer;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,63 +13,52 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 class CustomerServiceTest {
 
+	private static CustomerService customerService;
+	private static Customer defaultCustomer;
+
+	@BeforeAll
+	public static void setUp() {
+		FakeInputOutputCustomer inputOutputCustomer = new FakeInputOutputCustomer();
+		customerService = new CustomerService(inputOutputCustomer, inputOutputCustomer);
+		defaultCustomer = new Customer();
+
+		defaultCustomer.setEmail("test@example.com");
+		defaultCustomer.setPhone("380123456789");
+		defaultCustomer.setFirstName("Nikita");
+		defaultCustomer.setSecondName("Hrytsenko");
+	}
+
 	@Test
 	void save() {
-		CustomerService customerService = new CustomerService(new FakeInputCustomer(), new FakeOutputCustomer());
-
-		Customer customer = new Customer();
-		customer.setEmail("test@example.com");
-		customer.setPhone("380123456789");
-		customer.setFirstName("Nikita");
-		customer.setSecondName("Hrytsenko");
-		customer.setRegisterDate(LocalDateTime.now());
-
-		assertEquals(customer, customerService.save(customer));
+		Customer saved = customerService.save(defaultCustomer);
+		assertEquals(defaultCustomer, saved);
 	}
 
 	@Test
 	void findById() {
-		CustomerService customerService = new CustomerService(new FakeInputCustomer(), new FakeOutputCustomer());
+		Customer founded = customerService.findById(1L);
 
-		Customer customer = new Customer();
-		customer.setEmail("test@example.com");
-		customer.setPhone("380123456789");
-		customer.setFirstName("Nikita");
-		customer.setSecondName("Hrytsenko");
-		customer.setRegisterDate(LocalDateTime.now());
-
-		Customer saved = customerService.save(customer);
-
-		assertEquals(customer, customerService.findById(saved.getId()));
+		assertEquals(defaultCustomer, founded);
 	}
 
 	@Test
 	void findAll() {
-		CustomerService customerService = new CustomerService(new FakeInputCustomer(), new FakeOutputCustomer());
 		ArrayList<Customer> customers = new ArrayList<>();
 
-		Customer customer1 = new Customer();
-		customer1.setEmail("test@example.com");
-		customer1.setPhone("380123456789");
-		customer1.setFirstName("Nikita");
-		customer1.setSecondName("Hrytsenko");
-		customer1.setRegisterDate(LocalDateTime.now());
-		customers.add(customer1);
+		customers.add(defaultCustomer);
 
 		Customer customer2 = new Customer();
 		customer2.setEmail("test2@example.com");
 		customer2.setPhone("380113456789");
 		customer2.setFirstName("Vlad");
 		customer2.setSecondName("Alchim");
-		customer1.setRegisterDate(LocalDateTime.now());
 		customers.add(customer2);
 
 		Customer customer3 = new Customer();
-		customer3.setEmail("test2@example.com");
+		customer3.setEmail("test3@example.com");
 		customer3.setPhone("380103456789");
 		customer3.setFirstName("Dima");
 		customer3.setSecondName("Micu");
-		customer1.setRegisterDate(LocalDateTime.now());
 		customers.add(customer3);
 
 		customers.forEach(customerService::save);
