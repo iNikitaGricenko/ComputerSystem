@@ -35,6 +35,7 @@ public class CustomerOrder {
         }
     }
 
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     private String paymentMethod;
@@ -54,6 +55,7 @@ public class CustomerOrder {
     private String description;
 
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private LocalDateTime created = LocalDateTime.now();
 
     @Builder.Default
