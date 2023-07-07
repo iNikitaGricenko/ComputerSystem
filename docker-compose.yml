@@ -80,6 +80,7 @@ services:
     image: elasticsearch:7.16.2
     container_name: elasticsearch
     restart: unless-stopped
+    command: "sysctl -w vm.max_map_count=262144"
     ports:
       - "9200:9200"
     environment:
