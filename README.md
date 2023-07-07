@@ -4,6 +4,21 @@ Microservices for e-commerce computer components store
 ![build](https://img.shields.io/github/actions/workflow/status/iNikitaGricenko/ComputerSystem/build.yml?style=for-the-badge/badge.svg)
 <br>
 
+# Requirements:
+- Java 17 or above
+- Apache Maven 3.6.3 or above
+- docker 24.0.2+ and docker-compose v2.17.2+
+
+# (Linux) Instruction for run: 
+* Open root project folder in console:
+  - Execute comand: "mvn clean package"
+  - Execute command: "docker-compose build"
+  - Execute command: "docker-compose up -d"
+* Open [Eureka](http://localhost:8761/) in browser to enter eureka
+* Open [Swagger](http://localhost:8080/webjars/swagger-ui/index.html) in browser to open swagger for all services
+
+To stop docker containers exxecute command (in console from previous steps) "docker-compose stope"
+
 # Technologies
 
 ## Architecture
@@ -23,6 +38,7 @@ Microservices for e-commerce computer components store
 * Swagger
 * Redis Caching
 * JPA
+* AspectJ
 
 #### Mail Templates
 * Template Engine - Thymeleaf
