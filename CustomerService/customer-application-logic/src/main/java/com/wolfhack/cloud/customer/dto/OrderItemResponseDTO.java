@@ -17,6 +17,4 @@ public class OrderItemResponseDTO implements Serializable {
     private float unitPrice;
     @Schema(example = "1")
     private int quantity;
-    @Schema(example = "class com.wolfhack.cloud.product.model.Cpu")
-    private final String className;
 }
