@@ -36,7 +36,7 @@ class OrderRestControllerTest {
 	void getAll() throws Exception {
 		CustomerRequestDTO customer = new CustomerRequestDTO("email@domain.com", "Nikit", "Sambatist", "+111 (202) 555-0125");
 
-		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da", "");
+		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da");
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
@@ -61,7 +61,7 @@ class OrderRestControllerTest {
 	void getOne() throws Exception {
 		CustomerRequestDTO customer = new CustomerRequestDTO("email@domain.com", "Nikit", "Sambatist", "+111 (202) 555-0125");
 
-		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da", "");
+		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da");
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
@@ -99,7 +99,7 @@ class OrderRestControllerTest {
 	void add() throws Exception {
 		CustomerRequestDTO customer = new CustomerRequestDTO("email@domain.com", "Nikit", "Sambatist", "+111 (202) 555-0125");
 
-		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da", "");
+		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da");
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
@@ -122,7 +122,7 @@ class OrderRestControllerTest {
 	void update() throws Exception {
 		CustomerRequestDTO customer = new CustomerRequestDTO("email@domain.com", "Nikit", "Sambatist", "+111 (202) 555-0125");
 
-		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da", "");
+		OrderItemRequestDTO item = new OrderItemRequestDTO(3L, "Intel Core i3", "i83da");
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
