@@ -17,13 +17,17 @@ import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.MediaType.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -61,6 +65,14 @@ public class GpuRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public Long addGpu(@Valid @RequestBody GpuFullDTO gpu) {
         return gpuService.save(gpuMapper.toGpu(gpu));
+    }
+
+    @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
+    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+    @Parameter(name = "id", example = "1")
+    public String addPhoto(@PathVariable("id") Long id, @RequestParam("photo") MultipartFile photo) throws IOException {
+        return gpuService.addPhoto(id, photo);
     }
 
 }
