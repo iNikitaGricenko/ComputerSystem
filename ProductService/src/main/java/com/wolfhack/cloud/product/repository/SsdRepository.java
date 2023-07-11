@@ -9,7 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SsdRepository extends MongoRepository<Ssd, Long> {
-
-    @Query("{ $text: { $search: ?0 }}")
-    Page<Ssd> searchCpusByQuery(String query, Pageable pageable);
 }

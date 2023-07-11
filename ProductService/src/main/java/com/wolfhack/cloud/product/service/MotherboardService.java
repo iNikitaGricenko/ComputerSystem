@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -71,9 +72,8 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
 
     @AopLog
     @Override
-    public Page<Motherboard> searchByQuery(String query, Pageable pageable) {
-        query = format("\"%s\"", query);
-        return motherboardRepository.searchCpusByQuery(query, pageable);
+    public List<Motherboard> searchByTitle(String query, Pageable pageable) {
+        return motherboardSearchService.findByTitle(query, pageable);
     }
 
     @Override

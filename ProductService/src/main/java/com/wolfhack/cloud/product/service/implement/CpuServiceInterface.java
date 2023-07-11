@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface CpuServiceInterface {
     Page<Cpu> findAll(Pageable pageable);
@@ -16,7 +17,7 @@ public interface CpuServiceInterface {
 
     Cpu findById(Long id);
 
-    Page<Cpu> searchByQuery(String query, Pageable pageable);
+    List<Cpu> searchByTitle(String query, Pageable pageable);
 
     void delete(long id);
 

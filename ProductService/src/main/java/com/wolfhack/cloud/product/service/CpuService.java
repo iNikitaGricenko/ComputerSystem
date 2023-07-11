@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -71,9 +72,8 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
 
     @AopLog
     @Override
-    public Page<Cpu> searchByQuery(String query, Pageable pageable) {
-        query = format("\"%s\"", query);
-        return cpuRepository.searchCpusByQuery(query, pageable);
+    public List<Cpu> searchByTitle(String query, Pageable pageable) {
+        return cpuSearchService.findByTitle(query, pageable);
     }
 
     @Override
