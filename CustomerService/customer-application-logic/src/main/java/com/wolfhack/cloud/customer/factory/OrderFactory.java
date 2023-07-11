@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.customer.factory;
 
+import com.wolfhack.cloud.customer.annotations.AopLog;
 import com.wolfhack.cloud.customer.bean.Factory;
 import com.wolfhack.cloud.customer.dto.CustomerOrderRequestDTO;
 import com.wolfhack.cloud.customer.dto.CustomerOrderResponseDTO;
@@ -9,13 +10,10 @@ import com.wolfhack.cloud.customer.model.Customer;
 import com.wolfhack.cloud.customer.model.CustomerOrder;
 import com.wolfhack.cloud.customer.model.OrderItem;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.*;
 
 @Factory
@@ -24,6 +22,7 @@ final class OrderFactory implements IOrderFactory, IOrderCreator {
 
     private final CustomerOrderMapper customerOrderMapper;
 
+    @AopLog
     @Override
     public CustomerOrder toOrder(CustomerOrderRequestDTO requestDTO) {
         CustomerOrder customerOrder = customerOrderMapper.toOrderFromRequest(requestDTO);
@@ -35,11 +34,13 @@ final class OrderFactory implements IOrderFactory, IOrderCreator {
         return customerOrder;
     }
 
+    @AopLog
     @Override
     public CustomerOrderResponseDTO toResponse(CustomerOrder customerOrder) {
         return customerOrderMapper.toResponseDTO(customerOrder);
     }
 
+    @AopLog
     @Override
     public CustomerOrder edit(CustomerOrder customerOrder, CustomerOrder editor) {
         return customerOrder.renovator()
@@ -57,6 +58,7 @@ final class OrderFactory implements IOrderFactory, IOrderCreator {
                 .update();
     }
 
+    @AopLog
     @Override
     public AnalyticsResponse create(List<CustomerOrder> customerOrders) throws ExecutionException, InterruptedException {
         List<OrderItem> orderItems = new ArrayList<>();
