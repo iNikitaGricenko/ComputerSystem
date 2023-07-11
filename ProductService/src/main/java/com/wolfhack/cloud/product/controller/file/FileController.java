@@ -26,10 +26,7 @@ public class FileController {
 
 	private final AmazonStorageServiceInterface storageService;
 
-	@RequestMapping(
-			value = "/download/{fileId}",
-			method = {RequestMethod.GET, RequestMethod.OPTIONS},
-			produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+	@GetMapping(value = "/download/{fileId}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
 	@ResponseStatus(value = HttpStatus.OK)
 	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = byte[].class)))
@@ -39,11 +36,7 @@ public class FileController {
 		return IOUtils.toByteArray(inputStream);
 	}
 
-	@RequestMapping(
-			value = "/upload",
-			method = RequestMethod.POST,
-			consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
-	)
+	@PostMapping(value = "/upload", consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
 	@ResponseStatus(value = HttpStatus.OK)
 	public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
 		storageService.upload(file);
