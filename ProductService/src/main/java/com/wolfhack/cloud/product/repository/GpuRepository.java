@@ -9,7 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GpuRepository extends MongoRepository<Gpu, Long> {
-
-    @Query("{ $text: { $search: ?0 }}")
-    Page<Gpu> searchCpusByQuery(String query, Pageable pageable);
 }

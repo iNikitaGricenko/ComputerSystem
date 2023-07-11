@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -44,6 +47,12 @@ public class SsdRestController {
     @PageableAsQueryParam
     public Page<SsdResponseDTO> getSsds(Pageable pageable) {
         return new RestPage<>(ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO));
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/seach")
+    @PageableAsQueryParam
+    public List<SsdResponseDTO> searchSsds(Pageable pageable, @RequestParam String searchLine) {
+        return ssdService.searchByTitle(searchLine, pageable).stream().map(ssdMapper::toSsdResponseDTO).toList();
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

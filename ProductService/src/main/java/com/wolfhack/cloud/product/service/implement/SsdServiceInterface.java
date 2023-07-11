@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface SsdServiceInterface {
 	Page<Ssd> findAll(Pageable pageable);
@@ -16,7 +17,7 @@ public interface SsdServiceInterface {
 
 	Ssd findById(Long id);
 
-	Page<Ssd> searchByQuery(String query, Pageable pageable);
+	List<Ssd> searchByTitle(String query, Pageable pageable);
 
 	void delete(long id);
 

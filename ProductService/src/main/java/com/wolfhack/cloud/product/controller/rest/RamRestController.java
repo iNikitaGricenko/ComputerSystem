@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -44,6 +46,12 @@ public class RamRestController {
     @PageableAsQueryParam
     public Page<RamResponseDTO> getRams(Pageable pageable) {
         return new RestPage<>(ramService.findAll(pageable).map(ramMapper::toRamResponseDTO));
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/search")
+    @PageableAsQueryParam
+    public List<RamResponseDTO> searchRams(Pageable pageable, @RequestParam String searchLine) {
+        return ramService.searchByTitle(searchLine, pageable).stream().map(ramMapper::toRamResponseDTO).toList();
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

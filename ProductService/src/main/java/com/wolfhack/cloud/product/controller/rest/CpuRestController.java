@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -43,6 +46,12 @@ public class CpuRestController {
     @PageableAsQueryParam
     public Page<CpuResponseDTO> getCpus(Pageable pageable) {
         return new RestPage<>(cpuService.findAll(pageable).map(cpuMapper::toCpuResponseDTO));
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/search")
+    @PageableAsQueryParam
+    public List<CpuResponseDTO> searchCpus(Pageable pageable, @RequestParam String searchLine) {
+        return cpuService.searchByTitle(searchLine, pageable).stream().map(cpuMapper::toCpuResponseDTO).toList();
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

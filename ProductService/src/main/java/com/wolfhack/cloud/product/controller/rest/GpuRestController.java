@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -44,6 +47,12 @@ public class GpuRestController {
     @PageableAsQueryParam
     public Page<GpuResponseDTO> getGpus(Pageable pageable) {
         return new RestPage<>(gpuService.findAll(pageable).map(gpuMapper::toGpuResponseDTO));
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/search")
+    @PageableAsQueryParam
+    public List<GpuResponseDTO> searchGpus(Pageable pageable, @RequestParam String searchLine) {
+        return gpuService.searchByTitle(searchLine, pageable).stream().map(gpuMapper::toGpuResponseDTO).toList();
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
