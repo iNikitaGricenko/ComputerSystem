@@ -6,17 +6,16 @@ import com.wolfhack.cloud.business.enums.Role;
 import com.wolfhack.cloud.business.factory.mapper.UserMapper;
 import com.wolfhack.cloud.business.model.User;
 import com.wolfhack.cloud.business.service.IEmailSender;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -45,7 +44,7 @@ public class UserFactory implements IUserFactory {
         user.setActivationUrl(activationUrl);
         user.setActive(false);
 
-        sendMail(user, "Activation code", "activation_mail");
+        sendActivationMail(user);
 
         return user;
     }
@@ -74,15 +73,13 @@ public class UserFactory implements IUserFactory {
 
 
     @Async
-    protected void sendMail(User entity, String subject, String template) {
-        CompletableFuture.runAsync(() -> {
-            try {
-                log.info("Sending activation email");
-                emailSender.send(entity, subject, template);
-            } catch (MessagingException exception) {
-                throw new RuntimeException(exception);
-            }
-        });
+    protected void sendActivationMail(User entity) {
+        try {
+            log.info("Sending activation email");
+            emailSender.send(entity);
+        } catch (FeignException exception) {
+            throw new RuntimeException("Error sending activation email");
+        }
     }
 
     private static BCryptPasswordEncoder getPasswordEncoder() {
