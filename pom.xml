@@ -24,6 +24,7 @@
         <module>ProductService</module>
         <module>CustomerService</module>
         <module>EmailService</module>
+        <module>AuthorizationServer</module>
     </modules>
 
     <properties>
