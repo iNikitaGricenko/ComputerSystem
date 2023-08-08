@@ -1,7 +1,6 @@
 package com.wolfhack.cloud.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.wolfhack.cloud.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -54,7 +54,6 @@ public class FileDataStorageService implements FileDataStorageServiceInterface {
 
 	@Override
 	public FileStorage get(String id) {
-		return fileStorageRepository.findById(id)
-				.orElseThrow(NotFoundException::new);
+		return fileStorageRepository.findById(id).orElseThrow(NotFoundException::new);
 	}
 }

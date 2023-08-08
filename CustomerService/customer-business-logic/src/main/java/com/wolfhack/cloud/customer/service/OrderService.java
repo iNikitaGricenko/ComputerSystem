@@ -25,56 +25,51 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class OrderService implements IOrderService {
 
-    private final IOrderFactory IOrderFactory;
-    private final OutputCustomerOrder outputCustomerOrder;
-    private final InputCustomerOrder inputCustomerOrder;
-    private final NotificationSender notificationSender;
+	private final IOrderFactory IOrderFactory;
+	private final OutputCustomerOrder outputCustomerOrder;
+	private final InputCustomerOrder inputCustomerOrder;
+	private final NotificationSender notificationSender;
 
-    @Override
-    public CustomerOrder save(CustomerOrder customerOrder) {
-        sendToKafka(customerOrder);
-        return inputCustomerOrder.persist(customerOrder);
-    }
+	@Override
+	public CustomerOrder save(CustomerOrder customerOrder) {
+		sendToKafka(customerOrder);
+		return inputCustomerOrder.persist(customerOrder);
+	}
 
-    @Override
-    public CustomerOrder changeStatus(Long id, OrderStatus status) {
-        CustomerOrder customerOrder = outputCustomerOrder.get(id)
-                .map(order -> IOrderFactory.edit(order, CustomerOrder.builder()
-                        .status(status)
-                        .completed(isFinalDeal(status) ? LocalDateTime.now() : null)
-                        .build()))
-                .orElseThrow(CustomerOrderNotFoundException::new);
-        return inputCustomerOrder.persist(customerOrder);
-    }
+	@Override
+	public CustomerOrder changeStatus(Long id, OrderStatus status) {
+		CustomerOrder customerOrder = outputCustomerOrder.get(id).map(order -> IOrderFactory.edit(order, CustomerOrder.builder().status(status).completed(isFinalDeal(status) ? LocalDateTime.now() : null).build())).orElseThrow(CustomerOrderNotFoundException::new);
+		return inputCustomerOrder.persist(customerOrder);
+	}
 
-    private static boolean isFinalDeal(OrderStatus status) {
-        return OrderStatus.DELIVERED.equals(status) || OrderStatus.RETURNED.equals(status);
-    }
+	private static boolean isFinalDeal(OrderStatus status) {
+		return OrderStatus.DELIVERED.equals(status) || OrderStatus.RETURNED.equals(status);
+	}
 
-    @Override
-    public CustomerOrder findById(Long id) {
-        return outputCustomerOrder.get(id).orElseThrow(CustomerOrderNotFoundException::new);
-    }
+	@Override
+	public CustomerOrder findById(Long id) {
+		return outputCustomerOrder.get(id).orElseThrow(CustomerOrderNotFoundException::new);
+	}
 
-    @Override
-    public Page<CustomerOrder> findAll(Pageable pageable) {
-        return outputCustomerOrder.getAll(pageable);
-    }
+	@Override
+	public Page<CustomerOrder> findAll(Pageable pageable) {
+		return outputCustomerOrder.getAll(pageable);
+	}
 
-    @Override
-    public AnalyticsResponse getAnalytics(AnalyticsSearch analyticsSearch) {
-        try {
-            OrderStatus status = analyticsSearch.getStatus();
-            LocalDateTime from = analyticsSearch.getFrom().atTime(LocalTime.MIN);
-            LocalDateTime to = analyticsSearch.getTo().atTime(LocalTime.MIN);
-            List<CustomerOrder> orderItems = outputCustomerOrder.getAllByStatusAndCompletedBetween(status, from, to);
-            return IOrderFactory.create(orderItems);
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException("The server was unable to collect analytics");
-        }
-    }
+	@Override
+	public AnalyticsResponse getAnalytics(AnalyticsSearch analyticsSearch) {
+		try {
+			OrderStatus status = analyticsSearch.getStatus();
+			LocalDateTime from = analyticsSearch.getFrom().atTime(LocalTime.MIN);
+			LocalDateTime to = analyticsSearch.getTo().atTime(LocalTime.MIN);
+			List<CustomerOrder> orderItems = outputCustomerOrder.getAllByStatusAndCompletedBetween(status, from, to);
+			return IOrderFactory.create(orderItems);
+		} catch (ExecutionException | InterruptedException e) {
+			throw new RuntimeException("The server was unable to collect analytics");
+		}
+	}
 
-    private void sendToKafka(CustomerOrder customerOrder) {
-        customerOrder.getOrderItems().forEach(notificationSender::send);
-    }
+	private void sendToKafka(CustomerOrder customerOrder) {
+		customerOrder.getOrderItems().forEach(notificationSender::send);
+	}
 }

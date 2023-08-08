@@ -16,24 +16,16 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
 
-    private final IOutputUser outputUser;
+	private final IOutputUser outputUser;
 
-    @Override
-    public UserDetails loadUserByUsername(String login) {
-        return outputUser.findByLogin(login)
-                .map(AuthenticationService::buildSecurityUser)
-                .orElseThrow(UserNotFoundException::new);
-    }
+	@Override
+	public UserDetails loadUserByUsername(String login) {
+		return outputUser.findByLogin(login).map(AuthenticationService::buildSecurityUser).orElseThrow(UserNotFoundException::new);
+	}
 
-    private static UserSecurity buildSecurityUser(User user) {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getValue());
-        return UserSecurity.builder()
-                .id(user.getId())
-                .username(user.getLogin())
-                .password(user.getPassword())
-                .authorities(Collections.singleton(authority))
-                .enabled(user.isActive())
-                .build();
-    }
+	private static UserSecurity buildSecurityUser(User user) {
+		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getValue());
+		return UserSecurity.builder().id(user.getId()).username(user.getLogin()).password(user.getPassword()).authorities(Collections.singleton(authority)).enabled(user.isActive()).build();
+	}
 
 }

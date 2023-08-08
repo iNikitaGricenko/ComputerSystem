@@ -7,7 +7,7 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface EntityOrderItemMapper {
-    OrderItem toBusinessFromEntity(EntityOrderItem entityOrderItem);
+	OrderItem toBusinessFromEntity(EntityOrderItem entityOrderItem);
 
-    EntityOrderItem toEntityFromBusiness(OrderItem orderItem);
+	EntityOrderItem toEntityFromBusiness(OrderItem orderItem);
 }

@@ -6,13 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface IUserService {
-    User save(User user);
+	User save(User user);
 
-    User edit(User user) throws UserNotFoundException;
+	User edit(User user) throws UserNotFoundException;
 
-    Page<User> getAll(Pageable pageable);
+	Page<User> getAll(Pageable pageable);
 
-    User getOne(Long id) throws UserNotFoundException;
+	User getOne(Long id) throws UserNotFoundException;
 
-    User findByLogin(String login) throws UserNotFoundException;
+	User findByLogin(String login) throws UserNotFoundException;
 }

@@ -160,12 +160,7 @@ class InputOutputOrderGatewayTest {
 
 		assertTrue(customerOrders.isEmpty());
 
-		List<CustomerOrder> orders = defaultCustomerOrders.stream()
-				.filter(customerOrder -> customerOrder.getStatus().equals(status))
-				.filter(customerOrder -> customerOrder.getCompleted() != null)
-				.filter(customerOrder -> customerOrder.getCompleted().isAfter(from))
-				.filter(customerOrder -> customerOrder.getCompleted().isBefore(to))
-				.toList();
+		List<CustomerOrder> orders = defaultCustomerOrders.stream().filter(customerOrder -> customerOrder.getStatus().equals(status)).filter(customerOrder -> customerOrder.getCompleted() != null).filter(customerOrder -> customerOrder.getCompleted().isAfter(from)).filter(customerOrder -> customerOrder.getCompleted().isBefore(to)).toList();
 
 		assertTrue(orders.isEmpty());
 		assertEquals(orders, customerOrders);
@@ -183,11 +178,7 @@ class InputOutputOrderGatewayTest {
 
 		assertFalse(customerOrders.isEmpty());
 
-		List<CustomerOrder> orders = defaultCustomerOrders.stream()
-				.filter(customerOrder -> customerOrder.getStatus().equals(status))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to))
-				.toList();
+		List<CustomerOrder> orders = defaultCustomerOrders.stream().filter(customerOrder -> customerOrder.getStatus().equals(status)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to)).toList();
 
 		assertFalse(orders.isEmpty());
 		assertEquals(orders, customerOrders);

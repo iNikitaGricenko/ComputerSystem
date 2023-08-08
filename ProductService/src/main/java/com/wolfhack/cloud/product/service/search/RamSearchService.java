@@ -40,14 +40,7 @@ public class RamSearchService implements RamSearchServiceInterface {
 
 	@Override
 	public List<Ram> findByTitle(String line, Pageable pageable) {
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.field("type")
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line).field("name").field("model").field("type").type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<RamSearch> rams = elasticsearchOperations.search(searchQuery, RamSearch.class, IndexCoordinates.of("product-ram"));
 
@@ -57,34 +50,21 @@ public class RamSearchService implements RamSearchServiceInterface {
 	@AopLog
 	@Override
 	public List<Ram> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ram.class.getFields())
-				.filter(field -> field.getType().isInstance(String.class))
-				.map(Field::getName)
-				.toArray(String[]::new);
+		String[] fields = Arrays.stream(Ram.class.getFields()).filter(field -> field.getType().isInstance(String.class)).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<RamSearch> rams = elasticsearchOperations.search(searchQuery, RamSearch.class, IndexCoordinates.of("product-ram"));
 
 		return rams.map(SearchHit::getContent).map(ramMapper::toEntity).toList();
 	}
-	
+
 	@AopLog
 	@Override
 	public List<Ram> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ram.class.getFields())
-				.map(Field::getName)
-				.toArray(String[]::new);
+		String[] fields = Arrays.stream(Ram.class.getFields()).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<RamSearch> rams = elasticsearchOperations.search(searchQuery, RamSearch.class, IndexCoordinates.of("product-ram"));
 

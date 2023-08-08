@@ -6,10 +6,10 @@ import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface EntityAuthorizationLogMapper {
-    EntityAuthorizationLog convertToEntityAuthorizationLog(AuthorizationLog log);
+	EntityAuthorizationLog convertToEntityAuthorizationLog(AuthorizationLog log);
 
-    AuthorizationLog convertToBusinessAuthorizationLog(EntityAuthorizationLog entity);
+	AuthorizationLog convertToBusinessAuthorizationLog(EntityAuthorizationLog entity);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    EntityAuthorizationLog updateEntityFromBusiness(AuthorizationLog log, @MappingTarget EntityAuthorizationLog entity);
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	EntityAuthorizationLog updateEntityFromBusiness(AuthorizationLog log, @MappingTarget EntityAuthorizationLog entity);
 }

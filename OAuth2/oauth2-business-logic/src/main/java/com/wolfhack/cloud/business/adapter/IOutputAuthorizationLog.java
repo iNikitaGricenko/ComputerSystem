@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface IOutputAuthorizationLog {
-    Page<AuthorizationLog> findAll(Pageable pageable);
+	Page<AuthorizationLog> findAll(Pageable pageable);
 
-    Optional<AuthorizationLog> findById(Long id);
+	Optional<AuthorizationLog> findById(Long id);
 }

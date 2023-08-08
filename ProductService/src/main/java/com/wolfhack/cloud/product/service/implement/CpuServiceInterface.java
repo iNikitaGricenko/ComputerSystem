@@ -9,17 +9,17 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CpuServiceInterface {
-    Page<Cpu> findAll(Pageable pageable);
+	Page<Cpu> findAll(Pageable pageable);
 
-    Long save(Cpu cpu);
+	Long save(Cpu cpu);
 
-    String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
+	String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    Cpu findById(Long id);
+	Cpu findById(Long id);
 
-    List<Cpu> searchByTitle(String query, Pageable pageable);
+	List<Cpu> searchByTitle(String query, Pageable pageable);
 
-    void delete(long id);
+	void delete(long id);
 
-    long update(Cpu cpu);
+	long update(Cpu cpu);
 }

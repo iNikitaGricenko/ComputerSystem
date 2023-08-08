@@ -6,10 +6,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface IAuthorizationLogService {
 
-    AuthorizationLog save(AuthorizationLog authorizationLog);
+	AuthorizationLog save(AuthorizationLog authorizationLog);
 
-    Page<AuthorizationLog> findAll(Pageable pageable);
+	Page<AuthorizationLog> findAll(Pageable pageable);
 
-    AuthorizationLog findById(Long id);
+	AuthorizationLog findById(Long id);
 
 }

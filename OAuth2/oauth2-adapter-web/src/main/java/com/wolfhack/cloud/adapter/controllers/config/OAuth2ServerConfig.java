@@ -20,52 +20,33 @@ import static org.springframework.security.oauth2.core.AuthorizationGrantType.RE
 import static org.springframework.security.oauth2.core.ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
 import static org.springframework.security.oauth2.core.ClientAuthenticationMethod.CLIENT_SECRET_POST;
 
-@Getter @Setter
+@Getter
+@Setter
 @Configuration
 public class OAuth2ServerConfig {
 
-    @Bean
-    public RegisteredClientRepository registeredClientRepository() {
-        String encryptedSecret = passwordEncoder().encode("wolfhack-secret");
+	@Bean
+	public RegisteredClientRepository registeredClientRepository() {
+		String encryptedSecret = passwordEncoder().encode("wolfhack-secret");
 
-        RegisteredClient registeredClient = RegisteredClient
-                .withId(String.valueOf(randomUUID()))
-                .clientId("wolfhack-client")
-                .clientSecret(encryptedSecret)
-                .clientAuthenticationMethod(CLIENT_SECRET_BASIC)
-                .clientAuthenticationMethod(CLIENT_SECRET_POST)
-                .authorizationGrantType(AUTHORIZATION_CODE)
-                .authorizationGrantType(REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8088/login/oauth2/code/wolfhack-client-oidc")
-                .redirectUri("http://127.0.0.1:8088/authorized")
-                .redirectUri("https://oidcdebugger.com/debug")
-                .scope(OidcScopes.OPENID)
-                .scope("read")
-                .scope("write")
-                .tokenSettings(tokenSettings())
-                .build();
+		RegisteredClient registeredClient = RegisteredClient.withId(String.valueOf(randomUUID())).clientId("wolfhack-client").clientSecret(encryptedSecret).clientAuthenticationMethod(CLIENT_SECRET_BASIC).clientAuthenticationMethod(CLIENT_SECRET_POST).authorizationGrantType(AUTHORIZATION_CODE).authorizationGrantType(REFRESH_TOKEN).redirectUri("http://127.0.0.1:8088/login/oauth2/code/wolfhack-client-oidc").redirectUri("http://127.0.0.1:8088/authorized").redirectUri("https://oidcdebugger.com/debug").scope(OidcScopes.OPENID).scope("read").scope("write").tokenSettings(tokenSettings()).build();
 
-        return new InMemoryRegisteredClientRepository(registeredClient);
-    }
+		return new InMemoryRegisteredClientRepository(registeredClient);
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public ProviderSettings providerSettings() {
-        return ProviderSettings.builder()
-                .issuer("http://auth-server:8081/")
-                .build();
-    }
+	@Bean
+	public ProviderSettings providerSettings() {
+		return ProviderSettings.builder().issuer("http://auth-server:8081/").build();
+	}
 
-    @Bean
-    public TokenSettings tokenSettings() {
-        return TokenSettings.builder()
-                .accessTokenTimeToLive(ofHours(60))
-                .refreshTokenTimeToLive(ofHours(120))
-                .build();
-    }
+	@Bean
+	public TokenSettings tokenSettings() {
+		return TokenSettings.builder().accessTokenTimeToLive(ofHours(60)).refreshTokenTimeToLive(ofHours(120)).build();
+	}
 
 }

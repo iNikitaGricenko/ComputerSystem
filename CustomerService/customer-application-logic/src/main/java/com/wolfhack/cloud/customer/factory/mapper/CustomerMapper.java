@@ -8,11 +8,11 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface CustomerMapper {
-    Customer toCustomerFromRequest(CustomerRequestDTO customerRequestDTO);
+	Customer toCustomerFromRequest(CustomerRequestDTO customerRequestDTO);
 
-    CustomerRequestDTO toRequestDTO(Customer customer);
+	CustomerRequestDTO toRequestDTO(Customer customer);
 
-    Customer toCustomerFromResponse(CustomerResponseDTO customerResponseDTO);
+	Customer toCustomerFromResponse(CustomerResponseDTO customerResponseDTO);
 
-    CustomerResponseDTO toResponseDTO(Customer customer);
+	CustomerResponseDTO toResponseDTO(Customer customer);
 }

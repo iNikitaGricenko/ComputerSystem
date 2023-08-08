@@ -19,12 +19,11 @@ public class UserService {
 	private final UserOutput userOutput;
 
 	public Mono<Long> save(Mono<User> user) {
-		return userInput.save(
-				user.map(it -> {
-					it.setRole(Role.USER);
-					it.setRegisteredAt(LocalDate.now());
-					return it;
-				}));
+		return userInput.save(user.map(it -> {
+			it.setRole(Role.USER);
+			it.setRegisteredAt(LocalDate.now());
+			return it;
+		}));
 	}
 
 	public Mono<User> update(long id, Mono<User> user) {

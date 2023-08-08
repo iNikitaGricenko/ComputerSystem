@@ -11,15 +11,14 @@ import java.time.LocalDate;
 @Data
 public class AnalyticsSearch implements Serializable {
 
-    @Schema(example = "INPROGRESS")
-    private final OrderStatus status;
+	@Schema(example = "INPROGRESS") private final OrderStatus status;
 
-    @Schema(example = "2007-12-03", description = "years-month-days")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private final LocalDate from;
+	@Schema(example = "2007-12-03", description = "years-month-days")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private final LocalDate from;
 
-    @Schema(example = "2022-09-26", description = "years-month-days")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private final LocalDate to;
+	@Schema(example = "2022-09-26", description = "years-month-days")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private final LocalDate to;
 
 }

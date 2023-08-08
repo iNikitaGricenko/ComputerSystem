@@ -9,17 +9,17 @@ import java.io.IOException;
 import java.util.List;
 
 public interface RamServiceInterface {
-    Page<Ram> findAll(Pageable pageable);
+	Page<Ram> findAll(Pageable pageable);
 
-    Long save(Ram ram);
+	Long save(Ram ram);
 
-    String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
+	String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    Ram findById(Long id);
+	Ram findById(Long id);
 
-    List<Ram> searchByTitle(String query, Pageable pageable);
+	List<Ram> searchByTitle(String query, Pageable pageable);
 
-    void delete(long id);
+	void delete(long id);
 
-    long update(Ram ram);
+	long update(Ram ram);
 }

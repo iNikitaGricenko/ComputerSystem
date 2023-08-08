@@ -25,20 +25,11 @@ public class JwtSigner {
 	private final UserRepository userRepository;
 
 	public String create(String email) {
-		return Jwts.builder()
-				.signWith(keyPair.getPrivate(), SignatureAlgorithm.RS256)
-				.setSubject(String.valueOf(email))
-				.setIssuer("identity")
-				.setExpiration(Date.from(Instant.now().plus(Duration.ofMinutes(20))))
-				.setIssuedAt(Date.from(Instant.now()))
-				.compact();
+		return Jwts.builder().signWith(keyPair.getPrivate(), SignatureAlgorithm.RS256).setSubject(String.valueOf(email)).setIssuer("identity").setExpiration(Date.from(Instant.now().plus(Duration.ofMinutes(20)))).setIssuedAt(Date.from(Instant.now())).compact();
 	}
 
 	public Jws<Claims> validate(String token) {
-		return Jwts.parserBuilder()
-				.setSigningKey(keyPair.getPrivate())
-				.build()
-				.parseClaimsJws(token);
+		return Jwts.parserBuilder().setSigningKey(keyPair.getPrivate()).build().parseClaimsJws(token);
 	}
 
 	public Mono<UserAuthorityInfo> validateAndReturnInfo(String token) {

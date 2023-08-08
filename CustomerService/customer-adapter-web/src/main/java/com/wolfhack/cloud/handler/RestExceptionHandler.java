@@ -27,45 +27,42 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleConflict(RuntimeException ex) {
-        return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
-    }
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<String> handleConflict(RuntimeException ex) {
+		return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+	}
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<String> errors = exception.getBindingResult().getAllErrors().stream()
-                .map(ObjectError::getDefaultMessage)
-                .collect(toList());
-        ValidationErrorBody body = new ValidationErrorBody(status, request, errors);
-        return handleExceptionInternal(exception, body, headers, status, request);
-    }
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		List<String> errors = exception.getBindingResult().getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(toList());
+		ValidationErrorBody body = new ValidationErrorBody(status, request, errors);
+		return handleExceptionInternal(exception, body, headers, status, request);
+	}
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleViolationAccess(ValidationException exception, WebRequest request) {
-        return handleException(exception, request, FORBIDDEN);
-    }
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity<Object> handleViolationAccess(ValidationException exception, WebRequest request) {
+		return handleException(exception, request, FORBIDDEN);
+	}
 
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<Object> handleCustomerNotFound(CustomerNotFoundException exception, WebRequest request) {
-        return handleException(exception, request, exception.getStatus());
-    }
+	@ExceptionHandler(CustomerNotFoundException.class)
+	public ResponseEntity<Object> handleCustomerNotFound(CustomerNotFoundException exception, WebRequest request) {
+		return handleException(exception, request, exception.getStatus());
+	}
 
-    @ExceptionHandler(CustomerOrderNotFoundException.class)
-    public ResponseEntity<Object> handleOrderNotFound(CustomerOrderNotFoundException exception, WebRequest request) {
-        return handleException(exception, request, exception.getStatus());
-    }
+	@ExceptionHandler(CustomerOrderNotFoundException.class)
+	public ResponseEntity<Object> handleOrderNotFound(CustomerOrderNotFoundException exception, WebRequest request) {
+		return handleException(exception, request, exception.getStatus());
+	}
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<Object> handleProductNotFound(ProductNotFoundException exception, WebRequest request) {
-        return handleException(exception, request, exception.getStatus());
-    }
+	@ExceptionHandler(ProductNotFoundException.class)
+	public ResponseEntity<Object> handleProductNotFound(ProductNotFoundException exception, WebRequest request) {
+		return handleException(exception, request, exception.getStatus());
+	}
 
-    private ResponseEntity<Object> handleException(Exception exception, WebRequest request, HttpStatus status) {
-        HttpHeaders headers = new HttpHeaders();
-        ErrorBody body = new ErrorBody(status, request, exception.getMessage());
-        return handleExceptionInternal(exception, body, headers, status, request);
-    }
+	private ResponseEntity<Object> handleException(Exception exception, WebRequest request, HttpStatus status) {
+		HttpHeaders headers = new HttpHeaders();
+		ErrorBody body = new ErrorBody(status, request, exception.getMessage());
+		return handleExceptionInternal(exception, body, headers, status, request);
+	}
 
 }

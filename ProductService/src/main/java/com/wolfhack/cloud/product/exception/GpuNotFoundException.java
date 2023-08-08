@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class GpuNotFoundException extends NotFoundException {
 
-    public GpuNotFoundException() {
-        super("Gpu not found");
-    }
+	public GpuNotFoundException() {
+		super("Gpu not found");
+	}
 
 }

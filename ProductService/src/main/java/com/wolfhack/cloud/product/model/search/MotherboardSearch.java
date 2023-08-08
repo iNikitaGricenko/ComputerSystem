@@ -28,47 +28,33 @@ public class MotherboardSearch implements Serializable {
 	@Field(type = FieldType.Text, fielddata = true)
 	@NotNull @Size(min = 5) String model;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String type;
+	@Field(type = FieldType.Text, fielddata = true) String type;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String socket;
+	@Field(type = FieldType.Text, fielddata = true) String socket;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String cpus;
+	@Field(type = FieldType.Text, fielddata = true) String cpus;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String chipset;
+	@Field(type = FieldType.Text, fielddata = true) String chipset;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String memoryType;
+	@Field(type = FieldType.Text, fielddata = true) String memoryType;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String compatibleRam;
+	@Field(type = FieldType.Text, fielddata = true) String compatibleRam;
 
-	@Field(type = FieldType.Integer)
-	int ramSlots;
+	@Field(type = FieldType.Integer) int ramSlots;
 
-	@Field(type = FieldType.Integer)
-	int channelNumber;
+	@Field(type = FieldType.Integer) int channelNumber;
 
-	@Field(type = FieldType.Double)
-	double maxRamCapacity;
+	@Field(type = FieldType.Double) double maxRamCapacity;
 
-	@Field(type = FieldType.Double)
-	double minRamFreq;
+	@Field(type = FieldType.Double) double minRamFreq;
 
-	@Field(type = FieldType.Double)
-	double maxRamFreq;
+	@Field(type = FieldType.Double) double maxRamFreq;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String wirelessAdapter;
+	@Field(type = FieldType.Text, fielddata = true) String wirelessAdapter;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String soundCard;
+	@Field(type = FieldType.Text, fielddata = true) String soundCard;
 
-	@Field(type = FieldType.Float)
-	float soundScheme;
+	@Field(type = FieldType.Float) float soundScheme;
 
 	HashMap<String, Integer> injectedPorts = new HashMap<>();
 
@@ -76,6 +62,5 @@ public class MotherboardSearch implements Serializable {
 
 	HashMap<String, Integer> externalPorts = new HashMap<>();
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String formFactor;
+	@Field(type = FieldType.Text, fielddata = true) String formFactor;
 }

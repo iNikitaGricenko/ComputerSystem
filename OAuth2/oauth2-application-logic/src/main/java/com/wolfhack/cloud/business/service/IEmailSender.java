@@ -4,6 +4,6 @@ import com.wolfhack.cloud.business.model.User;
 
 public interface IEmailSender {
 
-    void send(User user);
+	void send(User user);
 
 }

@@ -11,22 +11,21 @@ import java.time.LocalDateTime;
 @Getter
 public class UserNotFoundException extends RuntimeException {
 
-    private final HttpStatus status = HttpStatus.NOT_FOUND;
+	private final HttpStatus status = HttpStatus.NOT_FOUND;
 
-    private final LocalDateTime timestamp = LocalDateTime.now();
-    @Schema(example = "404")
-    private final int code = status.value();
+	private final LocalDateTime timestamp = LocalDateTime.now();
+	@Schema(example = "404") private final int code = status.value();
 
-    public UserNotFoundException() {
-        super("User not found");
-    }
+	public UserNotFoundException() {
+		super("User not found");
+	}
 
-    public UserNotFoundException(String message) {
-        super(message);
-    }
+	public UserNotFoundException(String message) {
+		super(message);
+	}
 
-    public UserNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public UserNotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

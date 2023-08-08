@@ -23,12 +23,7 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
 	private final Map<Class<? extends Exception>, HttpStatus> exceptionToStatusCode;
 	private final HttpStatus defaultStatus;
 
-	public GlobalExceptionHandler(ErrorAttributes errorAttributes,
-	                              WebProperties webProperties,
-	                              ApplicationContext applicationContext,
-	                              Map<Class<? extends Exception>, HttpStatus> exceptionToStatusCode,
-	                              ServerCodecConfigurer configurer,
-	                              HttpStatus defaultStatus) {
+	public GlobalExceptionHandler(ErrorAttributes errorAttributes, WebProperties webProperties, ApplicationContext applicationContext, Map<Class<? extends Exception>, HttpStatus> exceptionToStatusCode, ServerCodecConfigurer configurer, HttpStatus defaultStatus) {
 		super(errorAttributes, webProperties.getResources(), applicationContext);
 		this.defaultStatus = defaultStatus;
 		this.setMessageWriters(configurer.getWriters());
@@ -46,9 +41,7 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
 		if (error instanceof Exception exception) {
 			httpStatus = exceptionToStatusCode.getOrDefault(exception.getClass(), defaultStatus);
 		}
-		return ServerResponse.status(httpStatus)
-				.contentType(MediaType.APPLICATION_JSON)
-				.body(BodyInserters.fromValue(handleException(error, request, httpStatus)));
+		return ServerResponse.status(httpStatus).contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(handleException(error, request, httpStatus)));
 	}
 
 	private ErrorBody handleException(Throwable exception, ServerRequest request, HttpStatus status) {

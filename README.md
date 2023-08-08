@@ -1,4 +1,5 @@
 # ComputerSystem ``Portfolio project``
+
 Microservices for e-commerce computer components store
 
 ![build](https://img.shields.io/github/actions/workflow/status/iNikitaGricenko/ComputerSystem/build.yml?style=for-the-badge/badge.svg)
@@ -7,9 +8,11 @@ Microservices for e-commerce computer components store
 # Technologies
 
 ## Architecture
+
 * Microservices
 
 ## Backend
+
 * Spring Boot
 * Spring Web
 * Spring Cloud
@@ -25,24 +28,31 @@ Microservices for e-commerce computer components store
 * JPA
 
 #### Mail Templates
+
 * Template Engine - Thymeleaf
 
 ### Databases
+
 #### SQL
+
 * MySQL
 
 #### NoSQL
+
 * MongoDB
 * Redis
 
 #### Migrations
+
 * Flyway
 
 ### Code Write
+
 * Lombok
 * Mapstruct
 
 ### Services
+
 * Github actions
 * Docker & Docker-compose
 

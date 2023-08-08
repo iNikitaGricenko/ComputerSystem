@@ -17,32 +17,32 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class MvcConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeChangeInterceptor());
-    }
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(localeChangeInterceptor());
+	}
 
-    @Bean(name = "localeResolver")
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.ENGLISH);
-        return localeResolver;
-    }
+	@Bean(name = "localeResolver")
+	public LocaleResolver localeResolver() {
+		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+		localeResolver.setDefaultLocale(Locale.ENGLISH);
+		return localeResolver;
+	}
 
-    @Bean(name = "messageSource")
-	public MessageSource getMessageResource()  {
-		ReloadableResourceBundleMessageSource messageResource= new ReloadableResourceBundleMessageSource();
+	@Bean(name = "messageSource")
+	public MessageSource getMessageResource() {
+		ReloadableResourceBundleMessageSource messageResource = new ReloadableResourceBundleMessageSource();
 
 		messageResource.setBasename("classpath:languages/messages");
 		messageResource.setDefaultEncoding("UTF-8");
 		return messageResource;
 	}
 
-    @Bean(name = "localeChangeInterceptor")
-    public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
-        return localeChangeInterceptor;
-    }
+	@Bean(name = "localeChangeInterceptor")
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+		localeChangeInterceptor.setParamName("lang");
+		return localeChangeInterceptor;
+	}
 
 }

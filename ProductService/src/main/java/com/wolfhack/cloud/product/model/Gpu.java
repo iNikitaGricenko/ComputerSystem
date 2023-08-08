@@ -12,44 +12,49 @@ import java.util.List;
 @Document("gpus")
 public class Gpu {
 
-    @NotNull @Min(0)
-    private Long id;
-    @NotNull @Size(min = 5)
-    private String name;
-    @NotNull @Size(min = 5)
-    private String model;
-    @NotNull @Min(5)
-    private int quantity;
-    @NotNull @Min(0)
-    private float unitPrice;
-    private String description;
+	@NotNull
+	@Min(0)
+	private Long id;
+	@NotNull
+	@Size(min = 5)
+	private String name;
+	@NotNull
+	@Size(min = 5)
+	private String model;
+	@NotNull
+	@Min(5)
+	private int quantity;
+	@NotNull
+	@Min(0)
+	private float unitPrice;
+	private String description;
 
-    private String type;
-    private long memorySize;
-    private String memoryType;
-    private double memoryBus;
+	private String type;
+	private long memorySize;
+	private String memoryType;
+	private double memoryBus;
 
-    private String graphicsProcessor;
-    private double coreFrequency;
-    private double videoMemoryFrequency;
-    private String maxResolution;
-    private String processorFamily;
+	private String graphicsProcessor;
+	private double coreFrequency;
+	private double videoMemoryFrequency;
+	private String maxResolution;
+	private String processorFamily;
 
-    private boolean cudaSupport;
-    private boolean additionalPowerSupply;
+	private boolean cudaSupport;
+	private boolean additionalPowerSupply;
 
-    private double length;
-    private double height;
-    private double powerSupplyCapacity;
+	private double length;
+	private double height;
+	private double powerSupplyCapacity;
 
-    private int fans;
-    private int cudaCores;
+	private int fans;
+	private int cudaCores;
 
-    private String[] standardsSupports;
-    private String supplyConnector;
+	private String[] standardsSupports;
+	private String supplyConnector;
 
-    private String gpuInterface;
-    private String[] connectors;
+	private String gpuInterface;
+	private String[] connectors;
 
-    private List<FileStorage> photos;
+	private List<FileStorage> photos;
 }

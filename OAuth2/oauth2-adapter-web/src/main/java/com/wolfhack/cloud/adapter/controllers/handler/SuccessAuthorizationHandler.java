@@ -25,34 +25,29 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class SuccessAuthorizationHandler implements AuthenticationSuccessHandler {
 
-    private final IAuthorizationLogService logService;
-    private final IUserService userService;
+	private final IAuthorizationLogService logService;
+	private final IUserService userService;
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                        Authentication authentication) throws IOException, ServletException {
-        AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
-        this.onAuthenticationSuccess(request, response, authentication);
-        log.info("Authentication success");
-    }
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+		AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
+		this.onAuthenticationSuccess(request, response, authentication);
+		log.info("Authentication success");
+	}
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
-        UserSecurity userDetails = (UserSecurity) authentication.getPrincipal();
-        User user = User.builder().id(userDetails.getId()).build();
-        AuthorizationLog authorizationLog = AuthorizationLog.builder()
-                .authorizationStatus(AuthorizationStatus.SUCCESS)
-                .dateTime(LocalDateTime.now())
-                .user(user).build();
-        logService.save(authorizationLog);
-        try {
-            User founded = userService.getOne(user.getId());
-            founded.setLastLoginDate(LocalDateTime.now());
-            userService.save(founded);
-        } catch (UserNotFoundException userNotFoundException) {
-            log.info("User {} authentication failed", userDetails.getUsername());
-        }
-        log.info("User {} authenticated", userDetails.getUsername());
-    }
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		UserSecurity userDetails = (UserSecurity) authentication.getPrincipal();
+		User user = User.builder().id(userDetails.getId()).build();
+		AuthorizationLog authorizationLog = AuthorizationLog.builder().authorizationStatus(AuthorizationStatus.SUCCESS).dateTime(LocalDateTime.now()).user(user).build();
+		logService.save(authorizationLog);
+		try {
+			User founded = userService.getOne(user.getId());
+			founded.setLastLoginDate(LocalDateTime.now());
+			userService.save(founded);
+		} catch (UserNotFoundException userNotFoundException) {
+			log.info("User {} authentication failed", userDetails.getUsername());
+		}
+		log.info("User {} authenticated", userDetails.getUsername());
+	}
 }

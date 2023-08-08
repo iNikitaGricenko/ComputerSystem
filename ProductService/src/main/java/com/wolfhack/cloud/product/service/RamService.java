@@ -20,72 +20,69 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static java.lang.String.format;
-
 @Service
 @RequiredArgsConstructor
 public class RamService extends AbstractMongoEventListener<Ram> implements RamServiceInterface {
 
-    private final RamRepository ramRepository;
-    private final RamSearchService ramSearchService;
-    private final StorageService storageService;
-    private final DatabaseSequenceService databaseSequenceService;
+	private final RamRepository ramRepository;
+	private final RamSearchService ramSearchService;
+	private final StorageService storageService;
+	private final DatabaseSequenceService databaseSequenceService;
 
-    @Override
-    public void onBeforeConvert(BeforeConvertEvent<Ram> event) {
-        if (event.getSource().getId() < 1) {
-            event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        }
-    }
+	@Override
+	public void onBeforeConvert(BeforeConvertEvent<Ram> event) {
+		if (event.getSource().getId() < 1) {
+			event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
+		}
+	}
 
-    @AopLog
-    @Override
-    @Cacheable(cacheNames = "ram_Response_Page")
-    public Page<Ram> findAll(Pageable pageable) {
-        return ramRepository.findAll(pageable);
-    }
+	@AopLog
+	@Override
+	@Cacheable(cacheNames = "ram_Response_Page")
+	public Page<Ram> findAll(Pageable pageable) {
+		return ramRepository.findAll(pageable);
+	}
 
-    @AopLog
-    @Override
-    @CachePut(cacheNames = {"ram_Response_Page", "ram"}, key = "#ram.id")
-    public Long save(Ram ram) {
-        ram.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        Ram saved = ramRepository.save(ram);
-        ramSearchService.save(saved);
-        return saved.getId();
-    }
+	@AopLog
+	@Override
+	@CachePut(cacheNames = {"ram_Response_Page", "ram"}, key = "#ram.id")
+	public Long save(Ram ram) {
+		ram.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
+		Ram saved = ramRepository.save(ram);
+		ramSearchService.save(saved);
+		return saved.getId();
+	}
 
-    @AopLog
-    @Override
-    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
-        Ram ram = findById(id);
-        return storageService.saveFileAndThen(multipartFile, ram.getPhotos(), () -> save(ram));
-    }
+	@AopLog
+	@Override
+	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+		Ram ram = findById(id);
+		return storageService.saveFileAndThen(multipartFile, ram.getPhotos(), () -> save(ram));
+	}
 
-    @AopLog
-    @Override
-    @Cacheable(cacheNames = "ram", key = "#id")
-    public Ram findById(Long id) {
-        return ramRepository.findById(id)
-                .orElseThrow(RamNotFoundException::new);
-    }
+	@AopLog
+	@Override
+	@Cacheable(cacheNames = "ram", key = "#id")
+	public Ram findById(Long id) {
+		return ramRepository.findById(id).orElseThrow(RamNotFoundException::new);
+	}
 
-    @AopLog
-    @Override
-    public List<Ram> searchByTitle(String query, Pageable pageable) {
-        return ramSearchService.findByTitle(query, pageable);
-    }
+	@AopLog
+	@Override
+	public List<Ram> searchByTitle(String query, Pageable pageable) {
+		return ramSearchService.findByTitle(query, pageable);
+	}
 
-    @Override
-    public void delete(long id) {
-        ramSearchService.delete(id);
-        ramRepository.deleteById(id);
-    }
+	@Override
+	public void delete(long id) {
+		ramSearchService.delete(id);
+		ramRepository.deleteById(id);
+	}
 
-    @Override
-    public long update(Ram ram) {
-        Ram saved = ramRepository.save(ram);
-        ramSearchService.update(ram);
-        return saved.getId();
-    }
+	@Override
+	public long update(Ram ram) {
+		Ram saved = ramRepository.save(ram);
+		ramSearchService.update(ram);
+		return saved.getId();
+	}
 }

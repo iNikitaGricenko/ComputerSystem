@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PersistenceUnitSettings">
-    <persistence-units>
-      <persistence-unit moduleName="customer-server" name="Default">
-        <packages>
-          <package value="com.wolfhack.cloud" />
-        </packages>
-      </persistence-unit>
-      <persistence-unit moduleName="oauth2-server" name="Default">
-        <packages>
-          <package value="com.wolfhack.cloud" />
-        </packages>
-      </persistence-unit>
-      <persistence-unit moduleName="ProductService" name="Default">
-        <packages>
-          <package value="com.wolfhack.cloud.product" />
-        </packages>
-      </persistence-unit>
-    </persistence-units>
-  </component>
+    <component name="PersistenceUnitSettings">
+        <persistence-units>
+            <persistence-unit moduleName="customer-server" name="Default">
+                <packages>
+                    <package value="com.wolfhack.cloud"/>
+                </packages>
+            </persistence-unit>
+            <persistence-unit moduleName="oauth2-server" name="Default">
+                <packages>
+                    <package value="com.wolfhack.cloud"/>
+                </packages>
+            </persistence-unit>
+            <persistence-unit moduleName="ProductService" name="Default">
+                <packages>
+                    <package value="com.wolfhack.cloud.product"/>
+                </packages>
+            </persistence-unit>
+        </persistence-units>
+    </component>
 </project>

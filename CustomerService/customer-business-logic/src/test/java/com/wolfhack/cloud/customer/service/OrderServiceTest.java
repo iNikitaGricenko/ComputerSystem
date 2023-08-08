@@ -17,7 +17,10 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -146,13 +149,7 @@ class OrderServiceTest {
 		LocalDate to = LocalDate.now().plusDays(1);
 		AnalyticsSearch analyticsSearch = new AnalyticsSearch(status, from, to);
 
-		List<OrderItem> list = defaultCustomerOrders.stream()
-				.filter(customerOrder -> customerOrder.getStatus().equals(status))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from.atTime(LocalTime.MIN)))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to.atTime(LocalTime.MIN)))
-				.map(CustomerOrder::getOrderItems)
-				.flatMap(Collection::stream)
-				.toList();
+		List<OrderItem> list = defaultCustomerOrders.stream().filter(customerOrder -> customerOrder.getStatus().equals(status)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from.atTime(LocalTime.MIN))).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to.atTime(LocalTime.MIN))).map(CustomerOrder::getOrderItems).flatMap(Collection::stream).toList();
 
 		double totalPrice = list.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).sum();
 		double maxOrderPrice = list.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).max().orElse(0);

@@ -20,72 +20,69 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static java.lang.String.format;
-
 @Service
 @RequiredArgsConstructor
 public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuServiceInterface {
 
-    private final CpuRepository cpuRepository;
-    private final CpuSearchService cpuSearchService;
-    private final StorageService storageService;
-    private final DatabaseSequenceService databaseSequenceService;
+	private final CpuRepository cpuRepository;
+	private final CpuSearchService cpuSearchService;
+	private final StorageService storageService;
+	private final DatabaseSequenceService databaseSequenceService;
 
-    @Override
-    public void onBeforeConvert(BeforeConvertEvent<Cpu> event) {
-        if (event.getSource().getId() < 1) {
-            event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        }
-    }
+	@Override
+	public void onBeforeConvert(BeforeConvertEvent<Cpu> event) {
+		if (event.getSource().getId() < 1) {
+			event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
+		}
+	}
 
-    @AopLog
-    @Override
-    @Cacheable(cacheNames = "cpu_Response_Page")
-    public Page<Cpu> findAll(Pageable pageable) {
-        return cpuRepository.findAll(pageable);
-    }
+	@AopLog
+	@Override
+	@Cacheable(cacheNames = "cpu_Response_Page")
+	public Page<Cpu> findAll(Pageable pageable) {
+		return cpuRepository.findAll(pageable);
+	}
 
-    @AopLog
-    @Override
-    @CachePut(cacheNames = {"cpu_Response_Page", "cpu"}, key = "#cpu.id")
-    public Long save(Cpu cpu) {
-        cpu.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        Cpu saved = cpuRepository.save(cpu);
-        cpuSearchService.save(saved);
-        return saved.getId();
-    }
+	@AopLog
+	@Override
+	@CachePut(cacheNames = {"cpu_Response_Page", "cpu"}, key = "#cpu.id")
+	public Long save(Cpu cpu) {
+		cpu.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
+		Cpu saved = cpuRepository.save(cpu);
+		cpuSearchService.save(saved);
+		return saved.getId();
+	}
 
-    @AopLog
-    @Override
-    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
-        Cpu cpu = findById(id);
-        return storageService.saveFileAndThen(multipartFile, cpu.getPhotos(), () -> save(cpu));
-    }
+	@AopLog
+	@Override
+	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+		Cpu cpu = findById(id);
+		return storageService.saveFileAndThen(multipartFile, cpu.getPhotos(), () -> save(cpu));
+	}
 
-    @AopLog
-    @Override
-    @Cacheable(cacheNames = "cpu", key = "#id")
-    public Cpu findById(Long id) {
-        return cpuRepository.findById(id)
-            .orElseThrow(CpuNotFoundException::new);
-    }
+	@AopLog
+	@Override
+	@Cacheable(cacheNames = "cpu", key = "#id")
+	public Cpu findById(Long id) {
+		return cpuRepository.findById(id).orElseThrow(CpuNotFoundException::new);
+	}
 
-    @AopLog
-    @Override
-    public List<Cpu> searchByTitle(String query, Pageable pageable) {
-        return cpuSearchService.findByTitle(query, pageable);
-    }
+	@AopLog
+	@Override
+	public List<Cpu> searchByTitle(String query, Pageable pageable) {
+		return cpuSearchService.findByTitle(query, pageable);
+	}
 
-    @Override
-    public void delete(long id) {
-        cpuSearchService.delete(id);
-        cpuRepository.deleteById(id);
-    }
+	@Override
+	public void delete(long id) {
+		cpuSearchService.delete(id);
+		cpuRepository.deleteById(id);
+	}
 
-    @Override
-    public long update(Cpu cpu) {
-        Cpu saved = cpuRepository.save(cpu);
-        cpuSearchService.update(cpu);
-        return saved.getId();
-    }
+	@Override
+	public long update(Cpu cpu) {
+		Cpu saved = cpuRepository.save(cpu);
+		cpuSearchService.update(cpu);
+		return saved.getId();
+	}
 }

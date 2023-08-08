@@ -9,17 +9,17 @@ import java.io.IOException;
 import java.util.List;
 
 public interface MotherboardServiceInterface {
-    Page<Motherboard> findAll(Pageable pageable);
+	Page<Motherboard> findAll(Pageable pageable);
 
-    Motherboard findById(Long id);
+	Motherboard findById(Long id);
 
-    Long save(Motherboard motherboard);
+	Long save(Motherboard motherboard);
 
-    String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
+	String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    List<Motherboard> searchByTitle(String query, Pageable pageable);
+	List<Motherboard> searchByTitle(String query, Pageable pageable);
 
-    void delete(long id);
+	void delete(long id);
 
-    long update(Motherboard motherboard);
+	long update(Motherboard motherboard);
 }

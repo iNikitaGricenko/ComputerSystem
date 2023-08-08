@@ -6,11 +6,11 @@ import com.wolfhack.cloud.business.model.User;
 
 public interface IUserFactory {
 
-    User create(UserCreationDTO requestDTO);
+	User create(UserCreationDTO requestDTO);
 
-    User create(UserResponseDTO fullUserDto);
+	User create(UserResponseDTO fullUserDto);
 
-    UserResponseDTO create(User customerOrder);
+	UserResponseDTO create(User customerOrder);
 
-    User edit(User customerOrder, User editor);
+	User edit(User customerOrder, User editor);
 }

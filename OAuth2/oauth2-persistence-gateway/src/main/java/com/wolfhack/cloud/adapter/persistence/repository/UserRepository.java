@@ -11,10 +11,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<EntityUser, Long> {
 
-    Optional<EntityUser> findByLogin(String login);
+	Optional<EntityUser> findByLogin(String login);
 
-    List<EntityUser> findAllByActiveIsTrueAndActivationCodeIsNotNull();
+	List<EntityUser> findAllByActiveIsTrueAndActivationCodeIsNotNull();
 
-    List<EntityUser> findAllByActiveIsFalseAndRegisterDateIsLessThan(LocalDateTime dateTime);
+	List<EntityUser> findAllByActiveIsFalseAndRegisterDateIsLessThan(LocalDateTime dateTime);
 
 }

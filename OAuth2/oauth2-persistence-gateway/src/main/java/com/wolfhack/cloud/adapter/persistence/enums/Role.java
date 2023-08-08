@@ -6,15 +6,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-    ADMIN("ROLE_ADMIN"),
-    MANAGER("ROLE_MANAGER"),
-    SALES("ROLE_SALES"),
-    USER("ROLE_USER");
+	ADMIN("ROLE_ADMIN"), MANAGER("ROLE_MANAGER"), SALES("ROLE_SALES"), USER("ROLE_USER");
 
-    private final String value;
+	private final String value;
 
-    @Override
-    public String toString() {
-        return value;
-    }
+	@Override
+	public String toString() {
+		return value;
+	}
 }

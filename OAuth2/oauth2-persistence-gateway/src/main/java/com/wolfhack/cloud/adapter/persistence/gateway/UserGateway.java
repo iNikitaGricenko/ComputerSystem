@@ -20,49 +20,47 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserGateway implements IInputUser, IOutputUser {
 
-    private final UserRepository userRepository;
-    private final EntityUserMapper userMapper;
+	private final UserRepository userRepository;
+	private final EntityUserMapper userMapper;
 
-    @Override
-    public User save(User user) {
-        EntityUser entity = userMapper.convertToEntityUser(user);
-        return userMapper.convertToBusinessUser(userRepository.save(entity));
-    }
+	@Override
+	public User save(User user) {
+		EntityUser entity = userMapper.convertToEntityUser(user);
+		return userMapper.convertToBusinessUser(userRepository.save(entity));
+	}
 
-    @Override
-    public void deleteAll(List<User> users) {
-        users.stream().map(userMapper::convertToEntityUser).forEach(userRepository::delete);
-    }
+	@Override
+	public void deleteAll(List<User> users) {
+		users.stream().map(userMapper::convertToEntityUser).forEach(userRepository::delete);
+	}
 
-    @Override
-    public void saveAll(List<User> users) {
-        users.stream().map(userMapper::convertToEntityUser).forEach(userRepository::save);
-    }
+	@Override
+	public void saveAll(List<User> users) {
+		users.stream().map(userMapper::convertToEntityUser).forEach(userRepository::save);
+	}
 
-    @Override
-    public Optional<User> findByLogin(String login) {
-        return userRepository.findByLogin(login).map(userMapper::convertToBusinessUser);
-    }
+	@Override
+	public Optional<User> findByLogin(String login) {
+		return userRepository.findByLogin(login).map(userMapper::convertToBusinessUser);
+	}
 
-    @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id).map(userMapper::convertToBusinessUser);
-    }
+	@Override
+	public Optional<User> findById(Long id) {
+		return userRepository.findById(id).map(userMapper::convertToBusinessUser);
+	}
 
-    @Override
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable).map(userMapper::convertToBusinessUser);
-    }
+	@Override
+	public Page<User> findAll(Pageable pageable) {
+		return userRepository.findAll(pageable).map(userMapper::convertToBusinessUser);
+	}
 
-    @Override
-    public List<User> findAllByActiveIsFalseAndRegisterDateIsLessThan(LocalDateTime dateTime) {
-        return userRepository.findAllByActiveIsFalseAndRegisterDateIsLessThan(dateTime).stream()
-                .map(userMapper::convertToBusinessUser).collect(Collectors.toList());
-    }
+	@Override
+	public List<User> findAllByActiveIsFalseAndRegisterDateIsLessThan(LocalDateTime dateTime) {
+		return userRepository.findAllByActiveIsFalseAndRegisterDateIsLessThan(dateTime).stream().map(userMapper::convertToBusinessUser).collect(Collectors.toList());
+	}
 
-    @Override
-    public List<User> findAllByActiveIsTrueAndActivationCodeIsNotNull() {
-        return userRepository.findAllByActiveIsTrueAndActivationCodeIsNotNull().stream()
-                .map(userMapper::convertToBusinessUser).collect(Collectors.toList());
-    }
+	@Override
+	public List<User> findAllByActiveIsTrueAndActivationCodeIsNotNull() {
+		return userRepository.findAllByActiveIsTrueAndActivationCodeIsNotNull().stream().map(userMapper::convertToBusinessUser).collect(Collectors.toList());
+	}
 }

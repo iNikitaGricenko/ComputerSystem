@@ -21,23 +21,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-		return http.exceptionHandling()
-				.authenticationEntryPoint((exchange, e) ->
-						Mono.fromRunnable(() -> exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
-				.accessDeniedHandler((exchange, e) ->
-						Mono.fromRunnable(() -> exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN)))
-				.and()
-				.csrf().disable()
-				.httpBasic().disable()
-				.formLogin().disable()
-				.authenticationManager(authenticationManager)
-				.securityContextRepository(securityContextRepository)
-				.authorizeExchange()
-				.pathMatchers("/authorization-server/login").permitAll()
-				.pathMatchers("/authorization-server/jwt/validate").permitAll()
-				.pathMatchers("/authorization-server/register").permitAll()
-				.anyExchange().authenticated()
-				.and().build();
+		return http.exceptionHandling().authenticationEntryPoint((exchange, e) -> Mono.fromRunnable(() -> exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED))).accessDeniedHandler((exchange, e) -> Mono.fromRunnable(() -> exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN))).and().csrf().disable().httpBasic().disable().formLogin().disable().authenticationManager(authenticationManager).securityContextRepository(securityContextRepository).authorizeExchange().pathMatchers("/authorization-server/login").permitAll().pathMatchers("/authorization-server/jwt/validate").permitAll().pathMatchers("/authorization-server/register").permitAll().anyExchange().authenticated().and().build();
 	}
 
 }

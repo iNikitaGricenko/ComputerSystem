@@ -11,36 +11,27 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Table("user_entity")
-@Getter @Setter
+@Getter
+@Setter
 public class UserEntity {
-	@Id
-	private Long id;
+	@Id private Long id;
 
-	@Column("email")
-	private String email;
+	@Column("email") private String email;
 
-	@Column("password")
-	private String password;
+	@Column("password") private String password;
 
-	@Column("first_name")
-	private String firstName;
+	@Column("first_name") private String firstName;
 
-	@Column("last_name")
-	private String lastName;
+	@Column("last_name") private String lastName;
 
-	@Column("role")
-	private Role role;
+	@Column("role") private Role role;
 
-	@Column("registered_at")
-	private LocalDate registeredAt;
+	@Column("registered_at") private LocalDate registeredAt;
 
-	@Column("online_at")
-	private LocalDateTime onlineAt;
+	@Column("online_at") private LocalDateTime onlineAt;
 
-	@Column("deleted")
-	private boolean deleted = false;
+	@Column("deleted") private boolean deleted = false;
 
-	@Column("deleted_at")
-	private LocalDateTime deletedAt;
+	@Column("deleted_at") private LocalDateTime deletedAt;
 
 }

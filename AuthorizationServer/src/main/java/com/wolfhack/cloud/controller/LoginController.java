@@ -25,12 +25,7 @@ public class LoginController {
 
 	@PostMapping
 	public Mono<ResponseEntity<Object>> login(@RequestBody UserLogin userLogin) {
-		return userService.get(userLogin.email())
-				.filter(user -> user.getPassword().equals(pbkdf2Encoder.encode(userLogin.password())))
-				.map(user -> ResponseEntity.noContent()
-						.header(HttpHeaders.AUTHORIZATION, jwtSigner.create(user.getEmail()))
-						.build())
-				.switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).build()));
+		return userService.get(userLogin.email()).filter(user -> user.getPassword().equals(pbkdf2Encoder.encode(userLogin.password()))).map(user -> ResponseEntity.noContent().header(HttpHeaders.AUTHORIZATION, jwtSigner.create(user.getEmail())).build()).switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).build()));
 	}
 
 }

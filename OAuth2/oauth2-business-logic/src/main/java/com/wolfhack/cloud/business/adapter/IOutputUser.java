@@ -5,18 +5,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public interface IOutputUser {
-    Optional<User> findByLogin(String login);
+	Optional<User> findByLogin(String login);
 
-    Optional<User> findById(Long id);
+	Optional<User> findById(Long id);
 
-    Page<User> findAll(Pageable pageable);
+	Page<User> findAll(Pageable pageable);
 
-    List<User> findAllByActiveIsFalseAndRegisterDateIsLessThan(LocalDateTime dateTime);
+	List<User> findAllByActiveIsFalseAndRegisterDateIsLessThan(LocalDateTime dateTime);
 
-    List<User> findAllByActiveIsTrueAndActivationCodeIsNotNull();
+	List<User> findAllByActiveIsTrueAndActivationCodeIsNotNull();
 }

@@ -7,7 +7,7 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface EntityCustomerMapper {
-    Customer toBusinessFromEntity(EntityCustomer entityCustomer);
+	Customer toBusinessFromEntity(EntityCustomer entityCustomer);
 
-    EntityCustomer toEntityFromBusiness(Customer customer);
+	EntityCustomer toEntityFromBusiness(Customer customer);
 }

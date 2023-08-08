@@ -20,29 +20,22 @@ public class UserPersistence implements UserInput, UserOutput {
 
 	@Override
 	public Mono<Long> save(Mono<User> user) {
-		return user.map(userMapper::toEntity)
-				.flatMap(userRepository::save)
-				.map(UserEntity::getId);
+		return user.map(userMapper::toEntity).flatMap(userRepository::save).map(UserEntity::getId);
 	}
 
 	@Override
 	public Mono<User> update(long id, Mono<User> user) {
-		return userRepository.findById(id)
-				.flatMap(entity -> user.map(updater -> userMapper.partialUpdate(updater, entity)))
-				.flatMap(userRepository::save)
-				.map(userMapper::toUser);
+		return userRepository.findById(id).flatMap(entity -> user.map(updater -> userMapper.partialUpdate(updater, entity))).flatMap(userRepository::save).map(userMapper::toUser);
 	}
 
 	@Override
 	public Mono<User> get(long id) {
-		return userRepository.findById(id)
-				.map(userMapper::toUser);
+		return userRepository.findById(id).map(userMapper::toUser);
 	}
 
 	@Override
 	public Mono<User> get(String email) {
-		return userRepository.findByEmail(email)
-				.map(userMapper::toUser);
+		return userRepository.findByEmail(email).map(userMapper::toUser);
 	}
 
 	@Override

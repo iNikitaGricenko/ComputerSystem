@@ -8,7 +8,6 @@ import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.server.ServerRequest;
 
 import java.util.Map;
@@ -21,8 +20,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
 	@Override
 	public Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
 		Throwable error = this.getError(request);
-		MergedAnnotation<ResponseStatus> responseStatusAnnotation = MergedAnnotations
-				.from(error.getClass(), MergedAnnotations.SearchStrategy.TYPE_HIERARCHY).get(ResponseStatus.class);
+		MergedAnnotation<ResponseStatus> responseStatusAnnotation = MergedAnnotations.from(error.getClass(), MergedAnnotations.SearchStrategy.TYPE_HIERARCHY).get(ResponseStatus.class);
 		HttpStatus errorStatus = findHttpStatus(error, responseStatusAnnotation);
 		Map<String, Object> attributes = super.getErrorAttributes(request, options);
 		attributes.remove("timestamp");

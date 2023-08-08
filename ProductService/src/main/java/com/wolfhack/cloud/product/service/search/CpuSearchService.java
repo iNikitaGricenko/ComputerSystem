@@ -46,14 +46,7 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 
 	@Override
 	public List<Cpu> findByTitle(String line, Pageable pageable) {
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.field("productLine")
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line).field("name").field("model").field("productLine").type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
 
@@ -63,34 +56,21 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 	@AopLog
 	@Override
 	public List<Cpu> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Cpu.class.getFields())
-				.filter(field -> field.getType().isInstance(String.class))
-				.map(Field::getName)
-				.toArray(String[]::new);
+		String[] fields = Arrays.stream(Cpu.class.getFields()).filter(field -> field.getType().isInstance(String.class)).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
 
 		return cpus.map(SearchHit::getContent).map(cpuMapper::toEntity).toList();
 	}
-	
+
 	@AopLog
 	@Override
 	public List<Cpu> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Cpu.class.getFields())
-				.map(Field::getName)
-				.toArray(String[]::new);
+		String[] fields = Arrays.stream(Cpu.class.getFields()).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
 

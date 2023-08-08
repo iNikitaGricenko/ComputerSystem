@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -33,43 +32,43 @@ import static org.springframework.http.MediaType.*;
 @RequiredArgsConstructor
 public class RamRestController {
 
-    private final RamService ramService;
-    private final RamMapper ramMapper;
+	private final RamService ramService;
+	private final RamMapper ramMapper;
 
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RamResponseDTO.class)))
-    @Parameter(name = "id", example = "1")
-    public RamResponseDTO getRamById(@PathVariable("id") Long id) {
-        return ramMapper.toRamResponseDTO(ramService.findById(id));
-    }
+	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RamResponseDTO.class)))
+	@Parameter(name = "id", example = "1")
+	public RamResponseDTO getRamById(@PathVariable("id") Long id) {
+		return ramMapper.toRamResponseDTO(ramService.findById(id));
+	}
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
-    @PageableAsQueryParam
-    public Page<RamResponseDTO> getRams(Pageable pageable) {
-        return new RestPage<>(ramService.findAll(pageable).map(ramMapper::toRamResponseDTO));
-    }
+	@GetMapping(produces = APPLICATION_JSON_VALUE)
+	@PageableAsQueryParam
+	public Page<RamResponseDTO> getRams(Pageable pageable) {
+		return new RestPage<>(ramService.findAll(pageable).map(ramMapper::toRamResponseDTO));
+	}
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/search")
-    @PageableAsQueryParam
-    public List<RamResponseDTO> searchRams(Pageable pageable, @RequestParam String searchLine) {
-        return ramService.searchByTitle(searchLine, pageable).stream().map(ramMapper::toRamResponseDTO).toList();
-    }
+	@GetMapping(produces = APPLICATION_JSON_VALUE, value = "/search")
+	@PageableAsQueryParam
+	public List<RamResponseDTO> searchRams(Pageable pageable, @RequestParam String searchLine) {
+		return ramService.searchByTitle(searchLine, pageable).stream().map(ramMapper::toRamResponseDTO).toList();
+	}
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
-    @ResponseStatus(HttpStatus.CREATED)
-    public Long addRam(@Valid @RequestBody RamFullDTO ram) {
-        return ramService.save(ramMapper.toRam(ram));
-    }
+	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+	@ResponseStatus(HttpStatus.CREATED)
+	public Long addRam(@Valid @RequestBody RamFullDTO ram) {
+		return ramService.save(ramMapper.toRam(ram));
+	}
 
-    @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
-    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
-    @Parameter(name = "id", example = "1")
-    public String addPhoto(@PathVariable("id") Long id, @RequestParam("photo") MultipartFile photo) throws IOException {
-        return ramService.addPhoto(id, photo);
-    }
+	@PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
+	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+	@Parameter(name = "id", example = "1")
+	public String addPhoto(@PathVariable("id") Long id, @RequestParam("photo") MultipartFile photo) throws IOException {
+		return ramService.addPhoto(id, photo);
+	}
 
 }

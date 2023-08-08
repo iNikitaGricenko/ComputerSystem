@@ -6,4 +6,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "ComputerSystem - Products API", version = "0.0.1-SNAPSHOT"))
-public class SwaggerConfig { }
+public class SwaggerConfig {
+}

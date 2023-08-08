@@ -12,9 +12,7 @@ public class ExceptionStatuses {
 
 	@Bean
 	public Map<Class<? extends Exception>, HttpStatus> exceptionToStatusCode() {
-		return Map.of(
-				UnauthorizedException.class, HttpStatus.FORBIDDEN
-		             );
+		return Map.of(UnauthorizedException.class, HttpStatus.FORBIDDEN);
 	}
 
 	@Bean

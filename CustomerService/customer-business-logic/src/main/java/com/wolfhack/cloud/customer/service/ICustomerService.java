@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ICustomerService {
 
-    Customer save(Customer customer);
+	Customer save(Customer customer);
 
-    Customer findById(Long id);
+	Customer findById(Long id);
 
-    Page<Customer> findAll(Pageable pageable);
+	Page<Customer> findAll(Pageable pageable);
 }

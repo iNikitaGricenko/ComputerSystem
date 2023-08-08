@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableEurekaClient
 @SpringBootApplication
 public class OAuth2Application {
-    public static void main(String[] args) {
-        SpringApplication.run(OAuth2Application.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(OAuth2Application.class, args);
+	}
 }

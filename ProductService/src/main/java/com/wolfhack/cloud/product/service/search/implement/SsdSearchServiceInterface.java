@@ -1,7 +1,6 @@
 package com.wolfhack.cloud.product.service.search.implement;
 
 import com.wolfhack.cloud.product.model.Ssd;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

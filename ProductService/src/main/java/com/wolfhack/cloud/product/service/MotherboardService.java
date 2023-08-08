@@ -20,72 +20,69 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static java.lang.String.format;
-
 @Service
 @RequiredArgsConstructor
 public class MotherboardService extends AbstractMongoEventListener<Motherboard> implements MotherboardServiceInterface {
 
-    private final MotherboardRepository motherboardRepository;
-    private final MotherboardSearchService motherboardSearchService;
-    private final StorageService storageService;
-    private final DatabaseSequenceService databaseSequenceService;
+	private final MotherboardRepository motherboardRepository;
+	private final MotherboardSearchService motherboardSearchService;
+	private final StorageService storageService;
+	private final DatabaseSequenceService databaseSequenceService;
 
-    @Override
-    public void onBeforeConvert(BeforeConvertEvent<Motherboard> event) {
-        if (event.getSource().getId() < 1) {
-            event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        }
-    }
+	@Override
+	public void onBeforeConvert(BeforeConvertEvent<Motherboard> event) {
+		if (event.getSource().getId() < 1) {
+			event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
+		}
+	}
 
-    @AopLog
-    @Override
-    @Cacheable(cacheNames = "motherboard_Response_Page")
-    public Page<Motherboard> findAll(Pageable pageable) {
-        return motherboardRepository.findAll(pageable);
-    }
+	@AopLog
+	@Override
+	@Cacheable(cacheNames = "motherboard_Response_Page")
+	public Page<Motherboard> findAll(Pageable pageable) {
+		return motherboardRepository.findAll(pageable);
+	}
 
-    @AopLog
-    @Override
-    @Cacheable(cacheNames = "motherboard", key = "#id")
-    public Motherboard findById(Long id) {
-        return motherboardRepository.findById(id)
-                .orElseThrow(MotherboardNotFoundException::new);
-    }
+	@AopLog
+	@Override
+	@Cacheable(cacheNames = "motherboard", key = "#id")
+	public Motherboard findById(Long id) {
+		return motherboardRepository.findById(id).orElseThrow(MotherboardNotFoundException::new);
+	}
 
-    @AopLog
-    @Override
-    @CachePut(cacheNames = {"motherboard_Response_Page", "motherboard"}, key = "#motherboard.id")
-    public Long save(Motherboard motherboard) {
-        motherboard.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        Motherboard saved = motherboardRepository.save(motherboard);
-        motherboardSearchService.save(saved);
-        return saved.getId();
-    }
+	@AopLog
+	@Override
+	@CachePut(cacheNames = {"motherboard_Response_Page", "motherboard"}, key = "#motherboard.id")
+	public Long save(Motherboard motherboard) {
+		motherboard.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
+		Motherboard saved = motherboardRepository.save(motherboard);
+		motherboardSearchService.save(saved);
+		return saved.getId();
+	}
 
-    @AopLog
-    @Override
-    public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
-        Motherboard motherboard = findById(id);
-        return storageService.saveFileAndThen(multipartFile, motherboard.getPhotos(), () -> save(motherboard));
-    }
+	@AopLog
+	@Override
+	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
+		Motherboard motherboard = findById(id);
+		return storageService.saveFileAndThen(multipartFile, motherboard.getPhotos(), () -> save(motherboard));
+	}
 
-    @AopLog
-    @Override
-    public List<Motherboard> searchByTitle(String query, Pageable pageable) {
-        return motherboardSearchService.findByTitle(query, pageable);
-    }
+	@AopLog
+	@Override
+	public List<Motherboard> searchByTitle(String query, Pageable pageable) {
+		return motherboardSearchService.findByTitle(query, pageable);
+	}
 
-    @Override
-    public void delete(long id) {
-        motherboardSearchService.delete(id);
-        motherboardRepository.deleteById(id);
-    }
+	@Override
+	public void delete(long id) {
+		motherboardSearchService.delete(id);
+		motherboardRepository.deleteById(id);
+	}
 
-    @Override
-    public long update(Motherboard motherboard) {
-        Motherboard saved = motherboardRepository.save(motherboard);
-        motherboardSearchService.update(motherboard);
-        return saved.getId();
-    }
+	@Override
+	public long update(Motherboard motherboard) {
+		Motherboard saved = motherboardRepository.save(motherboard);
+		motherboardSearchService.update(motherboard);
+		return saved.getId();
+	}
 }

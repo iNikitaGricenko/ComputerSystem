@@ -12,23 +12,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthorizationLogService implements IAuthorizationLogService {
 
-    private final IInputAuthorizationLog inputAuthorizationLog;
-    private final IOutputAuthorizationLog outputAuthorizationLog;
+	private final IInputAuthorizationLog inputAuthorizationLog;
+	private final IOutputAuthorizationLog outputAuthorizationLog;
 
-    @Override
-    public AuthorizationLog save(AuthorizationLog authorizationLog) {
-        return inputAuthorizationLog.save(authorizationLog);
-    }
+	@Override
+	public AuthorizationLog save(AuthorizationLog authorizationLog) {
+		return inputAuthorizationLog.save(authorizationLog);
+	}
 
-    @Override
-    public Page<AuthorizationLog> findAll(Pageable pageable) {
-        return outputAuthorizationLog.findAll(pageable);
-    }
+	@Override
+	public Page<AuthorizationLog> findAll(Pageable pageable) {
+		return outputAuthorizationLog.findAll(pageable);
+	}
 
-    @Override
-    public AuthorizationLog findById(Long id) {
-        return outputAuthorizationLog.findById(id).orElseThrow(() -> new RuntimeException("Log is not found"));
-    }
+	@Override
+	public AuthorizationLog findById(Long id) {
+		return outputAuthorizationLog.findById(id).orElseThrow(() -> new RuntimeException("Log is not found"));
+	}
 
 
 }

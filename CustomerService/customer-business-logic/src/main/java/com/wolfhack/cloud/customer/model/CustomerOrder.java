@@ -18,60 +18,58 @@ import java.util.function.Function;
 @NoArgsConstructor
 public class CustomerOrder {
 
-    @RequiredArgsConstructor
-    static final class CustomerOrderUpdateFactory implements UpdateFactory {
+	@RequiredArgsConstructor
+	static final class CustomerOrderUpdateFactory implements UpdateFactory {
 
-        private final CustomerOrder customerOrder;
+		private final CustomerOrder customerOrder;
 
-        @Override
-        public <T, U> UpdateFactory edit(T editor, Function<T, U> getMethod, Consumer<U> setMethod) {
-            Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
-            return this;
-        }
+		@Override
+		public <T, U> UpdateFactory edit(T editor, Function<T, U> getMethod, Consumer<U> setMethod) {
+			Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
+			return this;
+		}
 
-        @Override
-        public CustomerOrder update() {
-            return customerOrder;
-        }
-    }
+		@Override
+		public CustomerOrder update() {
+			return customerOrder;
+		}
+	}
 
-    @EqualsAndHashCode.Exclude
-    private Long id;
+	@EqualsAndHashCode.Exclude private Long id;
 
-    private String paymentMethod;
+	private String paymentMethod;
 
-    private Currency paymentCurrency = Currency.EUR;
+	private Currency paymentCurrency = Currency.EUR;
 
-    private String address;
+	private String address;
 
-    private String city;
+	private String city;
 
-    private String state;
+	private String state;
 
-    private String country;
+	private String country;
 
-    private String zipCode;
+	private String zipCode;
 
-    private String description;
+	private String description;
 
-    @Builder.Default
-    @EqualsAndHashCode.Exclude
-    private LocalDateTime created = LocalDateTime.now();
+	@Builder.Default
+	@EqualsAndHashCode.Exclude
+	private LocalDateTime created = LocalDateTime.now();
 
-    @Builder.Default
-    private OrderStatus status = OrderStatus.INPROGRESS;
+	@Builder.Default private OrderStatus status = OrderStatus.INPROGRESS;
 
-    private LocalDateTime completed;
+	private LocalDateTime completed;
 
-    private Customer customer;
+	private Customer customer;
 
-    private boolean isDeleted = false;
+	private boolean isDeleted = false;
 
-    private LocalDateTime deletedAt;
+	private LocalDateTime deletedAt;
 
-    private Set<OrderItem> orderItems;
+	private Set<OrderItem> orderItems;
 
-    public UpdateFactory renovator() {
-        return new CustomerOrderUpdateFactory(this);
-    }
+	public UpdateFactory renovator() {
+		return new CustomerOrderUpdateFactory(this);
+	}
 }

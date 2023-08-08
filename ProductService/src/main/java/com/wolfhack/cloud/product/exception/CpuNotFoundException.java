@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class CpuNotFoundException extends NotFoundException {
 
-    public CpuNotFoundException() {
-        super("Cpu not found");
-    }
+	public CpuNotFoundException() {
+		super("Cpu not found");
+	}
 
 }

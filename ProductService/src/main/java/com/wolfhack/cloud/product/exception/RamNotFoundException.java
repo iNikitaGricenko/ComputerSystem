@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class RamNotFoundException extends NotFoundException {
 
-    public RamNotFoundException() {
-        super("Ram not found");
-    }
+	public RamNotFoundException() {
+		super("Ram not found");
+	}
 
 }

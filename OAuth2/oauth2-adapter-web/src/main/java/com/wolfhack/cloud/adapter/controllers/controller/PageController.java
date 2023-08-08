@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class PageController {
 
-    @GetMapping("/login")
-    public String oauth2LoginPage(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-        if (!(authentication instanceof AnonymousAuthenticationToken)){
-            return "redirect:/";
-        }
-        return "login";
-    }
+	@GetMapping("/login")
+	public String oauth2LoginPage(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			return "redirect:/";
+		}
+		return "login";
+	}
 
-    @PostMapping("/login")
-    public String oauth2LoginPageError(Model model) {
-        model.addAttribute("message", "Bad Credentials");
-        return "login";
-    }
+	@PostMapping("/login")
+	public String oauth2LoginPageError(Model model) {
+		model.addAttribute("message", "Bad Credentials");
+		return "login";
+	}
 
-    @GetMapping("/register")
-    public String oauth2RegisterPage() {
-        return "register";
-    }
+	@GetMapping("/register")
+	public String oauth2RegisterPage() {
+		return "register";
+	}
 
 }

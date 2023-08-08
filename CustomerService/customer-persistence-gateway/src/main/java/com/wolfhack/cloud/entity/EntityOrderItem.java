@@ -13,20 +13,15 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 public final class EntityOrderItem {
 
-    private Long id;
+	private Long id;
 
-    @Column(name = "order_item_name")
-    private String name;
+	@Column(name = "order_item_name") private String name;
 
-    @Column(name = "order_item_model")
-    private String model;
+	@Column(name = "order_item_model") private String model;
 
-    @Column(name = "quantity")
-    private long quantity;
+	@Column(name = "quantity") private long quantity;
 
-    @Column(name = "unit_price")
-    private double unitPrice;
+	@Column(name = "unit_price") private double unitPrice;
 
-    @Column(name = "order_item_class_name")
-    private String className;
+	@Column(name = "order_item_class_name") private String className;
 }

@@ -5,5 +5,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.Map;
 
 public interface SearchServiceInterface {
-    Map<String, Object> search(String query, Pageable pageable);
+	Map<String, Object> search(String query, Pageable pageable);
 }

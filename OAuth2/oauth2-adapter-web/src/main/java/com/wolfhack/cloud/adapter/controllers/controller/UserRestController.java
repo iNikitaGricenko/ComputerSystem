@@ -28,46 +28,46 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class UserRestController {
 
-    private final IUserService userService;
-    private final IUserFactory userFactory;
+	private final IUserService userService;
+	private final IUserFactory userFactory;
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
-    @Parameter(name = "user", schema = @Schema(implementation = UserCreationDTO.class))
-    public UserResponseDTO registration(@Valid @RequestBody UserCreationDTO user) {
-        User save = userService.save(userFactory.create(user));
-        return userFactory.create(save);
-    }
+	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
+	@Parameter(name = "user", schema = @Schema(implementation = UserCreationDTO.class))
+	public UserResponseDTO registration(@Valid @RequestBody UserCreationDTO user) {
+		User save = userService.save(userFactory.create(user));
+		return userFactory.create(save);
+	}
 
-    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
-    public UserResponseDTO changeProfile(@Valid @RequestBody UserResponseDTO user) {
-        User edit = userService.edit(userFactory.create(user));
-        return userFactory.create(edit);
-    }
+	@PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
+	public UserResponseDTO changeProfile(@Valid @RequestBody UserResponseDTO user) {
+		User edit = userService.edit(userFactory.create(user));
+		return userFactory.create(edit);
+	}
 
-    @GetMapping
-    public Page<UserResponseDTO> findAll(Pageable pageable) {
-        return new RestPage<>(userService.getAll(pageable).map(userFactory::create));
-    }
+	@GetMapping
+	public Page<UserResponseDTO> findAll(Pageable pageable) {
+		return new RestPage<>(userService.getAll(pageable).map(userFactory::create));
+	}
 
-    @GetMapping("/{id}")
-    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
-    public UserResponseDTO findOne(@PathVariable Long id) {
-        return userFactory.create(userService.getOne(id));
-    }
+	@GetMapping("/{id}")
+	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
+	public UserResponseDTO findOne(@PathVariable Long id) {
+		return userFactory.create(userService.getOne(id));
+	}
 
-    @GetMapping("/login")
-    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
-    @Parameter(name = "login", example = "test@domain.com")
-    public UserResponseDTO findByLogin(@RequestParam String login) {
-        return userFactory.create(userService.findByLogin(login));
-    }
+	@GetMapping("/login")
+	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
+	@Parameter(name = "login", example = "test@domain.com")
+	public UserResponseDTO findByLogin(@RequestParam String login) {
+		return userFactory.create(userService.findByLogin(login));
+	}
 
 }

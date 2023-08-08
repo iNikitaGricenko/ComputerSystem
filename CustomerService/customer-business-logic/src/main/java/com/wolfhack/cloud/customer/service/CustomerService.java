@@ -13,21 +13,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomerService implements ICustomerService {
 
-    private final InputCustomer inputCustomer;
-    private final OutputCustomer outputCustomer;
+	private final InputCustomer inputCustomer;
+	private final OutputCustomer outputCustomer;
 
-    @Override
-    public Customer save(Customer customer) {
-        return inputCustomer.persist(customer);
-    }
+	@Override
+	public Customer save(Customer customer) {
+		return inputCustomer.persist(customer);
+	}
 
-    @Override
-    public Customer findById(Long id) {
-        return outputCustomer.get(id).orElseThrow(CustomerNotFoundException::new);
-    }
+	@Override
+	public Customer findById(Long id) {
+		return outputCustomer.get(id).orElseThrow(CustomerNotFoundException::new);
+	}
 
-    @Override
-    public Page<Customer> findAll(Pageable pageable) {
-        return outputCustomer.getAll(pageable);
-    }
+	@Override
+	public Page<Customer> findAll(Pageable pageable) {
+		return outputCustomer.getAll(pageable);
+	}
 }

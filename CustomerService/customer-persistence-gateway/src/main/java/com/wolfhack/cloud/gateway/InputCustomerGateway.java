@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InputCustomerGateway implements InputCustomer {
 
-    private final CustomerRepository customerRepository;
-    private final EntityCustomerMapper entityCustomerMapper;
+	private final CustomerRepository customerRepository;
+	private final EntityCustomerMapper entityCustomerMapper;
 
-    @Override
-    public Customer persist(Customer customer) {
-        EntityCustomer entity = entityCustomerMapper.toEntityFromBusiness(customer);
-        return entityCustomerMapper.toBusinessFromEntity(customerRepository.save(entity));
-    }
+	@Override
+	public Customer persist(Customer customer) {
+		EntityCustomer entity = entityCustomerMapper.toEntityFromBusiness(customer);
+		return entityCustomerMapper.toBusinessFromEntity(customerRepository.save(entity));
+	}
 }

@@ -26,43 +26,38 @@ import static java.util.stream.Collectors.toSet;
 @Configuration
 public class JWKConfig {
 
-    @Bean
-    OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer() {
-        return context -> {
-            if (context.getTokenType() == OAuth2TokenType.ACCESS_TOKEN) {
-                Authentication principal = context.getPrincipal();
-                UserSecurity user = (UserSecurity) principal.getPrincipal();
+	@Bean
+	OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer() {
+		return context -> {
+			if (context.getTokenType() == OAuth2TokenType.ACCESS_TOKEN) {
+				Authentication principal = context.getPrincipal();
+				UserSecurity user = (UserSecurity) principal.getPrincipal();
 
-                Set<String> authorities = principal.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(toSet());
-                context.getClaims().claim("authorities", authorities);
-                context.getClaims().claim("id", user.getId());
-            }
-        };
-    }
+				Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toSet());
+				context.getClaims().claim("authorities", authorities);
+				context.getClaims().claim("id", user.getId());
+			}
+		};
+	}
 
-    @Bean
-    public JWKSource<SecurityContext> jwkSource() throws NoSuchAlgorithmException {
-        RSAKey rsaKey = generateRsa();
-        JWKSet jwkSet = new JWKSet(rsaKey);
-        return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
-    }
+	@Bean
+	public JWKSource<SecurityContext> jwkSource() throws NoSuchAlgorithmException {
+		RSAKey rsaKey = generateRsa();
+		JWKSet jwkSet = new JWKSet(rsaKey);
+		return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
+	}
 
-    private static RSAKey generateRsa() throws NoSuchAlgorithmException {
-        KeyPair keyPair = generateRsaKey();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        return new RSAKey.Builder(publicKey)
-                .privateKey(privateKey)
-                .keyID(String.valueOf(randomUUID()))
-                .build();
-    }
+	private static RSAKey generateRsa() throws NoSuchAlgorithmException {
+		KeyPair keyPair = generateRsaKey();
+		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+		return new RSAKey.Builder(publicKey).privateKey(privateKey).keyID(String.valueOf(randomUUID())).build();
+	}
 
-    private static KeyPair generateRsaKey() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        return keyPairGenerator.generateKeyPair();
-    }
+	private static KeyPair generateRsaKey() throws NoSuchAlgorithmException {
+		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+		keyPairGenerator.initialize(2048);
+		return keyPairGenerator.generateKeyPair();
+	}
 
 }

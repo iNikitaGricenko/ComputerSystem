@@ -30,9 +30,7 @@ class OrderFactoryTest {
 	@Test
 	void toOrder() {
 		CustomerRequestDTO customer = new CustomerRequestDTO("email@domain.com", "Nikit", "Sambatist", "+111 (202) 555-0125");
-		CustomerOrderRequestDTO requestDTO =
-				new CustomerOrderRequestDTO("Some street 39", "description", "Mastercard", Currency.UAH,
-				"BigCity-Town", "New-York", "USA", "96000", customer, Set.of());
+		CustomerOrderRequestDTO requestDTO = new CustomerOrderRequestDTO("Some street 39", "description", "Mastercard", Currency.UAH, "BigCity-Town", "New-York", "USA", "96000", customer, Set.of());
 
 		CustomerOrder order = orderFactory.toOrder(requestDTO);
 

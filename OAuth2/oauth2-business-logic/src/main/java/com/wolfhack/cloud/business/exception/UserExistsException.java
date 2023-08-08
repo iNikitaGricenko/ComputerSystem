@@ -11,22 +11,21 @@ import java.time.LocalDateTime;
 @Getter
 public class UserExistsException extends RuntimeException {
 
-    private final HttpStatus status = HttpStatus.FORBIDDEN;
+	private final HttpStatus status = HttpStatus.FORBIDDEN;
 
-    private final LocalDateTime timestamp = LocalDateTime.now();
-    @Schema(example = "403")
-    private final int code = status.value();
+	private final LocalDateTime timestamp = LocalDateTime.now();
+	@Schema(example = "403") private final int code = status.value();
 
-    public UserExistsException() {
-        super("User already exists");
-    }
+	public UserExistsException() {
+		super("User already exists");
+	}
 
-    public UserExistsException(String message) {
-        super(message);
-    }
+	public UserExistsException(String message) {
+		super(message);
+	}
 
-    public UserExistsException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public UserExistsException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

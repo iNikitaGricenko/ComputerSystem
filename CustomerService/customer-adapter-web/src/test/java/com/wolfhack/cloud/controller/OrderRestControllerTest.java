@@ -22,15 +22,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ContextConfiguration(
-		classes = {TestConfig.class}
-)
+@ContextConfiguration(classes = {TestConfig.class})
 @Import(OrderRestController.class)
 @WebMvcTest(OrderRestController.class)
 class OrderRestControllerTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+	@Autowired private MockMvc mockMvc;
 
 	@Test
 	void getAll() throws Exception {
@@ -40,21 +37,16 @@ class OrderRestControllerTest {
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
-		CustomerOrderRequestDTO requestDTO =
-				new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard",
-						Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
+		CustomerOrderRequestDTO requestDTO = new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard", Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-    ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-    String requestJson = objectWriter.writeValueAsString(requestDTO);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
+		String requestJson = objectWriter.writeValueAsString(requestDTO);
 
 		mockMvc.perform(post("/api/order/").contentType(MediaType.APPLICATION_JSON).content(requestJson));
 
-		mockMvc.perform(get("/api/order/"))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON));
+		mockMvc.perform(get("/api/order/")).andDo(print()).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
 	}
 
 	@Test
@@ -65,34 +57,21 @@ class OrderRestControllerTest {
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
-		CustomerOrderRequestDTO requestDTO =
-				new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard",
-						Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
+		CustomerOrderRequestDTO requestDTO = new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard", Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-    ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-    String requestJson = objectWriter.writeValueAsString(requestDTO);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
+		String requestJson = objectWriter.writeValueAsString(requestDTO);
 
 		mockMvc.perform(post("/api/order/").contentType(MediaType.APPLICATION_JSON).content(requestJson));
 
-		mockMvc.perform(get("/api/order/{id}/", 1))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.id").value("1"));
+		mockMvc.perform(get("/api/order/{id}/", 1)).andDo(print()).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value("1"));
 	}
 
 	@Test
 	void getAnalytics() throws Exception {
-		mockMvc.perform(get("/api/order/analytics/").param("status", "INPROGRESS").param("from", "2023-07-06").param("to", "2023-07-08"))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.totalPrice").value("3475.0"))
-				.andExpect(jsonPath("$.totalQuantity").value("2"))
-				.andExpect(jsonPath("$.maxOrderPrice").value("3405.0"))
-				.andExpect(jsonPath("$.minOrderPrice").value("70.0"));
+		mockMvc.perform(get("/api/order/analytics/").param("status", "INPROGRESS").param("from", "2023-07-06").param("to", "2023-07-08")).andDo(print()).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.totalPrice").value("3475.0")).andExpect(jsonPath("$.totalQuantity").value("2")).andExpect(jsonPath("$.maxOrderPrice").value("3405.0")).andExpect(jsonPath("$.minOrderPrice").value("70.0"));
 	}
 
 	@Test
@@ -103,19 +82,14 @@ class OrderRestControllerTest {
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
-		CustomerOrderRequestDTO requestDTO =
-				new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard",
-						Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
+		CustomerOrderRequestDTO requestDTO = new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard", Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-    ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-    String requestJson = objectWriter.writeValueAsString(requestDTO);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
+		String requestJson = objectWriter.writeValueAsString(requestDTO);
 
-		mockMvc.perform(post("/api/order/").contentType(MediaType.APPLICATION_JSON).content(requestJson))
-				.andDo(print())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
+		mockMvc.perform(post("/api/order/").contentType(MediaType.APPLICATION_JSON).content(requestJson)).andDo(print()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 	}
 
 	@Test
@@ -126,35 +100,27 @@ class OrderRestControllerTest {
 		item.setUnitPrice(99.9f);
 		item.setQuantity(1);
 
-		CustomerOrderRequestDTO requestDTO =
-				new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard",
-						Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
+		CustomerOrderRequestDTO requestDTO = new CustomerOrderRequestDTO("Historichna 84", "Some test description", "Mastercard", Currency.EUR, "Zaporizhzhya", "Zaporizhzhya", "Ukraine", "69000", customer, Set.of(item));
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-    ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-    String requestJson = objectWriter.writeValueAsString(requestDTO);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
+		String requestJson = objectWriter.writeValueAsString(requestDTO);
 
 		mockMvc.perform(post("/api/order/").contentType(MediaType.APPLICATION_JSON).content(requestJson)).andReturn();
 
-		mockMvc.perform(put("/api/order/{id}", "1").param("status", "DELIVERED"))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.id").value(1));
+		mockMvc.perform(put("/api/order/{id}", "1").param("status", "DELIVERED")).andDo(print()).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(1));
 	}
 
 	@Test
 	void updateFails() throws Exception {
 		CustomerOrderRequestDTO requestDTO = new CustomerOrderRequestDTO(null, null, null, null, null, null, null, null, null, null);
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-    ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-    String requestJson = objectWriter.writeValueAsString(requestDTO);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+		ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
+		String requestJson = objectWriter.writeValueAsString(requestDTO);
 
-		mockMvc.perform(put("/api/order/analytics/").contentType(MediaType.APPLICATION_JSON).content(requestJson))
-				.andDo(print())
-				.andExpect(status().isBadRequest());
+		mockMvc.perform(put("/api/order/analytics/").contentType(MediaType.APPLICATION_JSON).content(requestJson)).andDo(print()).andExpect(status().isBadRequest());
 	}
 }

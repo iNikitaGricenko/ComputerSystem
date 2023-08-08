@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public interface UpdateFactory {
 
-    <U, T> UpdateFactory update(U editor, Function<U, T> getMethod, Consumer<T> setMethod);
+	<U, T> UpdateFactory update(U editor, Function<U, T> getMethod, Consumer<T> setMethod);
 
-    User build();
+	User build();
 }

@@ -1,27 +1,27 @@
 <section class="section-login">
-    <th:block th:insert="/blocks/language :: choicer"></th:block>
-    <div class="contentBox">
-        <div class="formBox">
-            <h2 class="form-title" th:text="#{register_headline}"></h2>
-            <div class="inputBox">
-                <span th:text="#{login}"></span>
-                <input type="email" id="login" name="login" required>
-            </div>
-            <div class="inputBox">
-                <span th:text="#{username}"></span>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="inputBox">
-                <span th:text="#{password}"></span>
-                <input type="text" id="password" name="password" required>
-            </div>
-            <div class="inputBox">
-                <input type="submit" th:value="#{sign_up}" onclick="register()" required>
-            </div>
-            <div class="inputBox">
-                <a href="#" onclick="loadLogin()" th:text="#{already_have_account_ask}"></a>
-            </div>
-        </div>
+  <th:block th:insert="/blocks/language :: choicer"></th:block>
+  <div class="contentBox">
+    <div class="formBox">
+      <h2 class="form-title" th:text="#{register_headline}"></h2>
+      <div class="inputBox">
+        <span th:text="#{login}"></span>
+        <input type="email" id="login" name="login" required>
+      </div>
+      <div class="inputBox">
+        <span th:text="#{username}"></span>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="inputBox">
+        <span th:text="#{password}"></span>
+        <input type="text" id="password" name="password" required>
+      </div>
+      <div class="inputBox">
+        <input type="submit" th:value="#{sign_up}" onclick="register()" required>
+      </div>
+      <div class="inputBox">
+        <a href="#" onclick="loadLogin()" th:text="#{already_have_account_ask}"></a>
+      </div>
     </div>
-    <div class="imgBox" style="background: linear-gradient(-225deg, #e91e63, #03a9f4)"></div>
+  </div>
+  <div class="imgBox" style="background: linear-gradient(-225deg, #e91e63, #03a9f4)"></div>
 </section>

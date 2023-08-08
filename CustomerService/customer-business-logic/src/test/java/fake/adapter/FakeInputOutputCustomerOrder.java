@@ -60,11 +60,7 @@ public class FakeInputOutputCustomerOrder implements InputCustomerOrder, OutputC
 
 	@Override
 	public List<CustomerOrder> getAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to) {
-		return fakeTable.values().stream()
-				.filter(customerOrder -> customerOrder.getStatus().equals(status))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to))
-				.toList();
+		return fakeTable.values().stream().filter(customerOrder -> customerOrder.getStatus().equals(status)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to)).toList();
 	}
 
 	@Override

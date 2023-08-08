@@ -7,6 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum AuthorizationStatus {
 
-    SUCCESS, FAILED;
+	SUCCESS, FAILED;
 
 }

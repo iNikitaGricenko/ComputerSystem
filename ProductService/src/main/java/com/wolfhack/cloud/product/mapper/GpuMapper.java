@@ -1,9 +1,9 @@
 package com.wolfhack.cloud.product.mapper;
 
 import com.wolfhack.cloud.product.model.Gpu;
-import com.wolfhack.cloud.product.model.search.GpuSearch;
 import com.wolfhack.cloud.product.model.dto.GpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.GpuResponseDTO;
+import com.wolfhack.cloud.product.model.search.GpuSearch;
 import org.mapstruct.*;
 
 import java.util.List;

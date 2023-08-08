@@ -40,13 +40,7 @@ public class SsdSearchService implements SsdSearchServiceInterface {
 
 	@Override
 	public List<Ssd> findByTitle(String line, Pageable pageable) {
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line).field("name").field("model").type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<SsdSearch> ssds = elasticsearchOperations.search(searchQuery, SsdSearch.class, IndexCoordinates.of("product-ssd"));
 
@@ -56,34 +50,21 @@ public class SsdSearchService implements SsdSearchServiceInterface {
 	@AopLog
 	@Override
 	public List<Ssd> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ssd.class.getFields())
-				.filter(field -> field.getType().isInstance(String.class))
-				.map(Field::getName)
-				.toArray(String[]::new);
+		String[] fields = Arrays.stream(Ssd.class.getFields()).filter(field -> field.getType().isInstance(String.class)).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<SsdSearch> ssds = elasticsearchOperations.search(searchQuery, SsdSearch.class, IndexCoordinates.of("product-ssd"));
 
 		return ssds.map(SearchHit::getContent).map(ssdMapper::toEntity).toList();
 	}
-	
+
 	@AopLog
 	@Override
 	public List<Ssd> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ssd.class.getFields())
-				.map(Field::getName)
-				.toArray(String[]::new);
+		String[] fields = Arrays.stream(Ssd.class.getFields()).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<SsdSearch> ssds = elasticsearchOperations.search(searchQuery, SsdSearch.class, IndexCoordinates.of("product-ssd"));
 

@@ -3,7 +3,6 @@ package fake.persistence;
 import com.wolfhack.cloud.entity.EntityCustomer;
 import com.wolfhack.cloud.repository.CustomerRepository;
 import org.springframework.data.domain.*;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.FluentQuery;
 
 import java.util.*;

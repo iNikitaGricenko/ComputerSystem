@@ -17,23 +17,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorizationLogGateway implements IOutputAuthorizationLog, IInputAuthorizationLog {
 
-    private final AuthorizationLogRepository authorizationLogRepository;
-    private final EntityAuthorizationLogMapper authorizationLogMapper;
+	private final AuthorizationLogRepository authorizationLogRepository;
+	private final EntityAuthorizationLogMapper authorizationLogMapper;
 
-    @Override
-    public AuthorizationLog save(AuthorizationLog authorizationLog) {
-        EntityAuthorizationLog entity = authorizationLogMapper.convertToEntityAuthorizationLog(authorizationLog);
-        return authorizationLogMapper.convertToBusinessAuthorizationLog(authorizationLogRepository.save(entity));
-    }
+	@Override
+	public AuthorizationLog save(AuthorizationLog authorizationLog) {
+		EntityAuthorizationLog entity = authorizationLogMapper.convertToEntityAuthorizationLog(authorizationLog);
+		return authorizationLogMapper.convertToBusinessAuthorizationLog(authorizationLogRepository.save(entity));
+	}
 
-    @Override
-    public Page<AuthorizationLog> findAll(Pageable pageable) {
-        return authorizationLogRepository.findAll(pageable)
-                .map(authorizationLogMapper::convertToBusinessAuthorizationLog);
-    }
+	@Override
+	public Page<AuthorizationLog> findAll(Pageable pageable) {
+		return authorizationLogRepository.findAll(pageable).map(authorizationLogMapper::convertToBusinessAuthorizationLog);
+	}
 
-    @Override
-    public Optional<AuthorizationLog> findById(Long id) {
-        return authorizationLogRepository.findById(id).map(authorizationLogMapper::convertToBusinessAuthorizationLog);
-    }
+	@Override
+	public Optional<AuthorizationLog> findById(Long id) {
+		return authorizationLogRepository.findById(id).map(authorizationLogMapper::convertToBusinessAuthorizationLog);
+	}
 }

@@ -22,19 +22,15 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class FailureAuthorizationHandler implements AuthenticationFailureHandler {
 
-    private final IAuthorizationLogService logService;
-    private final IUserService userService;
+	private final IAuthorizationLogService logService;
+	private final IUserService userService;
 
-    @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException, ServletException {
-        String username = request.getParameter("username");
-        User user = userService.findByLogin(username);
-        AuthorizationLog authorizationLog = AuthorizationLog.builder()
-                .authorizationStatus(AuthorizationStatus.FAILED)
-                .dateTime(LocalDateTime.now())
-                .user(user).build();
-        logService.save(authorizationLog);
-        log.info("User {} fail authentication", user.getUsername());
-    }
+	@Override
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+		String username = request.getParameter("username");
+		User user = userService.findByLogin(username);
+		AuthorizationLog authorizationLog = AuthorizationLog.builder().authorizationStatus(AuthorizationStatus.FAILED).dateTime(LocalDateTime.now()).user(user).build();
+		logService.save(authorizationLog);
+		log.info("User {} fail authentication", user.getUsername());
+	}
 }

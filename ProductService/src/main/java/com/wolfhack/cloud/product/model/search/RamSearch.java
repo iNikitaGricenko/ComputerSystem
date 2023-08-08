@@ -27,39 +27,27 @@ public class RamSearch implements Serializable {
 	@Field(type = FieldType.Text, fielddata = true)
 	@NotNull @Size(min = 5) String model;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String type;
+	@Field(type = FieldType.Text, fielddata = true) String type;
 
-	@Field(type = FieldType.Long)
-	long size;
+	@Field(type = FieldType.Long) long size;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String formFactor;
+	@Field(type = FieldType.Text, fielddata = true) String formFactor;
 
-	@Field(type = FieldType.Float)
-	float freq;
+	@Field(type = FieldType.Float) float freq;
 
-	@Field(type = FieldType.Double)
-	double bandwidth;
+	@Field(type = FieldType.Double) double bandwidth;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String casLatency;
+	@Field(type = FieldType.Text, fielddata = true) String casLatency;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String timingScheme;
+	@Field(type = FieldType.Text, fielddata = true) String timingScheme;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String eccMemory;
+	@Field(type = FieldType.Text, fielddata = true) String eccMemory;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String xmp;
+	@Field(type = FieldType.Text, fielddata = true) String xmp;
 
-	@Field(type = FieldType.Float)
-	float voltage;
+	@Field(type = FieldType.Float) float voltage;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String worksTemperature;
+	@Field(type = FieldType.Text, fielddata = true) String worksTemperature;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String storageTemperature;
+	@Field(type = FieldType.Text, fielddata = true) String storageTemperature;
 }

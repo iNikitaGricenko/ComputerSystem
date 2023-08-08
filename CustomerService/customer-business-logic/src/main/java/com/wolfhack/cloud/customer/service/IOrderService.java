@@ -9,13 +9,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface IOrderService {
 
-    CustomerOrder save(CustomerOrder customerOrder);
+	CustomerOrder save(CustomerOrder customerOrder);
 
-    CustomerOrder changeStatus(Long id, OrderStatus status);
+	CustomerOrder changeStatus(Long id, OrderStatus status);
 
-    CustomerOrder findById(Long id);
+	CustomerOrder findById(Long id);
 
-    Page<CustomerOrder> findAll(Pageable pageable);
+	Page<CustomerOrder> findAll(Pageable pageable);
 
-    AnalyticsResponse getAnalytics(AnalyticsSearch analyticsSearch);
+	AnalyticsResponse getAnalytics(AnalyticsSearch analyticsSearch);
 }

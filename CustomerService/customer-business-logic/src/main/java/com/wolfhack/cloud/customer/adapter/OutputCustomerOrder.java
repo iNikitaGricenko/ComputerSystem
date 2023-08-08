@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public interface OutputCustomerOrder {
 
-    Optional<CustomerOrder> get(Long id);
+	Optional<CustomerOrder> get(Long id);
 
-    List<CustomerOrder> getAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to);
+	List<CustomerOrder> getAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to);
 
-    Page<CustomerOrder> getAll(Pageable pageable);
+	Page<CustomerOrder> getAll(Pageable pageable);
 }

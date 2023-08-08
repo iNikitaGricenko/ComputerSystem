@@ -23,29 +23,27 @@ import static java.util.concurrent.TimeUnit.HOURS;
 @RequiredArgsConstructor
 public class SchedulerTasks {
 
-    private final IOutputUser outputUser;
-    private final IInputUser inputUser;
+	private final IOutputUser outputUser;
+	private final IInputUser inputUser;
 
-    @Async
-    @Scheduled(initialDelay = 12, fixedDelay = 12, timeUnit = HOURS)
-    public void removeInactiveUsers() {
-        log.info("Scheduler removeInactiveUsers is started");
-        LocalDateTime dateTime = LocalDateTime.now().minusHours(12);
-        List<User> allByActivationCodeIsNotNullAndRegisterDateIsLessThan =
-                outputUser.findAllByActiveIsFalseAndRegisterDateIsLessThan(dateTime);
-        inputUser.deleteAll(allByActivationCodeIsNotNullAndRegisterDateIsLessThan);
-    }
+	@Async
+	@Scheduled(initialDelay = 12, fixedDelay = 12, timeUnit = HOURS)
+	public void removeInactiveUsers() {
+		log.info("Scheduler removeInactiveUsers is started");
+		LocalDateTime dateTime = LocalDateTime.now().minusHours(12);
+		List<User> allByActivationCodeIsNotNullAndRegisterDateIsLessThan = outputUser.findAllByActiveIsFalseAndRegisterDateIsLessThan(dateTime);
+		inputUser.deleteAll(allByActivationCodeIsNotNullAndRegisterDateIsLessThan);
+	}
 
-    @Async
-    @Scheduled(initialDelay = 24, fixedDelay = 24, timeUnit = HOURS)
-    public void removeActivationCodeAndUrlFromActiveUsers() {
-        log.info("Scheduler removeActivationCodeAndUrlFromActiveUsers is started");
-        Stream<User> userStream = outputUser.findAllByActiveIsTrueAndActivationCodeIsNotNull().stream()
-                .peek(user -> {
-                    user.setActivationCode("");
-                    user.setActivationUrl("");
-                });
-        inputUser.saveAll(userStream.collect(Collectors.toList()));
-    }
+	@Async
+	@Scheduled(initialDelay = 24, fixedDelay = 24, timeUnit = HOURS)
+	public void removeActivationCodeAndUrlFromActiveUsers() {
+		log.info("Scheduler removeActivationCodeAndUrlFromActiveUsers is started");
+		Stream<User> userStream = outputUser.findAllByActiveIsTrueAndActivationCodeIsNotNull().stream().peek(user -> {
+			user.setActivationCode("");
+			user.setActivationUrl("");
+		});
+		inputUser.saveAll(userStream.collect(Collectors.toList()));
+	}
 
 }

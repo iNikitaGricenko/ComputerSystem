@@ -18,16 +18,11 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 	@Override
 	public Mono<Authentication> authenticate(Authentication authentication) {
 		String jwtToken = authentication.getCredentials().toString();
-		return jwtService.tokenValidate(jwtToken)
-				.bodyToMono(Authority.class)
-				.onErrorStop()
-				.map(this::getAuthorities);
+		return jwtService.tokenValidate(jwtToken).bodyToMono(Authority.class).onErrorStop().map(this::getAuthorities);
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthorities(Authority userAuthority) {
-		return new UsernamePasswordAuthenticationToken(
-				userAuthority.email(), null,
-				userAuthority.authorities().stream().map(SimpleGrantedAuthority::new).toList());
+		return new UsernamePasswordAuthenticationToken(userAuthority.email(), null, userAuthority.authorities().stream().map(SimpleGrantedAuthority::new).toList());
 	}
 
 }

@@ -23,18 +23,6 @@ public class FakeOrderFactory implements IOrderFactory {
 
 	@Override
 	public CustomerOrder edit(CustomerOrder customerOrder, CustomerOrder editor) {
-		return customerOrder.renovator()
-				.edit(editor, CustomerOrder::getCustomer, customerOrder::setCustomer)
-				.edit(editor, CustomerOrder::getAddress, customerOrder::setAddress)
-				.edit(editor, CustomerOrder::getOrderItems, customerOrder::setOrderItems)
-				.edit(editor, CustomerOrder::getDescription, customerOrder::setDescription)
-				.edit(editor, CustomerOrder::getCity, customerOrder::setCity)
-				.edit(editor, CustomerOrder::getPaymentMethod, customerOrder::setPaymentMethod)
-				.edit(editor, CustomerOrder::getPaymentCurrency, customerOrder::setPaymentCurrency)
-				.edit(editor, CustomerOrder::getState, customerOrder::setState)
-				.edit(editor, CustomerOrder::getStatus, customerOrder::setStatus)
-				.edit(editor, CustomerOrder::getZipCode, customerOrder::setZipCode)
-				.edit(editor, CustomerOrder::getCompleted, customerOrder::setCompleted)
-				.update();
+		return customerOrder.renovator().edit(editor, CustomerOrder::getCustomer, customerOrder::setCustomer).edit(editor, CustomerOrder::getAddress, customerOrder::setAddress).edit(editor, CustomerOrder::getOrderItems, customerOrder::setOrderItems).edit(editor, CustomerOrder::getDescription, customerOrder::setDescription).edit(editor, CustomerOrder::getCity, customerOrder::setCity).edit(editor, CustomerOrder::getPaymentMethod, customerOrder::setPaymentMethod).edit(editor, CustomerOrder::getPaymentCurrency, customerOrder::setPaymentCurrency).edit(editor, CustomerOrder::getState, customerOrder::setState).edit(editor, CustomerOrder::getStatus, customerOrder::setStatus).edit(editor, CustomerOrder::getZipCode, customerOrder::setZipCode).edit(editor, CustomerOrder::getCompleted, customerOrder::setCompleted).update();
 	}
 }

@@ -11,22 +11,21 @@ import java.time.LocalDateTime;
 @Getter
 public class CustomerOrderNotFoundException extends RuntimeException {
 
-    private final HttpStatus status = HttpStatus.NOT_FOUND;
+	private final HttpStatus status = HttpStatus.NOT_FOUND;
 
-    private final LocalDateTime timestamp = LocalDateTime.now();
-    @Schema(example = "404")
-    private final int code = status.value();
+	private final LocalDateTime timestamp = LocalDateTime.now();
+	@Schema(example = "404") private final int code = status.value();
 
-    public CustomerOrderNotFoundException() {
-        super("Order not found");
-    }
+	public CustomerOrderNotFoundException() {
+		super("Order not found");
+	}
 
-    public CustomerOrderNotFoundException(String message) {
-        super(message);
-    }
+	public CustomerOrderNotFoundException(String message) {
+		super(message);
+	}
 
-    public CustomerOrderNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public CustomerOrderNotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

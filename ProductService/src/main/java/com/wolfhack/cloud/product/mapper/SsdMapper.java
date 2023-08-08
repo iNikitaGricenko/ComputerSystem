@@ -1,9 +1,9 @@
 package com.wolfhack.cloud.product.mapper;
 
 import com.wolfhack.cloud.product.model.Ssd;
-import com.wolfhack.cloud.product.model.search.SsdSearch;
 import com.wolfhack.cloud.product.model.dto.SsdFullDTO;
 import com.wolfhack.cloud.product.model.dto.SsdResponseDTO;
+import com.wolfhack.cloud.product.model.search.SsdSearch;
 import org.mapstruct.*;
 
 import java.util.List;

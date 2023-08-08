@@ -29,68 +29,44 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FilterChainConfig {
 
-    private final SuccessAuthorizationHandler successAuthorizationHandler;
-    private final FailureAuthorizationHandler failureAuthorizationHandler;
+	private final SuccessAuthorizationHandler successAuthorizationHandler;
+	private final FailureAuthorizationHandler failureAuthorizationHandler;
 
-    @Bean
-    @Order(1)
-    public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
-        OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
-                new OAuth2AuthorizationServerConfigurer<>();
+	@Bean
+	@Order(1)
+	public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
+		OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer<>();
 
-        RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
-        authorizationServerConfigurer.oidc((oidc) ->
-                oidc.userInfoEndpoint((userInfo) ->
-                                userInfo.userInfoMapper(FilterChainConfig::getOidcUserInfo))
-                        .clientRegistrationEndpoint(Customizer.withDefaults()));
+		RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
+		authorizationServerConfigurer.oidc((oidc) -> oidc.userInfoEndpoint((userInfo) -> userInfo.userInfoMapper(FilterChainConfig::getOidcUserInfo)).clientRegistrationEndpoint(Customizer.withDefaults()));
 
-        http.requestMatcher(endpointsMatcher)
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests.anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .exceptionHandling((exceptions) -> exceptions
-                                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-                                  )
-                .apply(authorizationServerConfigurer);
-        return http.build();
-    }
+		http.requestMatcher(endpointsMatcher).authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated()).csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher)).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt).exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))).apply(authorizationServerConfigurer);
+		return http.build();
+	}
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests(authorizeRequest ->
-                        authorizeRequest
-                                .antMatchers("/login/**").permitAll()
-                                .antMatchers("/register/**").permitAll()
-                                .antMatchers("/api/user").not().authenticated()
-                                .anyRequest().authenticated())
-                .formLogin()
-                .successHandler(successAuthorizationHandler)
-                .failureHandler(failureAuthorizationHandler)
-                .and()
-                .formLogin(form -> form
-                        .loginPage("/login").failureForwardUrl("/login?error")
-                        .permitAll());
+	@Bean
+	@Order(2)
+	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf().disable();
+		http.authorizeRequests(authorizeRequest -> authorizeRequest.antMatchers("/login/**").permitAll().antMatchers("/register/**").permitAll().antMatchers("/api/user").not().authenticated().anyRequest().authenticated()).formLogin().successHandler(successAuthorizationHandler).failureHandler(failureAuthorizationHandler).and().formLogin(form -> form.loginPage("/login").failureForwardUrl("/login?error").permitAll());
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    private static OidcUserInfo getOidcUserInfo(OidcUserInfoAuthenticationContext context) {
-        OidcUserInfoAuthenticationToken authentication = context.getAuthentication();
-        JwtAuthenticationToken principal = (JwtAuthenticationToken) authentication.getPrincipal();
+	private static OidcUserInfo getOidcUserInfo(OidcUserInfoAuthenticationContext context) {
+		OidcUserInfoAuthenticationToken authentication = context.getAuthentication();
+		JwtAuthenticationToken principal = (JwtAuthenticationToken) authentication.getPrincipal();
 
-        Map<String, Object> userInfo = new LinkedHashMap<>();
-        userInfo.put("id", principal.getTokenAttributes().get("id"));
-        userInfo.put("username", principal.getName());
-        userInfo.put("authorities", principal.getTokenAttributes().get("authorities"));
+		Map<String, Object> userInfo = new LinkedHashMap<>();
+		userInfo.put("id", principal.getTokenAttributes().get("id"));
+		userInfo.put("username", principal.getName());
+		userInfo.put("authorities", principal.getTokenAttributes().get("authorities"));
 
-        return new OidcUserInfo(userInfo);
-    }
+		return new OidcUserInfo(userInfo);
+	}
 
-    @Bean
-    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
-    }
+	@Bean
+	public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+		return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+	}
 }

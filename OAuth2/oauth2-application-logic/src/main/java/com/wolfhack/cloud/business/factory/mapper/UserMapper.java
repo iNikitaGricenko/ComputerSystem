@@ -12,13 +12,14 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface UserMapper {
 
-    UserResponseDTO toDto(User user);
+	UserResponseDTO toDto(User user);
 
-    User toUser(UserResponseDTO dto);
-    User toUser(UserCreationDTO dto);
+	User toUser(UserResponseDTO dto);
 
-    User toUser(FullUserDTO dto);
+	User toUser(UserCreationDTO dto);
 
-    List<UserResponseDTO> toDtos(List<User> usesrs);
+	User toUser(FullUserDTO dto);
+
+	List<UserResponseDTO> toDtos(List<User> usesrs);
 
 }

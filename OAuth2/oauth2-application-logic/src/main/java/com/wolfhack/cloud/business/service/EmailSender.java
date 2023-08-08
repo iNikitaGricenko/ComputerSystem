@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailSender implements IEmailSender {
 
-    private final EmailClient emailClient;
+	private final EmailClient emailClient;
 
-    @Override
-    public void send(User user) {
-        UserEmailData userEmailData = new UserEmailData(user.getActivationCode(), user.getLogin());
-        emailClient.send(userEmailData);
-    }
+	@Override
+	public void send(User user) {
+		UserEmailData userEmailData = new UserEmailData(user.getActivationCode(), user.getLogin());
+		emailClient.send(userEmailData);
+	}
 }
