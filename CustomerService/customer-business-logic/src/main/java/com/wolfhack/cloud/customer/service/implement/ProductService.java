@@ -20,4 +20,9 @@ public class ProductService implements IProductService {
 		List<Long> productIds = orderItems.stream().map(OrderItem::getId).toList();
 		productClient.removeProducts(productIds);
 	}
+
+	@Override
+	public void validateProducts(Collection<OrderItem> orderItems) {
+		productClient.validateProducts(orderItems);
+	}
 }

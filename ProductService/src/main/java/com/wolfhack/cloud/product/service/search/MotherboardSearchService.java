@@ -34,8 +34,8 @@ public class MotherboardSearchService implements MotherboardSearchServiceInterfa
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Motherboard motherboard) {
-		MotherboardSearch searchModel = motherboardMapper.toSearch(motherboard);
+	public long save(Motherboard motherboard, long id) {
+		MotherboardSearch searchModel = motherboardMapper.toSearch(motherboard, id);
 		return motherboardSearchRepository.save(searchModel).getId();
 	}
 
@@ -93,8 +93,8 @@ public class MotherboardSearchService implements MotherboardSearchServiceInterfa
 	}
 
 	@Override
-	public long update(Motherboard motherboard) {
-		MotherboardSearch motherboardSearch = motherboardSearchRepository.findById(motherboard.getId()).orElseThrow(MotherboardNotFoundException::new);
+	public long update(Motherboard motherboard, long id) {
+		MotherboardSearch motherboardSearch = motherboardSearchRepository.findById(id).orElseThrow(MotherboardNotFoundException::new);
 
 		motherboardMapper.partialUpdate(motherboardSearch, motherboard);
 

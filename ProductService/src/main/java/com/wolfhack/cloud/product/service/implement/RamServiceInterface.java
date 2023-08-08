@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.service.implement;
 
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ram;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,17 +10,17 @@ import java.io.IOException;
 import java.util.List;
 
 public interface RamServiceInterface {
-    Page<Ram> findAll(Pageable pageable);
+    Page<Product<Ram>> findAll(Pageable pageable);
 
     Long save(Ram ram);
 
     String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    Ram findById(Long id);
+    Product<Ram> findById(Long id);
 
     List<Ram> searchByTitle(String query, Pageable pageable);
 
     void delete(long id);
 
-    long update(Ram ram);
+    long update(long id, Ram ram);
 }

@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.MotherboardNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
 import com.wolfhack.cloud.product.model.Motherboard;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.repository.MotherboardRepository;
 import com.wolfhack.cloud.product.service.implement.MotherboardServiceInterface;
 import com.wolfhack.cloud.product.service.search.MotherboardSearchService;
@@ -24,7 +25,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
-public class MotherboardService extends AbstractMongoEventListener<Motherboard> implements MotherboardServiceInterface {
+public class MotherboardService extends AbstractMongoEventListener<Product<Motherboard>> implements MotherboardServiceInterface {
 
     private final MotherboardRepository motherboardRepository;
     private final MotherboardSearchService motherboardSearchService;
@@ -32,7 +33,7 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
-    public void onBeforeConvert(BeforeConvertEvent<Motherboard> event) {
+    public void onBeforeConvert(BeforeConvertEvent<Product<Motherboard>> event) {
         if (event.getSource().getId() < 1) {
             event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
         }
@@ -41,33 +42,38 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
     @AopLog
     @Override
     @Cacheable(cacheNames = "motherboard_Response_Page")
-    public Page<Motherboard> findAll(Pageable pageable) {
+    public Page<Product<Motherboard>> findAll(Pageable pageable) {
         return motherboardRepository.findAll(pageable);
     }
 
     @AopLog
     @Override
     @Cacheable(cacheNames = "motherboard", key = "#id")
-    public Motherboard findById(Long id) {
+    public Product<Motherboard> findById(Long id) {
         return motherboardRepository.findById(id)
                 .orElseThrow(MotherboardNotFoundException::new);
     }
 
     @AopLog
     @Override
-    @CachePut(cacheNames = {"motherboard_Response_Page", "motherboard"}, key = "#motherboard.id")
+    @CachePut(cacheNames = {"motherboard_Response_Page", "motherboard"}, key = "#motherboard")
     public Long save(Motherboard motherboard) {
-        motherboard.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        Motherboard saved = motherboardRepository.save(motherboard);
-        motherboardSearchService.save(saved);
+        Product<Motherboard> motherboardProduct = new Product<>();
+        long id = databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME);
+
+        motherboardProduct.setId(id);
+        motherboardProduct.setItem(motherboard);
+        Product<Motherboard> saved = motherboardRepository.save(motherboardProduct);
+        motherboardSearchService.save(saved.getItem(), id);
         return saved.getId();
     }
 
     @AopLog
     @Override
     public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
-        Motherboard motherboard = findById(id);
-        return storageService.saveFileAndThen(multipartFile, motherboard.getPhotos(), () -> save(motherboard));
+        Product<Motherboard> motherboard = motherboardRepository.findById(id)
+                .orElseThrow(MotherboardNotFoundException::new);
+        return storageService.saveFileAndThen(multipartFile, motherboard.getItem().getPhotos(), () -> save(motherboard.getItem()));
     }
 
     @AopLog
@@ -83,9 +89,11 @@ public class MotherboardService extends AbstractMongoEventListener<Motherboard> 
     }
 
     @Override
-    public long update(Motherboard motherboard) {
-        Motherboard saved = motherboardRepository.save(motherboard);
-        motherboardSearchService.update(motherboard);
+    public long update(long id, Motherboard motherboard) {
+        Product<Motherboard> motherboardProduct = motherboardRepository.findById(id).orElseThrow(MotherboardNotFoundException::new);
+        motherboardProduct.setItem(motherboard);
+        Product<Motherboard> saved = motherboardRepository.save(motherboardProduct);
+        motherboardSearchService.update(saved.getItem(), id);
         return saved.getId();
     }
 }

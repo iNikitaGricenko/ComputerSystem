@@ -1,5 +1,6 @@
 package com.wolfhack.cloud.product.mapper;
 
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ssd;
 import com.wolfhack.cloud.product.model.search.SsdSearch;
 import com.wolfhack.cloud.product.model.dto.SsdFullDTO;
@@ -10,6 +11,8 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface SsdMapper {
+	SsdResponseDTO toSsdResponseDTO(Product<Ssd> ssd);
+
 	SsdResponseDTO toSsdResponseDTO(Ssd ssd);
 
 	Ssd toSsd(SsdFullDTO dto);
@@ -20,7 +23,7 @@ public interface SsdMapper {
 
 	Ssd toEntity(SsdSearch ssdSearch);
 
-	SsdSearch toSearch(Ssd ssd);
+	SsdSearch toSearch(Ssd ssd, long id);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	SsdSearch partialUpdate(@MappingTarget SsdSearch ssdSearch, Ssd ssd);

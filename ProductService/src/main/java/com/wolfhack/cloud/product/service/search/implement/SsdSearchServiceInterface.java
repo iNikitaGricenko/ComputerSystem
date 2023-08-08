@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SsdSearchServiceInterface {
 
-	long save(Ssd ssd);
+	long save(Ssd ssd, long id);
 
 	List<Ssd> findByTitle(String line, Pageable pageable);
 
@@ -16,7 +16,7 @@ public interface SsdSearchServiceInterface {
 
 	List<Ssd> findByAllFields(String line, Pageable pageable);
 
-	long update(Ssd ssd);
+	long update(Ssd ssd, long id);
 
 	void delete(long ssdId);
 

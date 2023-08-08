@@ -33,8 +33,8 @@ public class SsdSearchService implements SsdSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Ssd ssd) {
-		SsdSearch searchModel = ssdMapper.toSearch(ssd);
+	public long save(Ssd ssd, long id) {
+		SsdSearch searchModel = ssdMapper.toSearch(ssd, id);
 		return ssdSearchRepository.save(searchModel).getId();
 	}
 
@@ -91,8 +91,8 @@ public class SsdSearchService implements SsdSearchServiceInterface {
 	}
 
 	@Override
-	public long update(Ssd ssd) {
-		SsdSearch ssdSearch = ssdSearchRepository.findById(ssd.getId()).orElseThrow(SsdNotFoundException::new);
+	public long update(Ssd ssd, long id) {
+		SsdSearch ssdSearch = ssdSearchRepository.findById(id).orElseThrow(SsdNotFoundException::new);
 
 		ssdMapper.partialUpdate(ssdSearch, ssd);
 

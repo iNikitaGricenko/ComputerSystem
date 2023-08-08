@@ -8,5 +8,5 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RamRepository extends MongoRepository<Ram, Long> {
+public interface RamRepository extends ProductRepository<Ram> {
 }

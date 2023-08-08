@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RamSearchServiceInterface {
 
-	long save(Ram ram);
+	long save(Ram ram, long id);
 
 	List<Ram> findByTitle(String line, Pageable pageable);
 
@@ -16,7 +16,7 @@ public interface RamSearchServiceInterface {
 
 	List<Ram> findByAllFields(String line, Pageable pageable);
 
-	long update(Ram ram);
+	long update(Ram ram, long id);
 
 	void delete(long ramId);
 

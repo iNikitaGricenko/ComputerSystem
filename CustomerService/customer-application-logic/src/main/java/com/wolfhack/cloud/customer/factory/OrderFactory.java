@@ -10,6 +10,8 @@ import com.wolfhack.cloud.customer.model.Customer;
 import com.wolfhack.cloud.customer.model.CustomerOrder;
 import com.wolfhack.cloud.customer.model.OrderItem;
 import com.wolfhack.cloud.customer.service.IOderItemService;
+import com.wolfhack.cloud.customer.service.implement.ProductService;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -23,11 +25,17 @@ final class OrderFactory implements IOrderFactory, IOrderCreator {
 
 	private final CustomerOrderMapper customerOrderMapper;
 	private final IOderItemService oderItemService;
+	private final ProductService productService;
 
 	@AopLog
 	@Override
 	public CustomerOrder toOrder(CustomerOrderRequestDTO requestDTO) {
 		CustomerOrder customerOrder = customerOrderMapper.toOrderFromRequest(requestDTO);
+		try {
+			productService.validateProducts(customerOrder.getOrderItems());
+		} catch (FeignException exception) {
+			throw new RuntimeException("Order items not valid");
+		}
 
 		customerOrder.setCreated(LocalDateTime.now());
 		Customer customer = customerOrder.getCustomer();

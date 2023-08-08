@@ -1,7 +1,6 @@
 package com.wolfhack.cloud.product.model;
 
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -10,11 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Data
-@Document("motherboards")
 public class Motherboard {
 
-    @NotNull @Min(0)
-    private Long id;
     @NotNull @Size(min = 5)
     private String name;
     @NotNull @Size(min = 5)

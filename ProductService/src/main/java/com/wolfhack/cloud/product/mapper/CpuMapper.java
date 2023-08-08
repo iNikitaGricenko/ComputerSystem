@@ -1,6 +1,7 @@
 package com.wolfhack.cloud.product.mapper;
 
 import com.wolfhack.cloud.product.model.Cpu;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.search.CpuSearch;
 import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
@@ -10,6 +11,8 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface CpuMapper {
+    CpuResponseDTO toCpuResponseDTO(Product<Cpu> cpu);
+
     CpuResponseDTO toCpuResponseDTO(Cpu cpu);
 
     Cpu toCpu(CpuFullDTO dto);
@@ -20,7 +23,7 @@ public interface CpuMapper {
 
     Cpu toEntity(CpuSearch cpuSearch);
 
-    CpuSearch toSearchModel(Cpu cpu);
+    CpuSearch toSearchModel(Cpu cpu, long id);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     CpuSearch partialUpdate(@MappingTarget CpuSearch toBeUpdated,  Cpu cpu);

@@ -1,6 +1,7 @@
 package com.wolfhack.cloud.product.mapper;
 
 import com.wolfhack.cloud.product.model.Motherboard;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.dto.MotherboardFullDTO;
 import com.wolfhack.cloud.product.model.dto.MotherboardResponseDTO;
 import com.wolfhack.cloud.product.model.search.MotherboardSearch;
@@ -10,6 +11,8 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface MotherboardMapper {
+	MotherboardResponseDTO toMotherboardResponseDTO(Product<Motherboard> motherboard);
+
 	MotherboardResponseDTO toMotherboardResponseDTO(Motherboard motherboard);
 
 	Motherboard toMotherboard(MotherboardFullDTO dto);
@@ -20,7 +23,7 @@ public interface MotherboardMapper {
 
 	Motherboard toEntity(MotherboardSearch motherboardSearch);
 
-	MotherboardSearch toSearch(Motherboard motherboard);
+	MotherboardSearch toSearch(Motherboard motherboard, long id);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	MotherboardSearch partialUpdate(@MappingTarget MotherboardSearch motherboardSearch, Motherboard motherboard);

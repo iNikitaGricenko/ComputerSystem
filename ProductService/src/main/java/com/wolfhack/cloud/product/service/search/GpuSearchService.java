@@ -40,8 +40,8 @@ public class GpuSearchService implements GpuSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Gpu gpu) {
-		GpuSearch searchModel = gpuMapper.toSearch(gpu);
+	public long save(Gpu gpu, long id) {
+		GpuSearch searchModel = gpuMapper.toSearch(gpu, id);
 		return gpuSearchRepository.save(searchModel).getId();
 	}
 
@@ -98,8 +98,8 @@ public class GpuSearchService implements GpuSearchServiceInterface {
 	}
 
 	@Override
-	public long update(Gpu gpu) {
-		GpuSearch gpuSearch = gpuSearchRepository.findById(gpu.getId()).orElseThrow(GpuNotFoundException::new);
+	public long update(Gpu gpu, long id) {
+		GpuSearch gpuSearch = gpuSearchRepository.findById(id).orElseThrow(GpuNotFoundException::new);
 
 		gpuMapper.partialUpdate(gpuSearch, gpu);
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GpuSearchServiceInterface {
 
-	long save(Gpu gpu);
+	long save(Gpu gpu, long id);
 
 	List<Gpu> findByTitle(String line, Pageable pageable);
 
@@ -16,7 +16,7 @@ public interface GpuSearchServiceInterface {
 
 	List<Gpu> findByAllFields(String line, Pageable pageable);
 
-	long update(Gpu gpu);
+	long update(Gpu gpu, long id);
 
 	void delete(long gpuId);
 

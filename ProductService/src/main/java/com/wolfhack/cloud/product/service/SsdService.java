@@ -3,6 +3,7 @@ package com.wolfhack.cloud.product.service;
 import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.SsdNotFoundException;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ssd;
 import com.wolfhack.cloud.product.repository.SsdRepository;
 import com.wolfhack.cloud.product.service.implement.SsdServiceInterface;
@@ -24,7 +25,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
-public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdServiceInterface {
+public class SsdService extends AbstractMongoEventListener<Product<Ssd>> implements SsdServiceInterface {
 
     private final SsdRepository ssdRepository;
     private final SsdSearchService ssdSearchService;
@@ -32,7 +33,7 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
-    public void onBeforeConvert(BeforeConvertEvent<Ssd> event) {
+    public void onBeforeConvert(BeforeConvertEvent<Product<Ssd>> event) {
         if (event.getSource().getId() < 1) {
             event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
         }
@@ -41,31 +42,36 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
     @AopLog
     @Override
     @Cacheable(cacheNames = "ssd_Response_Page")
-    public Page<Ssd> findAll(Pageable pageable) {
+    public Page<Product<Ssd>> findAll(Pageable pageable) {
         return ssdRepository.findAll(pageable);
     }
 
     @AopLog
     @Override
-    @CachePut(cacheNames = {"ssd_Response_Page", "ssd"}, key = "#ssd.id")
+    @CachePut(cacheNames = {"ssd_Response_Page", "ssd"}, key = "#ssd")
     public Long save(Ssd ssd) {
-        ssd.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        Ssd saved = ssdRepository.save(ssd);
-        ssdSearchService.save(saved);
+        Product<Ssd> ssdProduct = new Product<>();
+        long id = databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME);
+
+        ssdProduct.setId(id);
+        ssdProduct.setItem(ssd);
+        Product<Ssd> saved = ssdRepository.save(ssdProduct);
+        ssdSearchService.save(saved.getItem(), id);
         return saved.getId();
     }
 
     @AopLog
     @Override
     public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
-        Ssd ssd = findById(id);
-        return storageService.saveFileAndThen(multipartFile, ssd.getPhotos(), () -> save(ssd));
+        Product<Ssd> ssd = ssdRepository.findById(id)
+            .orElseThrow(SsdNotFoundException::new);
+        return storageService.saveFileAndThen(multipartFile, ssd.getItem().getPhotos(), () -> save(ssd.getItem()));
     }
 
     @AopLog
     @Override
     @Cacheable(cacheNames = "ssd", key = "#id")
-    public Ssd findById(Long id) {
+    public Product<Ssd> findById(Long id) {
         return ssdRepository.findById(id)
             .orElseThrow(SsdNotFoundException::new);
     }
@@ -84,9 +90,12 @@ public class SsdService extends AbstractMongoEventListener<Ssd> implements SsdSe
     }
 
     @Override
-    public long update(Ssd ssd) {
-        Ssd saved = ssdRepository.save(ssd);
-        ssdSearchService.update(ssd);
+    public long update(long id, Ssd ssd) {
+        Product<Ssd> ssdProduct = ssdRepository.findById(id)
+            .orElseThrow(SsdNotFoundException::new);
+        ssdProduct.setItem(ssd);
+        Product<Ssd> saved = ssdRepository.save(ssdProduct);
+        ssdSearchService.update(saved.getItem(), id);
         return saved.getId();
     }
 }

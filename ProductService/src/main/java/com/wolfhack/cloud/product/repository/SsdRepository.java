@@ -8,5 +8,5 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SsdRepository extends MongoRepository<Ssd, Long> {
+public interface SsdRepository extends ProductRepository<Ssd> {
 }

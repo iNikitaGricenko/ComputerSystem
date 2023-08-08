@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.CpuNotFoundException;
 import com.wolfhack.cloud.product.model.Cpu;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.repository.CpuRepository;
 import com.wolfhack.cloud.product.service.implement.CpuServiceInterface;
 import com.wolfhack.cloud.product.service.search.CpuSearchService;
@@ -24,7 +25,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
-public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuServiceInterface {
+public class CpuService extends AbstractMongoEventListener<Product<Cpu>> implements CpuServiceInterface {
 
     private final CpuRepository cpuRepository;
     private final CpuSearchService cpuSearchService;
@@ -32,7 +33,7 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
     private final DatabaseSequenceService databaseSequenceService;
 
     @Override
-    public void onBeforeConvert(BeforeConvertEvent<Cpu> event) {
+    public void onBeforeConvert(BeforeConvertEvent<Product<Cpu>> event) {
         if (event.getSource().getId() < 1) {
             event.getSource().setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
         }
@@ -41,31 +42,35 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
     @AopLog
     @Override
     @Cacheable(cacheNames = "cpu_Response_Page")
-    public Page<Cpu> findAll(Pageable pageable) {
+    public Page<Product<Cpu>> findAll(Pageable pageable) {
         return cpuRepository.findAll(pageable);
     }
 
     @AopLog
     @Override
-    @CachePut(cacheNames = {"cpu_Response_Page", "cpu"}, key = "#cpu.id")
+    @CachePut(cacheNames = {"cpu_Response_Page", "cpu"}, key = "#cpu")
     public Long save(Cpu cpu) {
-        cpu.setId(databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME));
-        Cpu saved = cpuRepository.save(cpu);
-        cpuSearchService.save(saved);
-        return saved.getId();
+        Product<Cpu> cpuProduct = new Product<>();
+        long id = databaseSequenceService.generateSequence(DatabaseSequence.SEQUENCE_NAME);
+
+        cpuProduct.setId(id);
+        cpuProduct.setItem(cpu);
+        Product<Cpu> saveProduct = cpuRepository.save(cpuProduct);
+        cpuSearchService.save(saveProduct.getItem(), id);
+        return saveProduct.getId();
     }
 
     @AopLog
     @Override
     public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
-        Cpu cpu = findById(id);
-        return storageService.saveFileAndThen(multipartFile, cpu.getPhotos(), () -> save(cpu));
+        Product<Cpu> cpu = cpuRepository.findById(id).orElseThrow(CpuNotFoundException::new);
+        return storageService.saveFileAndThen(multipartFile, cpu.getItem().getPhotos(), () -> save(cpu.getItem()));
     }
 
     @AopLog
     @Override
     @Cacheable(cacheNames = "cpu", key = "#id")
-    public Cpu findById(Long id) {
+    public Product<Cpu> findById(Long id) {
         return cpuRepository.findById(id)
             .orElseThrow(CpuNotFoundException::new);
     }
@@ -83,9 +88,11 @@ public class CpuService extends AbstractMongoEventListener<Cpu> implements CpuSe
     }
 
     @Override
-    public long update(Cpu cpu) {
-        Cpu saved = cpuRepository.save(cpu);
-        cpuSearchService.update(cpu);
-        return saved.getId();
+    public long update(long id, Cpu cpu) {
+        Product<Cpu> cpuProduct = cpuRepository.findById(id).orElseThrow(CpuNotFoundException::new);
+        cpuProduct.setItem(cpu);
+        Product<Cpu> savedProduct = cpuRepository.save(cpuProduct);
+        cpuSearchService.update(savedProduct.getItem(), id);
+        return savedProduct.getId();
     }
 }

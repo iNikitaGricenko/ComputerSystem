@@ -33,8 +33,8 @@ public class RamSearchService implements RamSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Ram ram) {
-		RamSearch searchModel = ramMapper.toSearch(ram);
+	public long save(Ram ram, long id) {
+		RamSearch searchModel = ramMapper.toSearch(ram, id);
 		return ramSearchRepository.save(searchModel).getId();
 	}
 
@@ -92,8 +92,8 @@ public class RamSearchService implements RamSearchServiceInterface {
 	}
 
 	@Override
-	public long update(Ram ram) {
-		RamSearch ramSearch = ramSearchRepository.findById(ram.getId()).orElseThrow(RamNotFoundException::new);
+	public long update(Ram ram, long id) {
+		RamSearch ramSearch = ramSearchRepository.findById(id).orElseThrow(RamNotFoundException::new);
 
 		ramMapper.partialUpdate(ramSearch, ram);
 

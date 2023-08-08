@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MotherboardSearchServiceInterface {
 
-	long save(Motherboard motherboard);
+	long save(Motherboard motherboard, long id);
 
 	List<Motherboard> findByTitle(String line, Pageable pageable);
 
@@ -16,7 +16,7 @@ public interface MotherboardSearchServiceInterface {
 
 	List<Motherboard> findByAllFields(String line, Pageable pageable);
 
-	long update(Motherboard motherboard);
+	long update(Motherboard motherboard, long id);
 
 	void delete(long motherboardId);
 

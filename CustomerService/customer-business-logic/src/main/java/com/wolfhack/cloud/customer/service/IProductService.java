@@ -8,4 +8,5 @@ public interface IProductService {
 
 	void reduceProductInStorage(Collection<OrderItem> orderItems);
 
+	void validateProducts(Collection<OrderItem> orderItems);
 }

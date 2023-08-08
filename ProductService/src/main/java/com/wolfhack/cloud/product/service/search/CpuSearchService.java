@@ -34,8 +34,8 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Cpu cpu) {
-		CpuSearch searchModel = cpuMapper.toSearchModel(cpu);
+	public long save(Cpu cpu, long id) {
+		CpuSearch searchModel = cpuMapper.toSearchModel(cpu, id);
 		return cpuSearchRepository.save(searchModel).getId();
 	}
 
@@ -98,8 +98,8 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 	}
 
 	@Override
-	public long update(Cpu cpu) {
-		CpuSearch cpuSearch = cpuSearchRepository.findById(cpu.getId()).orElseThrow(CpuNotFoundException::new);
+	public long update(Cpu cpu, long id) {
+		CpuSearch cpuSearch = cpuSearchRepository.findById(id).orElseThrow(CpuNotFoundException::new);
 
 		cpuMapper.partialUpdate(cpuSearch, cpu);
 
