@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -71,9 +72,8 @@ public class RamService extends AbstractMongoEventListener<Ram> implements RamSe
 
     @AopLog
     @Override
-    public Page<Ram> searchByQuery(String query, Pageable pageable) {
-        query = format("\"%s\"", query);
-        return ramRepository.searchCpusByQuery(query, pageable);
+    public List<Ram> searchByTitle(String query, Pageable pageable) {
+        return ramSearchService.findByTitle(query, pageable);
     }
 
     @Override

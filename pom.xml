@@ -23,6 +23,8 @@
         <module>Eureka</module>
         <module>ProductService</module>
         <module>CustomerService</module>
+        <module>EmailServiceM</module>
+        <module>AuthorizationServer</module>
     </modules>
 
     <properties>

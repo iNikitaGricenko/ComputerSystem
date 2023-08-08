@@ -51,6 +51,13 @@
             <artifactId>spring-kafka</artifactId>
             <version>2.9.0</version>
         </dependency>
+
+        <!--   Aop/AspectJ     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
         <!--    Test    -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>

@@ -23,8 +23,4 @@ public class OrderItemRequestDTO implements Serializable {
     private float unitPrice;
     @NotNull @Min(0)
     private int quantity;
-
-    @NotNull
-    @Schema(example = "class com.wolfhack.cloud.product.model.Cpu")
-    private final String className;
 }

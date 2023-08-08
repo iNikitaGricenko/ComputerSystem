@@ -18,10 +18,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/api/ssd")
@@ -46,11 +51,25 @@ public class SsdRestController {
         return new RestPage<>(ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO));
     }
 
+    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/seach")
+    @PageableAsQueryParam
+    public List<SsdResponseDTO> searchSsds(Pageable pageable, @RequestParam String searchLine) {
+        return ssdService.searchByTitle(searchLine, pageable).stream().map(ssdMapper::toSsdResponseDTO).toList();
+    }
+
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
     @ResponseStatus(HttpStatus.CREATED)
     public Long addSsd(@Valid @RequestBody SsdFullDTO ssd) {
         return ssdService.save(ssdMapper.toSsd(ssd));
+    }
+
+    @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
+    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+    @Parameter(name = "id", example = "1")
+    public String addPhoto(@PathVariable("id") Long id, @RequestParam("photo") MultipartFile photo) throws IOException {
+        return ssdService.addPhoto(id, photo);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface MotherboardServiceInterface {
     Page<Motherboard> findAll(Pageable pageable);
@@ -16,7 +17,7 @@ public interface MotherboardServiceInterface {
 
     String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    Page<Motherboard> searchByQuery(String query, Pageable pageable);
+    List<Motherboard> searchByTitle(String query, Pageable pageable);
 
     void delete(long id);
 

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -71,9 +72,8 @@ public class GpuService extends AbstractMongoEventListener<Gpu> implements GpuSe
 
     @AopLog
     @Override
-    public Page<Gpu> searchByQuery(String query, Pageable pageable) {
-        query = format("\"%s\"", query);
-        return gpuRepository.searchCpusByQuery(query, pageable);
+    public List<Gpu> searchByTitle(String query, Pageable pageable) {
+        return gpuSearchService.findByTitle(query, pageable);
     }
 
     @Override

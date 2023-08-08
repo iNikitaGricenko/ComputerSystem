@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface GpuServiceInterface {
     Page<Gpu> findAll(Pageable pageable);
@@ -16,7 +17,7 @@ public interface GpuServiceInterface {
 
     Gpu findById(Long id);
 
-    Page<Gpu> searchByQuery(String query, Pageable pageable);
+    List<Gpu> searchByTitle(String query, Pageable pageable);
 
     void delete(long id);
 

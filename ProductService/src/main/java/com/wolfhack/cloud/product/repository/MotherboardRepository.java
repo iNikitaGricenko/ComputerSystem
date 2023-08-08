@@ -9,7 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MotherboardRepository extends MongoRepository<Motherboard, Long> {
-
-    @Query("{ $text: { $search: ?0 }}")
-    Page<Motherboard> searchCpusByQuery(String query, Pageable pageable);
 }
