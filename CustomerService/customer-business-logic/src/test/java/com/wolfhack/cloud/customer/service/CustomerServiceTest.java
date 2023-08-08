@@ -1,7 +1,9 @@
 package com.wolfhack.cloud.customer.service;
 
 import com.wolfhack.cloud.customer.model.Customer;
+import com.wolfhack.cloud.customer.service.implement.CustomerService;
 import fake.adapter.FakeInputOutputCustomer;
+import fake.adapter.FakeStripeCustomerService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,8 @@ class CustomerServiceTest {
 	@BeforeAll
 	public static void setUp() {
 		FakeInputOutputCustomer inputOutputCustomer = new FakeInputOutputCustomer();
-		customerService = new CustomerService(inputOutputCustomer, inputOutputCustomer);
+		IStripeCustomerService stripeCustomerService = new FakeStripeCustomerService();
+		customerService = new CustomerService(inputOutputCustomer, inputOutputCustomer, stripeCustomerService);
 		defaultCustomer = new Customer();
 
 		defaultCustomer.setEmail("test@example.com");

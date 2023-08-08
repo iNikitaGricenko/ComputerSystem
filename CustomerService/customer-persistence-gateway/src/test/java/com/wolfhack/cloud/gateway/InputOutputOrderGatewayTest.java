@@ -7,6 +7,7 @@ import com.wolfhack.cloud.customer.model.CustomerOrder;
 import com.wolfhack.cloud.customer.model.OrderItem;
 import com.wolfhack.cloud.customer.model.enums.Currency;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
+import com.wolfhack.cloud.customer.model.enums.PaymentMethod;
 import com.wolfhack.cloud.mapper.EntityCustomerOrderMapperImpl;
 import fake.persistence.InMemoryOrderRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,7 +37,7 @@ class InputOutputOrderGatewayTest {
 		defaultCustomerOrder = new CustomerOrder();
 		defaultCustomerOrders = new ArrayList<>();
 
-		defaultCustomerOrder.setPaymentMethod("PrivatBank");
+		defaultCustomerOrder.setPaymentMethod(PaymentMethod.MASTERCARD);
 		defaultCustomerOrder.setPaymentCurrency(Currency.UAH);
 		defaultCustomerOrder.setAddress("Some street 24");
 		defaultCustomerOrder.setCity("Zaporizhzhya");
@@ -160,12 +161,7 @@ class InputOutputOrderGatewayTest {
 
 		assertTrue(customerOrders.isEmpty());
 
-		List<CustomerOrder> orders = defaultCustomerOrders.stream()
-				.filter(customerOrder -> customerOrder.getStatus().equals(status))
-				.filter(customerOrder -> customerOrder.getCompleted() != null)
-				.filter(customerOrder -> customerOrder.getCompleted().isAfter(from))
-				.filter(customerOrder -> customerOrder.getCompleted().isBefore(to))
-				.toList();
+		List<CustomerOrder> orders = defaultCustomerOrders.stream().filter(customerOrder -> customerOrder.getStatus().equals(status)).filter(customerOrder -> customerOrder.getCompleted() != null).filter(customerOrder -> customerOrder.getCompleted().isAfter(from)).filter(customerOrder -> customerOrder.getCompleted().isBefore(to)).toList();
 
 		assertTrue(orders.isEmpty());
 		assertEquals(orders, customerOrders);
@@ -183,11 +179,7 @@ class InputOutputOrderGatewayTest {
 
 		assertFalse(customerOrders.isEmpty());
 
-		List<CustomerOrder> orders = defaultCustomerOrders.stream()
-				.filter(customerOrder -> customerOrder.getStatus().equals(status))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to))
-				.toList();
+		List<CustomerOrder> orders = defaultCustomerOrders.stream().filter(customerOrder -> customerOrder.getStatus().equals(status)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to)).toList();
 
 		assertFalse(orders.isEmpty());
 		assertEquals(orders, customerOrders);

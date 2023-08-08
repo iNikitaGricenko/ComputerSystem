@@ -2,7 +2,6 @@ package fake.persistence;
 
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
 import com.wolfhack.cloud.entity.EntityCustomerOrder;
-import com.wolfhack.cloud.repository.CustomerRepository;
 import com.wolfhack.cloud.repository.OrderRepository;
 import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.FluentQuery;
@@ -194,10 +193,6 @@ public class InMemoryOrderRepository implements OrderRepository {
 
 	@Override
 	public List<EntityCustomerOrder> findAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to) {
-		return fakeTable.values().stream()
-				.filter(entityCustomerOrder -> entityCustomerOrder.getStatus().equals(status))
-				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() == null || entityCustomerOrder.getCompleted().isAfter(from))
-				.filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() == null || entityCustomerOrder.getCompleted().isBefore(to))
-				.toList();
+		return fakeTable.values().stream().filter(entityCustomerOrder -> entityCustomerOrder.getStatus().equals(status)).filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() == null || entityCustomerOrder.getCompleted().isAfter(from)).filter(entityCustomerOrder -> entityCustomerOrder.getCompleted() == null || entityCustomerOrder.getCompleted().isBefore(to)).toList();
 	}
 }

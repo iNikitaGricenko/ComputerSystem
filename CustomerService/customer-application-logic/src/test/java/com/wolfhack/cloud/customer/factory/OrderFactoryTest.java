@@ -9,6 +9,8 @@ import com.wolfhack.cloud.customer.model.CustomerOrder;
 import com.wolfhack.cloud.customer.model.OrderItem;
 import com.wolfhack.cloud.customer.model.enums.Currency;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
+import com.wolfhack.cloud.customer.model.enums.PaymentMethod;
+import com.wolfhack.cloud.customer.service.implement.OrderItemService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,15 +26,13 @@ class OrderFactoryTest {
 
 	@BeforeAll
 	public static void setUp() {
-		orderFactory = new OrderFactory(new CustomerOrderMapperImpl());
+		orderFactory = new OrderFactory(new CustomerOrderMapperImpl(), new OrderItemService());
 	}
 
 	@Test
 	void toOrder() {
 		CustomerRequestDTO customer = new CustomerRequestDTO("email@domain.com", "Nikit", "Sambatist", "+111 (202) 555-0125");
-		CustomerOrderRequestDTO requestDTO =
-				new CustomerOrderRequestDTO("Some street 39", "description", "Mastercard", Currency.UAH,
-				"BigCity-Town", "New-York", "USA", "96000", customer, Set.of());
+		CustomerOrderRequestDTO requestDTO = new CustomerOrderRequestDTO("Some street 39", "description", PaymentMethod.MASTERCARD, Currency.UAH, "BigCity-Town", "New-York", "USA", "96000", customer, Set.of());
 
 		CustomerOrder order = orderFactory.toOrder(requestDTO);
 
@@ -40,7 +40,7 @@ class OrderFactoryTest {
 
 		assertEquals("Some street 39", order.getAddress());
 		assertEquals("description", order.getDescription());
-		assertEquals("Mastercard", order.getPaymentMethod());
+		assertEquals(PaymentMethod.MASTERCARD, order.getPaymentMethod());
 		assertEquals(Currency.UAH, order.getPaymentCurrency());
 		assertEquals("BigCity-Town", order.getCity());
 		assertEquals("New-York", order.getState());
@@ -58,7 +58,7 @@ class OrderFactoryTest {
 	@Test
 	void toResponse() {
 		CustomerOrder customerOrder = new CustomerOrder();
-		customerOrder.setPaymentMethod("Mastercard");
+		customerOrder.setPaymentMethod(PaymentMethod.MASTERCARD);
 		customerOrder.setPaymentCurrency(Currency.UAH);
 		customerOrder.setAddress("Some street 39");
 		customerOrder.setCity("BigCity-Town");
@@ -71,7 +71,7 @@ class OrderFactoryTest {
 
 		assertNotNull(response);
 
-		assertEquals("Mastercard", response.getPaymentMethod());
+		assertEquals(PaymentMethod.MASTERCARD, response.getPaymentMethod());
 		assertEquals(Currency.UAH, response.getPaymentCurrency());
 		assertEquals("Some street 39", response.getAddress());
 		assertEquals(OrderStatus.INPROGRESS, response.getStatus());
@@ -80,7 +80,7 @@ class OrderFactoryTest {
 	@Test
 	void edit() {
 		CustomerOrder customerOrder = new CustomerOrder();
-		customerOrder.setPaymentMethod("Mastercard");
+		customerOrder.setPaymentMethod(PaymentMethod.MASTERCARD);
 		customerOrder.setPaymentCurrency(Currency.UAH);
 		customerOrder.setAddress("Some street 39");
 		customerOrder.setCity("BigCity-Town");
@@ -99,14 +99,14 @@ class OrderFactoryTest {
 		assertNotEquals(Currency.UAH, customerOrder.getPaymentCurrency());
 		assertEquals(Currency.USD, customerOrder.getPaymentCurrency());
 		assertEquals(OrderStatus.DELIVERED, customerOrder.getStatus());
-		assertEquals("Mastercard", customerOrder.getPaymentMethod());
+		assertEquals(PaymentMethod.MASTERCARD, customerOrder.getPaymentMethod());
 		assertEquals("Some street 39", customerOrder.getAddress());
 	}
 
 	@Test
 	void create() throws ExecutionException, InterruptedException {
 		CustomerOrder customerOrder = new CustomerOrder();
-		customerOrder.setPaymentMethod("Mastercard");
+		customerOrder.setPaymentMethod(PaymentMethod.MASTERCARD);
 		customerOrder.setPaymentCurrency(Currency.UAH);
 		customerOrder.setStatus(OrderStatus.DELIVERED);
 
@@ -120,10 +120,13 @@ class OrderFactoryTest {
 		AnalyticsResponse analyticsResponse = orderFactory.create(List.of(customerOrder));
 		assertDoesNotThrow(() -> orderFactory.create(List.of(customerOrder)));
 		assertNotNull(analyticsResponse);
-		double totalPrice = orderItems.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).sum();
-		double maxOrderPrice = orderItems.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).max().orElse(0);
-		double minOrderPrice = orderItems.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).min().orElse(0);
-		long totalQuantity = orderItems.stream().mapToLong(OrderItem::getQuantity).sum();
+
+		OrderItemService orderItemService = new OrderItemService();
+
+		double totalPrice = orderItemService.getTotalOrderPrice(orderItems);
+		double maxOrderPrice = orderItemService.getMaxPriceForItem(orderItems);
+		double minOrderPrice = orderItemService.getMinPriceForItem(orderItems);
+		long totalQuantity = orderItemService.getTotalOrderQuantity(orderItems);
 
 		assertEquals(minOrderPrice, analyticsResponse.getMinOrderPrice());
 		assertEquals(maxOrderPrice, analyticsResponse.getMaxOrderPrice());

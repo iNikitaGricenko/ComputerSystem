@@ -1,12 +1,17 @@
 package com.wolfhack.cloud.customer.service;
 
 import com.wolfhack.cloud.customer.adapter.NotificationSender;
+import com.wolfhack.cloud.customer.adapter.PaymentAdapter;
 import com.wolfhack.cloud.customer.factory.IOrderFactory;
 import com.wolfhack.cloud.customer.model.*;
 import com.wolfhack.cloud.customer.model.enums.Currency;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
+import com.wolfhack.cloud.customer.model.enums.PaymentMethod;
+import com.wolfhack.cloud.customer.service.implement.OrderService;
 import fake.adapter.FakeInputOutputCustomerOrder;
 import fake.adapter.FakeNotificationSender;
+import fake.adapter.FakePayment;
+import fake.adapter.FakeProductService;
 import fake.factory.FakeOrderFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +22,10 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +41,8 @@ class OrderServiceTest {
 		defaultCustomerOrder = new CustomerOrder();
 		defaultCustomerOrders = new ArrayList<>();
 
-		defaultCustomerOrder.setPaymentMethod("PrivatBank");
+		defaultCustomerOrder.setChargeId(null);
+		defaultCustomerOrder.setPaymentMethod(PaymentMethod.MASTERCARD);
 		defaultCustomerOrder.setPaymentCurrency(Currency.UAH);
 		defaultCustomerOrder.setAddress("Some street 24");
 		defaultCustomerOrder.setCity("Zaporizhzhya");
@@ -88,10 +97,13 @@ class OrderServiceTest {
 		FakeInputOutputCustomerOrder inputOutputCustomerOrder = new FakeInputOutputCustomerOrder();
 		NotificationSender notificationSender = new FakeNotificationSender();
 		IOrderFactory iOrderFactory = new FakeOrderFactory();
-		orderService = new OrderService(iOrderFactory, inputOutputCustomerOrder, inputOutputCustomerOrder, notificationSender);
+		PaymentAdapter paymentAdapter = new FakePayment();
+		IProductService productService = new FakeProductService();
+		orderService = new OrderService(iOrderFactory, inputOutputCustomerOrder, inputOutputCustomerOrder, notificationSender, paymentAdapter, productService);
 
 		defaultCustomerOrder.setId(null);
-		defaultCustomerOrder.setPaymentMethod("PrivatBank");
+		defaultCustomerOrder.setChargeId(null);
+		defaultCustomerOrder.setPaymentMethod(PaymentMethod.MASTERCARD);
 		defaultCustomerOrder.setPaymentCurrency(Currency.UAH);
 		defaultCustomerOrder.setAddress("Some street 24");
 		defaultCustomerOrder.setCity("Zaporizhzhya");
@@ -108,6 +120,7 @@ class OrderServiceTest {
 		assertNotNull(saved.getId());
 		assertNotNull(saved.getCreated());
 
+		defaultCustomerOrder.setChargeId(null);
 		assertEquals(defaultCustomerOrder, saved);
 	}
 
@@ -131,6 +144,7 @@ class OrderServiceTest {
 	@Test
 	void findById() {
 		CustomerOrder saved = orderService.save(defaultCustomerOrder);
+		defaultCustomerOrder.setChargeId(null);
 
 		CustomerOrder byId = orderService.findById(1L);
 		assertNotNull(byId);
@@ -146,13 +160,7 @@ class OrderServiceTest {
 		LocalDate to = LocalDate.now().plusDays(1);
 		AnalyticsSearch analyticsSearch = new AnalyticsSearch(status, from, to);
 
-		List<OrderItem> list = defaultCustomerOrders.stream()
-				.filter(customerOrder -> customerOrder.getStatus().equals(status))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from.atTime(LocalTime.MIN)))
-				.filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to.atTime(LocalTime.MIN)))
-				.map(CustomerOrder::getOrderItems)
-				.flatMap(Collection::stream)
-				.toList();
+		List<OrderItem> list = defaultCustomerOrders.stream().filter(customerOrder -> customerOrder.getStatus().equals(status)).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isAfter(from.atTime(LocalTime.MIN))).filter(customerOrder -> customerOrder.getCompleted() == null || customerOrder.getCompleted().isBefore(to.atTime(LocalTime.MIN))).map(CustomerOrder::getOrderItems).flatMap(Collection::stream).toList();
 
 		double totalPrice = list.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).sum();
 		double maxOrderPrice = list.stream().mapToDouble(orderItem -> orderItem.getUnitPrice() * orderItem.getQuantity()).max().orElse(0);

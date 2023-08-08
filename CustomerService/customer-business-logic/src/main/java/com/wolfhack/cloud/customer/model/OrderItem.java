@@ -13,36 +13,36 @@ import java.util.function.Function;
 @NoArgsConstructor
 public class OrderItem {
 
-    @RequiredArgsConstructor
-    static final class OrderItemUpdateFactory implements UpdateFactory {
+	@RequiredArgsConstructor
+	static final class OrderItemUpdateFactory implements UpdateFactory {
 
-        private final OrderItem orderItem;
+		private final OrderItem orderItem;
 
-        @Override
-        public <T, U> UpdateFactory edit(T editor, Function<T, U> getMethod, Consumer<U> setMethod) {
-            Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
-            return this;
-        }
+		@Override
+		public <T, U> UpdateFactory edit(T editor, Function<T, U> getMethod, Consumer<U> setMethod) {
+			Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
+			return this;
+		}
 
-        @Override
-        public OrderItem update() {
-            return orderItem;
-        }
-    }
+		@Override
+		public OrderItem update() {
+			return orderItem;
+		}
+	}
 
-    private Long id;
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private String model;
+	private String model;
 
-    private long quantity;
+	private long quantity;
 
-    private double unitPrice;
+	private double unitPrice;
 
-    private String className;
+	private String className;
 
-    public UpdateFactory renovator() {
-        return new OrderItemUpdateFactory(this);
-    }
+	public UpdateFactory renovator() {
+		return new OrderItemUpdateFactory(this);
+	}
 }

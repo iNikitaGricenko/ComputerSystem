@@ -3,6 +3,7 @@ package com.wolfhack.cloud.customer.model;
 import com.wolfhack.cloud.customer.factory.UpdateFactory;
 import com.wolfhack.cloud.customer.model.enums.Currency;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
+import com.wolfhack.cloud.customer.model.enums.PaymentMethod;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,60 +19,66 @@ import java.util.function.Function;
 @NoArgsConstructor
 public class CustomerOrder {
 
-    @RequiredArgsConstructor
-    static final class CustomerOrderUpdateFactory implements UpdateFactory {
+	@RequiredArgsConstructor
+	static final class CustomerOrderUpdateFactory implements UpdateFactory {
 
-        private final CustomerOrder customerOrder;
+		private final CustomerOrder customerOrder;
 
-        @Override
-        public <T, U> UpdateFactory edit(T editor, Function<T, U> getMethod, Consumer<U> setMethod) {
-            Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
-            return this;
-        }
+		@Override
+		public <T, U> UpdateFactory edit(T editor, Function<T, U> getMethod, Consumer<U> setMethod) {
+			Optional.ofNullable(getMethod.apply(editor)).ifPresent(setMethod);
+			return this;
+		}
 
-        @Override
-        public CustomerOrder update() {
-            return customerOrder;
-        }
-    }
+		@Override
+		public CustomerOrder update() {
+			return customerOrder;
+		}
+	}
 
-    @EqualsAndHashCode.Exclude
-    private Long id;
+	@EqualsAndHashCode.Exclude private Long id;
 
-    private String paymentMethod;
+	private String chargeId;
 
-    private Currency paymentCurrency = Currency.EUR;
+	private PaymentMethod paymentMethod;
 
-    private String address;
+	private Currency paymentCurrency = Currency.EUR;
 
-    private String city;
+	private String address;
 
-    private String state;
+	private String city;
 
-    private String country;
+	private String state;
 
-    private String zipCode;
+	private String country;
 
-    private String description;
+	private String zipCode;
 
-    @Builder.Default
-    @EqualsAndHashCode.Exclude
-    private LocalDateTime created = LocalDateTime.now();
+	private String description;
 
-    @Builder.Default
-    private OrderStatus status = OrderStatus.INPROGRESS;
+	private Payment payment;
 
-    private LocalDateTime completed;
+	@Builder.Default
+	@EqualsAndHashCode.Exclude
+	private LocalDateTime created = LocalDateTime.now();
 
-    private Customer customer;
+	@Builder.Default private OrderStatus status = OrderStatus.INPROGRESS;
 
-    private boolean isDeleted = false;
+	private LocalDateTime completed;
 
-    private LocalDateTime deletedAt;
+	private Customer customer;
 
-    private Set<OrderItem> orderItems;
+	private boolean isDeleted = false;
 
-    public UpdateFactory renovator() {
-        return new CustomerOrderUpdateFactory(this);
-    }
+	private LocalDateTime deletedAt;
+
+	private Set<OrderItem> orderItems;
+
+	public UpdateFactory renovator() {
+		return new CustomerOrderUpdateFactory(this);
+	}
+
+	public boolean isFinalDeal() {
+		return OrderStatus.DELIVERED.equals(status) || OrderStatus.RETURNED.equals(status);
+	}
 }

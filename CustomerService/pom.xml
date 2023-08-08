@@ -55,6 +55,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!--   OpenFeign   -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
         <!--    Swagger    -->
         <dependency>
             <groupId>org.springdoc</groupId>

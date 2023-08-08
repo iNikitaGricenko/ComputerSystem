@@ -15,16 +15,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OutputCustomerGateway implements OutputCustomer {
 
-    private final CustomerRepository customerRepository;
-    private final EntityCustomerMapper entityCustomerMapper;
+	private final CustomerRepository customerRepository;
+	private final EntityCustomerMapper entityCustomerMapper;
 
-    @Override
-    public Optional<Customer> get(Long id) {
-        return customerRepository.findById(id).map(entityCustomerMapper::toBusinessFromEntity);
-    }
+	@Override
+	public Optional<Customer> get(Long id) {
+		return customerRepository.findById(id).map(entityCustomerMapper::toBusinessFromEntity);
+	}
 
-    @Override
-    public Page<Customer> getAll(Pageable pageable) {
-        return customerRepository.findAll(pageable).map(entityCustomerMapper::toBusinessFromEntity);
-    }
+	@Override
+	public Page<Customer> getAll(Pageable pageable) {
+		return customerRepository.findAll(pageable).map(entityCustomerMapper::toBusinessFromEntity);
+	}
+
+	@Override
+	public Customer get(String email) {
+		return customerRepository.findByEmail(email).map(entityCustomerMapper::toBusinessFromEntity).orElseThrow();
+	}
 }

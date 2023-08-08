@@ -3,7 +3,6 @@ package fake.persistence;
 import com.wolfhack.cloud.entity.EntityCustomer;
 import com.wolfhack.cloud.repository.CustomerRepository;
 import org.springframework.data.domain.*;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.FluentQuery;
 
 import java.util.*;
@@ -188,5 +187,10 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 	@Override
 	public void deleteAll() {
 		fakeTable.clear();
+	}
+
+	@Override
+	public Optional<EntityCustomer> findByEmail(String email) {
+		return fakeTable.values().stream().filter(entityCustomer -> entityCustomer.getEmail().equalsIgnoreCase(email)).findFirst();
 	}
 }

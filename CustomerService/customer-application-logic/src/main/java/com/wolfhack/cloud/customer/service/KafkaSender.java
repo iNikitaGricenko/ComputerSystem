@@ -14,16 +14,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 class KafkaSender implements NotificationSender {
 
-    private final static String ORDER_TOPIC = "order";
-    private final KafkaTemplate<String, OrderItem> kafkaTemplate;
+	private final static String ORDER_TOPIC = "order";
+	private final KafkaTemplate<String, OrderItem> kafkaTemplate;
 
-    @Override
-    @Async
-    public void send(OrderItem customerOrder) {
-        Message<OrderItem> message = MessageBuilder.withPayload(customerOrder)
-                .setHeader(KafkaHeaders.TOPIC, ORDER_TOPIC)
-                .build();
-        kafkaTemplate.send(message);
-    }
+	@Override
+	@Async
+	public void send(OrderItem customerOrder) {
+		Message<OrderItem> message = MessageBuilder.withPayload(customerOrder).setHeader(KafkaHeaders.TOPIC, ORDER_TOPIC).build();
+		kafkaTemplate.send(message);
+	}
 
 }

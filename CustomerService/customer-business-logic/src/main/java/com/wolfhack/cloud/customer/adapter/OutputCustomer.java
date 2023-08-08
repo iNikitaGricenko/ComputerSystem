@@ -8,8 +8,9 @@ import java.util.Optional;
 
 public interface OutputCustomer {
 
-    Optional<Customer> get(Long id);
+	Optional<Customer> get(Long id);
 
-    Page<Customer> getAll(Pageable pageable);
+	Page<Customer> getAll(Pageable pageable);
 
+	Customer get(String email);
 }
