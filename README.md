@@ -35,6 +35,13 @@ To stop docker containers exxecute command (in console from previous steps) "doc
 * OAuth2 Resource Server
 * Spring Validation
 * Spring Mail
+* JWT
+* Stripe
+* Elasticsearch
+* OpenFeign
+* WebClient
+* Loadbalacer
+* DigitalOcean
 * Apache Kafka
 * Swagger
 * Redis Caching
