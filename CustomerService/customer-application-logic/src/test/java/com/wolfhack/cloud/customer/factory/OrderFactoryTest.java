@@ -4,6 +4,7 @@ import com.wolfhack.cloud.customer.dto.CustomerOrderRequestDTO;
 import com.wolfhack.cloud.customer.dto.CustomerOrderResponseDTO;
 import com.wolfhack.cloud.customer.dto.CustomerRequestDTO;
 import com.wolfhack.cloud.customer.factory.mapper.CustomerOrderMapperImpl;
+import com.wolfhack.cloud.customer.fake.FakeProductClient;
 import com.wolfhack.cloud.customer.model.AnalyticsResponse;
 import com.wolfhack.cloud.customer.model.CustomerOrder;
 import com.wolfhack.cloud.customer.model.OrderItem;
@@ -11,6 +12,7 @@ import com.wolfhack.cloud.customer.model.enums.Currency;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
 import com.wolfhack.cloud.customer.model.enums.PaymentMethod;
 import com.wolfhack.cloud.customer.service.implement.OrderItemService;
+import com.wolfhack.cloud.customer.service.implement.ProductService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +28,7 @@ class OrderFactoryTest {
 
 	@BeforeAll
 	public static void setUp() {
-		orderFactory = new OrderFactory(new CustomerOrderMapperImpl(), new OrderItemService());
+		orderFactory = new OrderFactory(new CustomerOrderMapperImpl(), new OrderItemService(), new ProductService(new FakeProductClient()));
 	}
 
 	@Test

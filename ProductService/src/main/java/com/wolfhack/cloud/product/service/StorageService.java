@@ -26,8 +26,7 @@ public class StorageService implements AmazonStorageServiceInterface {
 
 	private final FileDataStorageServiceInterface fileDataStorage;
 
-	@Value("${AWS_STORAGE_BUCKET_NAME}")
-	private String bucket;
+	@Value("${AWS_STORAGE_BUCKET_NAME}") private String bucket;
 
 	private static final String DEFAULT_STORAGE_KEY = "picture/";
 
@@ -52,10 +51,7 @@ public class StorageService implements AmazonStorageServiceInterface {
 
 	@Override
 	public void delete(List<String> fileIds) {
-		List<String> collect = fileDataStorage.getAll(fileIds).stream()
-				.map(FileStorage::getName)
-				.map(name -> DEFAULT_STORAGE_KEY + name)
-				.collect(Collectors.toList());
+		List<String> collect = fileDataStorage.getAll(fileIds).stream().map(FileStorage::getName).map(name -> DEFAULT_STORAGE_KEY + name).collect(Collectors.toList());
 
 		DeleteObjectsRequest request = new DeleteObjectsRequest(bucket).withKeys(collect.toArray(String[]::new));
 		amazonS3Client.deleteObjects(request);
@@ -64,7 +60,7 @@ public class StorageService implements AmazonStorageServiceInterface {
 	@Override
 	public void delete(String fileId) {
 		String name = fileDataStorage.get(fileId).getName();
-		String key = DEFAULT_STORAGE_KEY+name;
+		String key = DEFAULT_STORAGE_KEY + name;
 
 		amazonS3Client.deleteObject(bucket, key);
 	}
@@ -92,13 +88,7 @@ public class StorageService implements AmazonStorageServiceInterface {
 	}
 
 	private String saveToLocalStorage(MultipartFile file, String pathToFile) {
-		FileStorage fileStorage = FileStorage.builder()
-				.key(StorageService.DEFAULT_STORAGE_KEY)
-				.name(file.getName())
-				.type(file.getContentType())
-				.size(file.getSize())
-				.url(pathToFile)
-				.build();
+		FileStorage fileStorage = FileStorage.builder().key(StorageService.DEFAULT_STORAGE_KEY).name(file.getName()).type(file.getContentType()).size(file.getSize()).url(pathToFile).build();
 
 		return fileDataStorage.save(fileStorage);
 	}

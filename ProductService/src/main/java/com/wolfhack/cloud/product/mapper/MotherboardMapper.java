@@ -13,18 +13,20 @@ import java.util.List;
 public interface MotherboardMapper {
 	MotherboardResponseDTO toMotherboardResponseDTO(Product<Motherboard> motherboard);
 
-	MotherboardResponseDTO toMotherboardResponseDTO(Motherboard motherboard);
+	@Mapping(source = ".", target = "item")
+	Product<Motherboard> toMotherboard(MotherboardFullDTO dto);
 
-	Motherboard toMotherboard(MotherboardFullDTO dto);
+	List<MotherboardResponseDTO> toMotherboardResponseListDTO(List<Product<Motherboard>> motherboards);
 
-	List<MotherboardResponseDTO> toMotherboardResponseListDTO(List<Motherboard> motherboards);
+	List<Product<Motherboard>> toMotherboardList(List<MotherboardFullDTO> dtos);
 
-	List<Motherboard> toMotherboardList(List<MotherboardFullDTO> dtos);
+	Product<Motherboard> toEntity(MotherboardSearch motherboardSearch);
 
-	Motherboard toEntity(MotherboardSearch motherboardSearch);
-
-	MotherboardSearch toSearch(Motherboard motherboard, long id);
+	MotherboardSearch toSearch(Product<Motherboard> motherboards);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	MotherboardSearch partialUpdate(@MappingTarget MotherboardSearch motherboardSearch, Motherboard motherboard);
+	MotherboardSearch partialUpdate(@MappingTarget MotherboardSearch motherboardSearch, Product<Motherboard> motherboard);
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	Product<Motherboard> partialUpdate(@MappingTarget Product<Motherboard> toUpdate, Product<Motherboard> motherboard);
 }

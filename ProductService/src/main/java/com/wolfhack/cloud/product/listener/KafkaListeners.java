@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class KafkaListeners {
-    @KafkaListener(topics = "order", groupId = "group-id")
-    public void listenOrder(ProductPOJO productPOJO) {
-        log.info("Product in order {}", productPOJO);
-    }
+	@KafkaListener(topics = "order", groupId = "group-id")
+	public void listenOrder(ProductPOJO productPOJO) {
+		log.info("Product in order {}", productPOJO);
+	}
 }

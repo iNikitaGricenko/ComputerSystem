@@ -23,49 +23,39 @@ public class SsdSearch implements Serializable {
 	@NotNull @Min(0) Long id;
 
 	@Field(type = FieldType.Text, fielddata = true)
+	@NotNull @Size(min = 5) String title;
+
+	@Field(type = FieldType.Text, fielddata = true)
 	@NotNull @Size(min = 5) String name;
 
 	@Field(type = FieldType.Text, fielddata = true)
 	@NotNull @Size(min = 5) String model;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String formFactor;
+	@Field(type = FieldType.Text, fielddata = true) String formFactor;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String memorySize;
+	@Field(type = FieldType.Text, fielddata = true) String memorySize;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String memorySlotsType;
+	@Field(type = FieldType.Text, fielddata = true) String memorySlotsType;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String interfaceType;
+	@Field(type = FieldType.Text, fielddata = true) String interfaceType;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String nvme;
+	@Field(type = FieldType.Text, fielddata = true) String nvme;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String controller;
+	@Field(type = FieldType.Text, fielddata = true) String controller;
 
-	@Field(type = FieldType.Long)
-	long readerSpeed;
+	@Field(type = FieldType.Long) long readerSpeed;
 
-	@Field(type = FieldType.Long)
-	long writerSpeed;
+	@Field(type = FieldType.Long) long writerSpeed;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String MTBF;
+	@Field(type = FieldType.Text, fielddata = true) String MTBF;
 
-	@Field(type = FieldType.Double)
-	double impactResistance;
+	@Field(type = FieldType.Double) double impactResistance;
 
-	@Field(type = FieldType.Float)
-	float powerRequirement;
+	@Field(type = FieldType.Float) float powerRequirement;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String worksTemperature;
+	@Field(type = FieldType.Text, fielddata = true) String worksTemperature;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String storageTemperature;
+	@Field(type = FieldType.Text, fielddata = true) String storageTemperature;
 
 	HashSet<String> additionally;
 

@@ -10,4 +10,9 @@ public class FakeProductService implements IProductService {
 	public void reduceProductInStorage(Collection<OrderItem> orderItems) {
 
 	}
+
+	@Override
+	public void validateProducts(Collection<OrderItem> orderItems) {
+
+	}
 }

@@ -22,62 +22,47 @@ public class GpuSearch implements Serializable {
 	@NotNull @Min(0) Long id;
 
 	@Field(type = FieldType.Text, fielddata = true)
+	@NotNull @Size(min = 5) String title;
+
+	@Field(type = FieldType.Text, fielddata = true)
 	@NotNull @Size(min = 5) String name;
 
 	@Field(type = FieldType.Text, fielddata = true)
 	@NotNull @Size(min = 5) String model;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String type;
+	@Field(type = FieldType.Text, fielddata = true) String type;
 
-	@Field(type = FieldType.Long)
-	long memorySize;
+	@Field(type = FieldType.Long) long memorySize;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String memoryType;
+	@Field(type = FieldType.Text, fielddata = true) String memoryType;
 
-	@Field(type = FieldType.Double)
-	double memoryBus;
+	@Field(type = FieldType.Double) double memoryBus;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String graphicsProcessor;
+	@Field(type = FieldType.Text, fielddata = true) String graphicsProcessor;
 
-	@Field(type = FieldType.Double)
-	double coreFrequency;
+	@Field(type = FieldType.Double) double coreFrequency;
 
-	@Field(type = FieldType.Double)
-	double videoMemoryFrequency;
+	@Field(type = FieldType.Double) double videoMemoryFrequency;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String maxResolution;
+	@Field(type = FieldType.Text, fielddata = true) String maxResolution;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String processorFamily;
+	@Field(type = FieldType.Text, fielddata = true) String processorFamily;
 
-	@Field(type = FieldType.Boolean)
-	boolean cudaSupport;
+	@Field(type = FieldType.Boolean) boolean cudaSupport;
 
-	@Field(type = FieldType.Boolean)
-	boolean additionalPowerSupply;
+	@Field(type = FieldType.Boolean) boolean additionalPowerSupply;
 
-	@Field(type = FieldType.Double)
-	double length;
+	@Field(type = FieldType.Double) double length;
 
-	@Field(type = FieldType.Double)
-	double height;
+	@Field(type = FieldType.Double) double height;
 
-	@Field(type = FieldType.Double)
-	double powerSupplyCapacity;
+	@Field(type = FieldType.Double) double powerSupplyCapacity;
 
-	@Field(type = FieldType.Integer)
-	int fans;
+	@Field(type = FieldType.Integer) int fans;
 
-	@Field(type = FieldType.Integer)
-	int cudaCores;
+	@Field(type = FieldType.Integer) int cudaCores;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String supplyConnector;
+	@Field(type = FieldType.Text, fielddata = true) String supplyConnector;
 
-	@Field(type = FieldType.Text, fielddata = true)
-	String gpuInterface;
+	@Field(type = FieldType.Text, fielddata = true) String gpuInterface;
 }

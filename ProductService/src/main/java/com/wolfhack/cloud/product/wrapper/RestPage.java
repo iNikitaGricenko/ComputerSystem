@@ -12,15 +12,12 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"pageable"})
 public class RestPage<T> extends PageImpl<T> {
 
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public RestPage(@JsonProperty("content") List<T> content,
-                     @JsonProperty("number") int page,
-                     @JsonProperty("size") int size,
-                     @JsonProperty("totalElements") long total) {
-        super(content, PageRequest.of(page, size), total);
-    }
+	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+	public RestPage(@JsonProperty("content") List<T> content, @JsonProperty("number") int page, @JsonProperty("size") int size, @JsonProperty("totalElements") long total) {
+		super(content, PageRequest.of(page, size), total);
+	}
 
-    public RestPage(Page<T> page) {
-        super(page.getContent(), page.getPageable(), page.getTotalElements());
-    }
+	public RestPage(Page<T> page) {
+		super(page.getContent(), page.getPageable(), page.getTotalElements());
+	}
 }

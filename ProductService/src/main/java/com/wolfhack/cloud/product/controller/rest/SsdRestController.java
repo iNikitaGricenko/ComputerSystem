@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.*;
 
@@ -34,42 +32,42 @@ import static org.springframework.http.MediaType.*;
 @RequiredArgsConstructor
 public class SsdRestController {
 
-    private final SsdService ssdService;
-    private final SsdMapper ssdMapper;
+	private final SsdService ssdService;
+	private final SsdMapper ssdMapper;
 
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SsdResponseDTO.class)))
-    @Parameter(name = "id", example = "1")
-    public SsdResponseDTO getSsdById(@PathVariable("id") Long id) {
-        return ssdMapper.toSsdResponseDTO(ssdService.findById(id));
-    }
+	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SsdResponseDTO.class)))
+	@Parameter(name = "id", example = "1")
+	public SsdResponseDTO getSsdById(@PathVariable("id") Long id) {
+		return ssdMapper.toSsdResponseDTO(ssdService.findById(id));
+	}
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
-    @PageableAsQueryParam
-    public Page<SsdResponseDTO> getSsds(Pageable pageable) {
-        return new RestPage<>(ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO));
-    }
+	@GetMapping(produces = APPLICATION_JSON_VALUE)
+	@PageableAsQueryParam
+	public Page<SsdResponseDTO> getSsds(Pageable pageable) {
+		return new RestPage<>(ssdService.findAll(pageable).map(ssdMapper::toSsdResponseDTO));
+	}
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/seach")
-    @PageableAsQueryParam
-    public List<SsdResponseDTO> searchSsds(Pageable pageable, @RequestParam String searchLine) {
-        return ssdService.searchByTitle(searchLine, pageable).stream().map(ssdMapper::toSsdResponseDTO).toList();
-    }
+	@GetMapping(produces = APPLICATION_JSON_VALUE, value = "/seach")
+	@PageableAsQueryParam
+	public List<SsdResponseDTO> searchSsds(Pageable pageable, @RequestParam String searchLine) {
+		return ssdService.searchByTitle(searchLine, pageable).stream().map(ssdMapper::toSsdResponseDTO).toList();
+	}
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
-    @ResponseStatus(HttpStatus.CREATED)
-    public Long addSsd(@Valid @RequestBody SsdFullDTO ssd) {
-        return ssdService.save(ssdMapper.toSsd(ssd));
-    }
+	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ValidationErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+	@ResponseStatus(HttpStatus.CREATED)
+	public Long addSsd(@Valid @RequestBody SsdFullDTO ssd) {
+		return ssdService.save(ssdMapper.toSsd(ssd));
+	}
 
-    @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
-    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
-    @Parameter(name = "id", example = "1")
-    public String addPhoto(@PathVariable("id") Long id, @RequestParam("photo") MultipartFile photo) throws IOException {
-        return ssdService.addPhoto(id, photo);
-    }
+	@PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
+	@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class)))
+	@Parameter(name = "id", example = "1")
+	public String addPhoto(@PathVariable("id") Long id, @RequestParam("photo") MultipartFile photo) throws IOException {
+		return ssdService.addPhoto(id, photo);
+	}
 }

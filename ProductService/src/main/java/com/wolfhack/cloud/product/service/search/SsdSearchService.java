@@ -3,6 +3,7 @@ package com.wolfhack.cloud.product.service.search;
 import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.SsdNotFoundException;
 import com.wolfhack.cloud.product.mapper.SsdMapper;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ssd;
 import com.wolfhack.cloud.product.model.search.SsdSearch;
 import com.wolfhack.cloud.product.repository.search.SsdSearchRepository;
@@ -33,20 +34,14 @@ public class SsdSearchService implements SsdSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Ssd ssd, long id) {
-		SsdSearch searchModel = ssdMapper.toSearch(ssd, id);
+	public long save(Product<Ssd> ssd) {
+		SsdSearch searchModel = ssdMapper.toSearch(ssd);
 		return ssdSearchRepository.save(searchModel).getId();
 	}
 
 	@Override
-	public List<Ssd> findByTitle(String line, Pageable pageable) {
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+	public List<Product<Ssd>> findByTitle(String line, Pageable pageable) {
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line).field("name").field("model").field("title").type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<SsdSearch> ssds = elasticsearchOperations.search(searchQuery, SsdSearch.class, IndexCoordinates.of("product-ssd"));
 
@@ -55,35 +50,22 @@ public class SsdSearchService implements SsdSearchServiceInterface {
 
 	@AopLog
 	@Override
-	public List<Ssd> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ssd.class.getFields())
-				.filter(field -> field.getType().isInstance(String.class))
-				.map(Field::getName)
-				.toArray(String[]::new);
+	public List<Product<Ssd>> findByAllTextFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Ssd.class.getFields()).filter(field -> field.getType().isInstance(String.class)).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<SsdSearch> ssds = elasticsearchOperations.search(searchQuery, SsdSearch.class, IndexCoordinates.of("product-ssd"));
 
 		return ssds.map(SearchHit::getContent).map(ssdMapper::toEntity).toList();
 	}
-	
+
 	@AopLog
 	@Override
-	public List<Ssd> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ssd.class.getFields())
-				.map(Field::getName)
-				.toArray(String[]::new);
+	public List<Product<Ssd>> findByAllFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Ssd.class.getFields()).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<SsdSearch> ssds = elasticsearchOperations.search(searchQuery, SsdSearch.class, IndexCoordinates.of("product-ssd"));
 
@@ -91,7 +73,7 @@ public class SsdSearchService implements SsdSearchServiceInterface {
 	}
 
 	@Override
-	public long update(Ssd ssd, long id) {
+	public long update(Product<Ssd> ssd, long id) {
 		SsdSearch ssdSearch = ssdSearchRepository.findById(id).orElseThrow(SsdNotFoundException::new);
 
 		ssdMapper.partialUpdate(ssdSearch, ssd);

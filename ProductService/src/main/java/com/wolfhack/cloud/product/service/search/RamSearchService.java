@@ -3,6 +3,7 @@ package com.wolfhack.cloud.product.service.search;
 import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.RamNotFoundException;
 import com.wolfhack.cloud.product.mapper.RamMapper;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ram;
 import com.wolfhack.cloud.product.model.search.RamSearch;
 import com.wolfhack.cloud.product.repository.search.RamSearchRepository;
@@ -33,21 +34,14 @@ public class RamSearchService implements RamSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Ram ram, long id) {
-		RamSearch searchModel = ramMapper.toSearch(ram, id);
+	public long save(Product<Ram> ram) {
+		RamSearch searchModel = ramMapper.toSearch(ram);
 		return ramSearchRepository.save(searchModel).getId();
 	}
 
 	@Override
-	public List<Ram> findByTitle(String line, Pageable pageable) {
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.field("type")
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+	public List<Product<Ram>> findByTitle(String line, Pageable pageable) {
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line).field("name").field("model").field("type").field("title").type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<RamSearch> rams = elasticsearchOperations.search(searchQuery, RamSearch.class, IndexCoordinates.of("product-ram"));
 
@@ -56,35 +50,22 @@ public class RamSearchService implements RamSearchServiceInterface {
 
 	@AopLog
 	@Override
-	public List<Ram> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ram.class.getFields())
-				.filter(field -> field.getType().isInstance(String.class))
-				.map(Field::getName)
-				.toArray(String[]::new);
+	public List<Product<Ram>> findByAllTextFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Ram.class.getFields()).filter(field -> field.getType().isInstance(String.class)).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<RamSearch> rams = elasticsearchOperations.search(searchQuery, RamSearch.class, IndexCoordinates.of("product-ram"));
 
 		return rams.map(SearchHit::getContent).map(ramMapper::toEntity).toList();
 	}
-	
+
 	@AopLog
 	@Override
-	public List<Ram> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Ram.class.getFields())
-				.map(Field::getName)
-				.toArray(String[]::new);
+	public List<Product<Ram>> findByAllFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Ram.class.getFields()).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<RamSearch> rams = elasticsearchOperations.search(searchQuery, RamSearch.class, IndexCoordinates.of("product-ram"));
 
@@ -92,7 +73,7 @@ public class RamSearchService implements RamSearchServiceInterface {
 	}
 
 	@Override
-	public long update(Ram ram, long id) {
+	public long update(Product<Ram> ram, long id) {
 		RamSearch ramSearch = ramSearchRepository.findById(id).orElseThrow(RamNotFoundException::new);
 
 		ramMapper.partialUpdate(ramSearch, ram);

@@ -1,22 +1,22 @@
 package com.wolfhack.cloud.product.service.search.implement;
 
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ssd;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface SsdSearchServiceInterface {
 
-	long save(Ssd ssd, long id);
+	long save(Product<Ssd> ssd);
 
-	List<Ssd> findByTitle(String line, Pageable pageable);
+	List<Product<Ssd>> findByTitle(String line, Pageable pageable);
 
-	List<Ssd> findByAllTextFields(String line, Pageable pageable);
+	List<Product<Ssd>> findByAllTextFields(String line, Pageable pageable);
 
-	List<Ssd> findByAllFields(String line, Pageable pageable);
+	List<Product<Ssd>> findByAllFields(String line, Pageable pageable);
 
-	long update(Ssd ssd, long id);
+	long update(Product<Ssd> ssd, long id);
 
 	void delete(long ssdId);
 

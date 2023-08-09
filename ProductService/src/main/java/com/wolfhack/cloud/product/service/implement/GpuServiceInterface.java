@@ -10,17 +10,17 @@ import java.io.IOException;
 import java.util.List;
 
 public interface GpuServiceInterface {
-    Page<Product<Gpu>> findAll(Pageable pageable);
+	Page<Product<Gpu>> findAll(Pageable pageable);
 
-    Long save(Gpu gpu);
+	Long save(Product<Gpu> gpu);
 
-    String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
+	String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    Product<Gpu> findById(Long id);
+	Product<Gpu> findById(Long id);
 
-    List<Gpu> searchByTitle(String query, Pageable pageable);
+	List<Product<Gpu>> searchByTitle(String query, Pageable pageable);
 
-    void delete(long id);
+	void delete(long id);
 
-    long update(long id, Gpu gpu);
+	long update(long id, Product<Gpu> gpu);
 }

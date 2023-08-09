@@ -24,7 +24,8 @@ import org.springframework.util.StopWatch;
 public class AopConfiguration {
 
 	@Pointcut("@annotation(com.wolfhack.cloud.product.annotations.AopLog)")
-	public void monitor() { }
+	public void monitor() {
+	}
 
 	@Bean
 	public PerformanceMonitorInterceptor performanceMonitorInterceptor() {

@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +23,16 @@ public class ProductService implements IProductService {
 
 	@Override
 	public void reduceItemsQuantity(List<Long> itemIds) {
-		Query query = new Query(Criteria.where("id").in(itemIds));
+		itemIds.stream()
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+				.forEach(this::reduceItemQuantity);
+	}
+
+	private void reduceItemQuantity(long id, long quantity) {
+		Query query = new Query(Criteria.where("id").is(id));
 		Update update = new Update();
-		update.inc("item.quantity", -1);
-		mongoTemplate.updateMulti(query, update, Product.class);
+		update.inc("quantity", quantity * -1);
+		mongoTemplate.updateFirst(query, update, Product.class);
 	}
 
 	@Override

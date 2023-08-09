@@ -2,9 +2,9 @@ package com.wolfhack.cloud.product.mapper;
 
 import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ram;
-import com.wolfhack.cloud.product.model.search.RamSearch;
 import com.wolfhack.cloud.product.model.dto.RamFullDTO;
 import com.wolfhack.cloud.product.model.dto.RamResponseDTO;
+import com.wolfhack.cloud.product.model.search.RamSearch;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -13,18 +13,20 @@ import java.util.List;
 public interface RamMapper {
 	RamResponseDTO toRamResponseDTO(Product<Ram> ram);
 
-	RamResponseDTO toRamResponseDTO(Ram ram);
+	@Mapping(source = ".", target = "item")
+	Product<Ram> toRam(RamFullDTO dto);
 
-	Ram toRam(RamFullDTO dto);
+	List<RamResponseDTO> toRamResponseListDTO(List<Product<Ram>> rams);
 
-	List<RamResponseDTO> toRamResponseListDTO(List<Ram> rams);
+	List<Product<Ram>> toRamList(List<RamFullDTO> dtos);
 
-	List<Ram> toRamList(List<RamFullDTO> dtos);
+	Product<Ram> toEntity(RamSearch ramSearch);
 
-	Ram toEntity(RamSearch ramSearch);
-
-	RamSearch toSearch(Ram ram, long id);
+	RamSearch toSearch(Product<Ram> ram);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	RamSearch partialUpdate(@MappingTarget RamSearch ramSearch, Ram ram);
+	RamSearch partialUpdate(@MappingTarget RamSearch ramSearch, Product<Ram> ram);
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	Product<Ram> partialUpdate(@MappingTarget Product<Ram> toUpdate, Product<Ram> ram);
 }
