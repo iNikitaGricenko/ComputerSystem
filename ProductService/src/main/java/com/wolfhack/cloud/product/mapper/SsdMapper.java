@@ -22,6 +22,7 @@ public interface SsdMapper {
 
 	Product<Ssd> toEntity(SsdSearch ssdSearch);
 
+	@Mapping(source = "item", target = ".")
 	SsdSearch toSearch(Product<Ssd> ssd);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

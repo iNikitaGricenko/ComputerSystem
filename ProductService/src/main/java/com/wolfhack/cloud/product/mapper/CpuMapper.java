@@ -22,6 +22,7 @@ public interface CpuMapper {
 
 	Product<Cpu> toEntity(CpuSearch cpuSearch);
 
+	@Mapping(source = "item", target = ".")
 	CpuSearch toSearchModel(Product<Cpu> cpu);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
