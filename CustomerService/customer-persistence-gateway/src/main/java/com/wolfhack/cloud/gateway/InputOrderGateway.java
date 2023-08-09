@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InputOrderGateway implements InputCustomerOrder {
 
-    private final OrderRepository orderRepository;
-    private final EntityCustomerOrderMapper orderMapper;
+	private final OrderRepository orderRepository;
+	private final EntityCustomerOrderMapper orderMapper;
 
-    @Override
-    public CustomerOrder persist(CustomerOrder customerOrder) {
-        EntityCustomerOrder entityCustomerOrder = orderMapper.toEntityFromBusiness(customerOrder);
-        return orderMapper.toBusinessFromEntity(orderRepository.save(entityCustomerOrder));
-    }
+	@Override
+	public CustomerOrder persist(CustomerOrder customerOrder) {
+		EntityCustomerOrder entityCustomerOrder = orderMapper.toEntityFromBusiness(customerOrder);
+		return orderMapper.toBusinessFromEntity(orderRepository.save(entityCustomerOrder));
+	}
 }

@@ -13,7 +13,6 @@ import java.lang.annotation.Target;
 @Component
 public @interface Factory {
 
-    @AliasFor(annotation = Component.class)
-    String value() default "";
+	@AliasFor(annotation = Component.class) String value() default "";
 
 }

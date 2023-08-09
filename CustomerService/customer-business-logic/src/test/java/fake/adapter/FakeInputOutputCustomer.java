@@ -38,6 +38,11 @@ public class FakeInputOutputCustomer implements InputCustomer, OutputCustomer {
 	}
 
 	@Override
+	public Customer update(Long id, Customer customer) {
+		return fakeTable.get(id).renovator().update();
+	}
+
+	@Override
 	public Optional<Customer> get(Long id) {
 		return Optional.ofNullable(fakeTable.get(id));
 	}
@@ -46,5 +51,10 @@ public class FakeInputOutputCustomer implements InputCustomer, OutputCustomer {
 	public Page<Customer> getAll(Pageable pageable) {
 		List<Customer> customers = new ArrayList<>(fakeTable.values());
 		return new PageImpl<>(customers, pageable, customers.size());
+	}
+
+	@Override
+	public Customer get(String email) {
+		return fakeTable.values().stream().filter(customer -> customer.getEmail().equalsIgnoreCase(email)).findFirst().orElseThrow();
 	}
 }

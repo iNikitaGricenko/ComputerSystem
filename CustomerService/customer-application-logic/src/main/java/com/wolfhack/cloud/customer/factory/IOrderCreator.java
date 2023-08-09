@@ -6,8 +6,8 @@ import com.wolfhack.cloud.customer.model.CustomerOrder;
 
 public interface IOrderCreator {
 
-    CustomerOrder toOrder(CustomerOrderRequestDTO requestDTO);
+	CustomerOrder toOrder(CustomerOrderRequestDTO requestDTO);
 
-    CustomerOrderResponseDTO toResponse(CustomerOrder customerOrder);
+	CustomerOrderResponseDTO toResponse(CustomerOrder customerOrder);
 
 }

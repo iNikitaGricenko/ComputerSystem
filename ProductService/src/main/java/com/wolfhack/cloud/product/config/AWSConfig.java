@@ -14,26 +14,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AWSConfig {
 
-	@Value("${AWS_ACCESS_KEY_ID}")
-	private String key;
+	@Value("${AWS_ACCESS_KEY_ID}") private String key;
 
-	@Value("${AWS_SECRET_ACCESS_KEY}")
-	private String secret;
+	@Value("${AWS_SECRET_ACCESS_KEY}") private String secret;
 
-	@Value("${AWS_ACCESS_ENDPOINT}")
-	private String endpoint;
+	@Value("${AWS_ACCESS_ENDPOINT}") private String endpoint;
 
-	@Value("${AWS_ACCESS_REGION}")
-	private String region;
+	@Value("${AWS_ACCESS_REGION}") private String region;
 
 	@Bean
 	public AmazonS3 getAmazonS3() {
 		AwsClientBuilder.EndpointConfiguration endpointConfiguration = getAWSEndpointConfiguration();
 		AWSCredentialsProvider credentials = getAWSCredentialsProvider();
-		return AmazonS3ClientBuilder.standard()
-				.withEndpointConfiguration(endpointConfiguration)
-				.withCredentials(credentials)
-				.build();
+		return AmazonS3ClientBuilder.standard().withEndpointConfiguration(endpointConfiguration).withCredentials(credentials).build();
 	}
 
 	private AwsClientBuilder.EndpointConfiguration getAWSEndpointConfiguration() {

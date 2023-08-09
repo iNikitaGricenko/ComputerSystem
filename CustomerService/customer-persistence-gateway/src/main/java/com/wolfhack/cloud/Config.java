@@ -12,12 +12,12 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class Config {
 
-    private final CustomerRepository repository;
-    private final EntityCustomerMapper entityCustomerMapper;
+	private final CustomerRepository repository;
+	private final EntityCustomerMapper entityCustomerMapper;
 
-    @Bean
-    public InputCustomer inputCustomer() {
-        return new InputCustomerGateway(repository, entityCustomerMapper);
-    }
+	@Bean
+	public InputCustomer inputCustomer() {
+		return new InputCustomerGateway(repository, entityCustomerMapper);
+	}
 
 }

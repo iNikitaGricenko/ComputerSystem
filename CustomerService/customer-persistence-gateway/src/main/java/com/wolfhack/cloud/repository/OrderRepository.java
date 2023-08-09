@@ -13,11 +13,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<EntityCustomerOrder, Long> {
 
-    @Query(value = "SELECT e " +
-            "FROM customer_order e " +
-            "WHERE e.status = :status AND e.completed BETWEEN :from AND :to")
-    List<EntityCustomerOrder> findAllByStatusAndCompletedBetween(@Param("status") OrderStatus status,
-                                                            @Param("from") LocalDateTime from,
-                                                            @Param("to") LocalDateTime to);
+	@Query(value = "SELECT e " + "FROM customer_order e " + "WHERE e.status = :status AND e.completed BETWEEN :from AND :to")
+	List<EntityCustomerOrder> findAllByStatusAndCompletedBetween(@Param("status") OrderStatus status, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
 }

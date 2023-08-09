@@ -1,27 +1,32 @@
 package com.wolfhack.cloud.product.mapper;
 
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ssd;
-import com.wolfhack.cloud.product.model.search.SsdSearch;
 import com.wolfhack.cloud.product.model.dto.SsdFullDTO;
 import com.wolfhack.cloud.product.model.dto.SsdResponseDTO;
+import com.wolfhack.cloud.product.model.search.SsdSearch;
 import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface SsdMapper {
-	SsdResponseDTO toSsdResponseDTO(Ssd ssd);
+	SsdResponseDTO toSsdResponseDTO(Product<Ssd> ssd);
 
-	Ssd toSsd(SsdFullDTO dto);
+	@Mapping(source = ".", target = "item")
+	Product<Ssd> toSsd(SsdFullDTO dto);
 
-	List<SsdResponseDTO> toSsdResponseListDTO(List<Ssd> ssds);
+	List<SsdResponseDTO> toSsdResponseListDTO(List<Product<Ssd>> ssds);
 
-	List<Ssd> toSsdList(List<SsdFullDTO> dtos);
+	List<Product<Ssd>> toSsdList(List<SsdFullDTO> dtos);
 
-	Ssd toEntity(SsdSearch ssdSearch);
+	Product<Ssd> toEntity(SsdSearch ssdSearch);
 
-	SsdSearch toSearch(Ssd ssd);
+	SsdSearch toSearch(Product<Ssd> ssd);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	SsdSearch partialUpdate(@MappingTarget SsdSearch ssdSearch, Ssd ssd);
+	SsdSearch partialUpdate(@MappingTarget SsdSearch ssdSearch, Product<Ssd> ssd);
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	Product<Ssd> partialUpdate(@MappingTarget Product<Ssd> toUpdate, Product<Ssd> ssd);
 }

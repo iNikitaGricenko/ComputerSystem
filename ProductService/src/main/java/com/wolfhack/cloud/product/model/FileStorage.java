@@ -14,16 +14,12 @@ public class FileStorage {
 
 	private String key;
 
-	@JsonProperty("file_name")
-	private String name;
+	@JsonProperty("file_name") private String name;
 
-	@JsonProperty("file_size")
-	private double size;
+	@JsonProperty("file_size") private double size;
 
-	@JsonProperty("file_type")
-	private String type;
+	@JsonProperty("file_type") private String type;
 
-	@JsonProperty("file_url")
-	private String url;
+	@JsonProperty("file_url") private String url;
 
 }

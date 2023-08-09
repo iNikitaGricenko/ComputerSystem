@@ -1,6 +1,7 @@
 package com.wolfhack.cloud.product.service.implement;
 
 import com.wolfhack.cloud.product.model.Cpu;
+import com.wolfhack.cloud.product.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,17 +10,17 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CpuServiceInterface {
-    Page<Cpu> findAll(Pageable pageable);
+	Page<Product<Cpu>> findAll(Pageable pageable);
 
-    Long save(Cpu cpu);
+	Long save(Product<Cpu> cpu);
 
-    String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
+	String addPhoto(Long id, MultipartFile multipartFile) throws IOException;
 
-    Cpu findById(Long id);
+	Product<Cpu> findById(Long id);
 
-    List<Cpu> searchByTitle(String query, Pageable pageable);
+	List<Product<Cpu>> searchByTitle(String query, Pageable pageable);
 
-    void delete(long id);
+	void delete(long id);
 
-    long update(Cpu cpu);
+	long update(long id, Product<Cpu> cpu);
 }

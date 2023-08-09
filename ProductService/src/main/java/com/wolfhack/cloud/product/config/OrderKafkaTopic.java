@@ -14,19 +14,17 @@ import java.util.Map;
 @Configuration
 public class OrderKafkaTopic {
 
-    @Value(value = "${spring.kafka.bootstrap-servers}")
-    private String bootstrapAddress;
+	@Value(value = "${spring.kafka.bootstrap-servers}") private String bootstrapAddress;
 
-    @Bean
-    public KafkaAdmin kafkaAdmin() {
-        Map<String, Object> configs = new HashMap<>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        return new KafkaAdmin(configs);
-    }
+	@Bean
+	public KafkaAdmin kafkaAdmin() {
+		Map<String, Object> configs = new HashMap<>();
+		configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+		return new KafkaAdmin(configs);
+	}
 
-    @Bean
-    public NewTopic orderTopic() {
-        return TopicBuilder.name("order")
-                .build();
-    }
+	@Bean
+	public NewTopic orderTopic() {
+		return TopicBuilder.name("order").build();
+	}
 }

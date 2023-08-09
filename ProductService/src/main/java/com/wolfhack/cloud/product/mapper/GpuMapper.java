@@ -1,27 +1,32 @@
 package com.wolfhack.cloud.product.mapper;
 
 import com.wolfhack.cloud.product.model.Gpu;
-import com.wolfhack.cloud.product.model.search.GpuSearch;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.dto.GpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.GpuResponseDTO;
+import com.wolfhack.cloud.product.model.search.GpuSearch;
 import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface GpuMapper {
-	GpuResponseDTO toGpuResponseDTO(Gpu Cpu);
+	GpuResponseDTO toGpuResponseDTO(Product<Gpu> Cpu);
 
-	Gpu toGpu(GpuFullDTO dto);
+	@Mapping(source = ".", target = "item")
+	Product<Gpu> toGpu(GpuFullDTO dto);
 
-	List<GpuResponseDTO> toGpuResponseListDTO(List<Gpu> cpus);
+	List<GpuResponseDTO> toGpuResponseListDTO(List<Product<Gpu>> cpus);
 
-	List<Gpu> toGpuList(List<GpuFullDTO> dtos);
+	List<Product<Gpu>> toGpuList(List<GpuFullDTO> dtos);
 
-	Gpu toEntity(GpuSearch gpuSearch);
+	Product<Gpu> toEntity(GpuSearch gpuSearch);
 
-	GpuSearch toSearch(Gpu gpu);
+	GpuSearch toSearch(Product<Gpu> gpu);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	GpuSearch partialUpdate(@MappingTarget GpuSearch gpuSearch, Gpu gpu);
+	GpuSearch partialUpdate(@MappingTarget GpuSearch gpuSearch, Product<Gpu> gpu);
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	Product<Gpu> partialUpdate(@MappingTarget Product<Gpu> toUpdate, Product<Gpu> gpu);
 }

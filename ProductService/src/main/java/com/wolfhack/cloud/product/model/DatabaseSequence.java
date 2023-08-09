@@ -9,12 +9,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "database_sequences")
 public class DatabaseSequence {
 
-    @Transient
-    public static final String SEQUENCE_NAME = "products_sequence";
+	@Transient public static final String SEQUENCE_NAME = "products_sequence";
 
-    @Id
-    private String id;
+	@Id private String id;
 
-    private Long sequence;
+	private Long sequence;
 
 }

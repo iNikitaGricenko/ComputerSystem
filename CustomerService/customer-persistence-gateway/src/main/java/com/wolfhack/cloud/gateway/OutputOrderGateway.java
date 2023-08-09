@@ -20,23 +20,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OutputOrderGateway implements OutputCustomerOrder {
 
-    private final OrderRepository orderRepository;
-    private final EntityCustomerOrderMapper orderMapper;
+	private final OrderRepository orderRepository;
+	private final EntityCustomerOrderMapper orderMapper;
 
-    @Override
-    public Optional<CustomerOrder> get(Long id) {
-        return orderRepository.findById(id).map(orderMapper::toBusinessFromEntity);
-    }
+	@Override
+	public Optional<CustomerOrder> get(Long id) {
+		return orderRepository.findById(id).map(orderMapper::toBusinessFromEntity);
+	}
 
-    @Override
-    public List<CustomerOrder> getAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to) {
-        List<EntityCustomerOrder> allByStatusAndCompletedBetween = orderRepository.findAllByStatusAndCompletedBetween(status, from, to);
-        return allByStatusAndCompletedBetween.stream()
-                .map(orderMapper::toBusinessFromEntity).collect(Collectors.toList());
-    }
+	@Override
+	public List<CustomerOrder> getAllByStatusAndCompletedBetween(OrderStatus status, LocalDateTime from, LocalDateTime to) {
+		List<EntityCustomerOrder> allByStatusAndCompletedBetween = orderRepository.findAllByStatusAndCompletedBetween(status, from, to);
+		return allByStatusAndCompletedBetween.stream().map(orderMapper::toBusinessFromEntity).collect(Collectors.toList());
+	}
 
-    @Override
-    public Page<CustomerOrder> getAll(Pageable pageable) {
-        return orderRepository.findAll(pageable).map(orderMapper::toBusinessFromEntity);
-    }
+	@Override
+	public Page<CustomerOrder> getAll(Pageable pageable) {
+		return orderRepository.findAll(pageable).map(orderMapper::toBusinessFromEntity);
+	}
 }

@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.CpuNotFoundException;
 import com.wolfhack.cloud.product.mapper.CpuMapper;
 import com.wolfhack.cloud.product.model.Cpu;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.search.CpuSearch;
 import com.wolfhack.cloud.product.repository.search.CpuSearchRepository;
 import com.wolfhack.cloud.product.service.search.implement.CpuSearchServiceInterface;
@@ -34,26 +35,19 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Cpu cpu) {
+	public long save(Product<Cpu> cpu) {
 		CpuSearch searchModel = cpuMapper.toSearchModel(cpu);
 		return cpuSearchRepository.save(searchModel).getId();
 	}
 
 	@Override
-	public Page<Cpu> findByProductLine(String productLine, Pageable pageable) {
+	public Page<Product<Cpu>> findByProductLine(String productLine, Pageable pageable) {
 		return cpuSearchRepository.findByProductLine(productLine, pageable).map(cpuMapper::toEntity);
 	}
 
 	@Override
-	public List<Cpu> findByTitle(String line, Pageable pageable) {
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.field("productLine")
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+	public List<Product<Cpu>> findByTitle(String line, Pageable pageable) {
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line).field("name").field("model").field("title").field("productLine").type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
 
@@ -62,35 +56,22 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 
 	@AopLog
 	@Override
-	public List<Cpu> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Cpu.class.getFields())
-				.filter(field -> field.getType().isInstance(String.class))
-				.map(Field::getName)
-				.toArray(String[]::new);
+	public List<Product<Cpu>> findByAllTextFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Cpu.class.getFields()).filter(field -> field.getType().isInstance(String.class)).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
 
 		return cpus.map(SearchHit::getContent).map(cpuMapper::toEntity).toList();
 	}
-	
+
 	@AopLog
 	@Override
-	public List<Cpu> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Cpu.class.getFields())
-				.map(Field::getName)
-				.toArray(String[]::new);
+	public List<Product<Cpu>> findByAllFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Cpu.class.getFields()).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<CpuSearch> cpus = elasticsearchOperations.search(searchQuery, CpuSearch.class, IndexCoordinates.of("product-cpu"));
 
@@ -98,8 +79,8 @@ public class CpuSearchService implements CpuSearchServiceInterface {
 	}
 
 	@Override
-	public long update(Cpu cpu) {
-		CpuSearch cpuSearch = cpuSearchRepository.findById(cpu.getId()).orElseThrow(CpuNotFoundException::new);
+	public long update(Product<Cpu> cpu, long id) {
+		CpuSearch cpuSearch = cpuSearchRepository.findById(id).orElseThrow(CpuNotFoundException::new);
 
 		cpuMapper.partialUpdate(cpuSearch, cpu);
 

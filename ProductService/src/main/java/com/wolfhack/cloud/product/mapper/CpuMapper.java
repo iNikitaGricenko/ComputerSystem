@@ -1,30 +1,32 @@
 package com.wolfhack.cloud.product.mapper;
 
 import com.wolfhack.cloud.product.model.Cpu;
-import com.wolfhack.cloud.product.model.search.CpuSearch;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.dto.CpuFullDTO;
 import com.wolfhack.cloud.product.model.dto.CpuResponseDTO;
+import com.wolfhack.cloud.product.model.search.CpuSearch;
 import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface CpuMapper {
-    CpuResponseDTO toCpuResponseDTO(Cpu cpu);
+	CpuResponseDTO toCpuResponseDTO(Product<Cpu> cpu);
 
-    Cpu toCpu(CpuFullDTO dto);
+	@Mapping(source = ".", target = "item")
+	Product<Cpu> toCpu(CpuFullDTO dto);
 
-    List<CpuResponseDTO> toCpuResponseListDTO(List<Cpu> cpus);
+	List<CpuResponseDTO> toCpuResponseListDTO(List<Product<Cpu>> cpus);
 
-    List<Cpu> toCpuList(List<CpuFullDTO> dtos);
+	List<Product<Cpu>> toCpuList(List<CpuFullDTO> dtos);
 
-    Cpu toEntity(CpuSearch cpuSearch);
+	Product<Cpu> toEntity(CpuSearch cpuSearch);
 
-    CpuSearch toSearchModel(Cpu cpu);
+	CpuSearch toSearchModel(Product<Cpu> cpu);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    CpuSearch partialUpdate(@MappingTarget CpuSearch toBeUpdated,  Cpu cpu);
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	CpuSearch partialUpdate(@MappingTarget CpuSearch toBeUpdated, Product<Cpu> cpu);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Cpu partialUpdate(@MappingTarget Cpu toBeUpdated,  Cpu cpu);
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	Product<Cpu> partialUpdate(@MappingTarget Product<Cpu> toBeUpdated, Product<Cpu> cpu);
 }

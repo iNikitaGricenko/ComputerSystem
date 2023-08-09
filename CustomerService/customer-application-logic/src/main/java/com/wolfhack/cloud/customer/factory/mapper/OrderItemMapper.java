@@ -8,11 +8,11 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface OrderItemMapper {
-    OrderItem toProductFromRequest(OrderItemRequestDTO orderItemRequestDTO);
+	OrderItem toProductFromRequest(OrderItemRequestDTO orderItemRequestDTO);
 
-    OrderItemRequestDTO toRequestDTO(OrderItem orderItem);
+	OrderItemRequestDTO toRequestDTO(OrderItem orderItem);
 
-    OrderItem toProductFromResponse(OrderItemResponseDTO orderResponseDTO);
+	OrderItem toProductFromResponse(OrderItemResponseDTO orderResponseDTO);
 
-    OrderItemResponseDTO toResponseDTO(OrderItem order);
+	OrderItemResponseDTO toResponseDTO(OrderItem order);
 }

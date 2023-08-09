@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.MotherboardNotFoundException;
 import com.wolfhack.cloud.product.mapper.MotherboardMapper;
 import com.wolfhack.cloud.product.model.Motherboard;
+import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.search.MotherboardSearch;
 import com.wolfhack.cloud.product.repository.search.MotherboardSearchRepository;
 import com.wolfhack.cloud.product.service.search.implement.MotherboardSearchServiceInterface;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -34,21 +34,27 @@ public class MotherboardSearchService implements MotherboardSearchServiceInterfa
 	private final ElasticsearchOperations elasticsearchOperations;
 
 	@Override
-	public long save(Motherboard motherboard) {
+	public long save(Product<Motherboard> motherboard) {
 		MotherboardSearch searchModel = motherboardMapper.toSearch(motherboard);
 		return motherboardSearchRepository.save(searchModel).getId();
 	}
 
 	@Override
-	public List<Motherboard> findByTitle(String line, Pageable pageable) {
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line)
-						.field("name")
-						.field("model")
-						.field("type")
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+	public List<Product<Motherboard>> findByTitle(String line, Pageable pageable) {
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line).field("name").field("model").field("type").field("title").type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
+
+		IndexCoordinates index = IndexCoordinates.of("product-motherboard");
+		SearchHits<MotherboardSearch> motherboards = elasticsearchOperations.search(searchQuery, MotherboardSearch.class, index);
+
+		return motherboards.map(SearchHit::getContent).map(motherboardMapper::toEntity).toList();
+	}
+
+	@AopLog
+	@Override
+	public List<Product<Motherboard>> findByAllTextFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Motherboard.class.getFields()).filter(field -> field.getType().isInstance(String.class)).map(Field::getName).toArray(String[]::new);
+
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<MotherboardSearch> motherboards = elasticsearchOperations.search(searchQuery, MotherboardSearch.class, IndexCoordinates.of("product-motherboard"));
 
@@ -57,35 +63,10 @@ public class MotherboardSearchService implements MotherboardSearchServiceInterfa
 
 	@AopLog
 	@Override
-	public List<Motherboard> findByAllTextFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Motherboard.class.getFields())
-				.filter(field -> field.getType().isInstance(String.class))
-				.map(Field::getName)
-				.toArray(String[]::new);
+	public List<Product<Motherboard>> findByAllFields(String line, Pageable pageable) {
+		String[] fields = Arrays.stream(Motherboard.class.getFields()).map(Field::getName).toArray(String[]::new);
 
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
-
-		SearchHits<MotherboardSearch> motherboards = elasticsearchOperations.search(searchQuery, MotherboardSearch.class, IndexCoordinates.of("product-motherboard"));
-
-		return motherboards.map(SearchHit::getContent).map(motherboardMapper::toEntity).toList();
-	}
-	
-	@AopLog
-	@Override
-	public List<Motherboard> findByAllFields(String line, Pageable pageable) {
-		String[] fields = Arrays.stream(Motherboard.class.getFields())
-				.map(Field::getName)
-				.toArray(String[]::new);
-
-		Query searchQuery = new NativeSearchQueryBuilder()
-				.withQuery(QueryBuilders.multiMatchQuery(line, fields)
-						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-						.fuzziness(Fuzziness.ONE)
-						.prefixLength(3)).build();
+		Query searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(line, fields).type(MultiMatchQueryBuilder.Type.BEST_FIELDS).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
 		SearchHits<MotherboardSearch> motherboards = elasticsearchOperations.search(searchQuery, MotherboardSearch.class, IndexCoordinates.of("product-motherboard"));
 
@@ -93,8 +74,8 @@ public class MotherboardSearchService implements MotherboardSearchServiceInterfa
 	}
 
 	@Override
-	public long update(Motherboard motherboard) {
-		MotherboardSearch motherboardSearch = motherboardSearchRepository.findById(motherboard.getId()).orElseThrow(MotherboardNotFoundException::new);
+	public long update(Product<Motherboard> motherboard, long id) {
+		MotherboardSearch motherboardSearch = motherboardSearchRepository.findById(id).orElseThrow(MotherboardNotFoundException::new);
 
 		motherboardMapper.partialUpdate(motherboardSearch, motherboard);
 

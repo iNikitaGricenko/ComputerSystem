@@ -15,14 +15,12 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @ComponentScan(basePackages = {"com.wolfhack.cloud.product.service.search"})
 public class ElasticConfig extends AbstractElasticsearchConfiguration {
 
-	@Value("${elasticsearch-host-port}")
-	private String elasticHostPort;
+	@Value("${elasticsearch-host-port}") private String elasticHostPort;
 
 	@Bean
 	@Override
 	public RestHighLevelClient elasticsearchClient() {
-		ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-				.connectedTo(elasticHostPort).build();
+		ClientConfiguration clientConfiguration = ClientConfiguration.builder().connectedTo(elasticHostPort).build();
 
 		return RestClients.create(clientConfiguration).rest();
 	}

@@ -3,16 +3,16 @@ package fake;
 import com.wolfhack.cloud.customer.model.AnalyticsResponse;
 import com.wolfhack.cloud.customer.model.AnalyticsSearch;
 import com.wolfhack.cloud.customer.model.CustomerOrder;
-import com.wolfhack.cloud.customer.model.OrderItem;
 import com.wolfhack.cloud.customer.model.enums.OrderStatus;
 import com.wolfhack.cloud.customer.service.IOrderService;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FakeOrderService implements IOrderService {
 

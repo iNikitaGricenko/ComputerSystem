@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class MotherboardNotFoundException extends NotFoundException {
 
-    public MotherboardNotFoundException() {
-        super("Motherboard not found");
-    }
+	public MotherboardNotFoundException() {
+		super("Motherboard not found");
+	}
 
 }

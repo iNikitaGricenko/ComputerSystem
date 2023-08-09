@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class SsdNotFoundException extends NotFoundException {
 
-    public SsdNotFoundException() {
-        super("Ssd not found");
-    }
+	public SsdNotFoundException() {
+		super("Ssd not found");
+	}
 
 }

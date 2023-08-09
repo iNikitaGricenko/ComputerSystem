@@ -8,8 +8,8 @@ import java.util.concurrent.ExecutionException;
 
 public interface IOrderFactory {
 
-    AnalyticsResponse create(List<CustomerOrder> customerOrders) throws ExecutionException, InterruptedException;
+	AnalyticsResponse create(List<CustomerOrder> customerOrders) throws ExecutionException, InterruptedException;
 
-    CustomerOrder edit(CustomerOrder customerOrder, CustomerOrder editor);
+	CustomerOrder edit(CustomerOrder customerOrder, CustomerOrder editor);
 
 }

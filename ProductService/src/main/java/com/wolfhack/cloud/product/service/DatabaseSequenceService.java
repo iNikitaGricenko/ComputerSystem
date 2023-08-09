@@ -16,13 +16,11 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @RequiredArgsConstructor
 public class DatabaseSequenceService {
 
-    private final MongoOperations mongoOperations;
+	private final MongoOperations mongoOperations;
 
-    public long generateSequence(String seqName) {
-        DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
-                new Update().inc("sequence",1), options().returnNew(true).upsert(true),
-                DatabaseSequence.class);
-        return !Objects.isNull(counter) ? counter.getSequence() : 1;
-    }
+	public long generateSequence(String seqName) {
+		DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)), new Update().inc("sequence", 1), options().returnNew(true).upsert(true), DatabaseSequence.class);
+		return !Objects.isNull(counter) ? counter.getSequence() : 1;
+	}
 
 }
