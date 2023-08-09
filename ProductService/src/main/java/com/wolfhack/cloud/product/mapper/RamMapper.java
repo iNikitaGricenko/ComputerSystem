@@ -22,6 +22,7 @@ public interface RamMapper {
 
 	Product<Ram> toEntity(RamSearch ramSearch);
 
+	@Mapping(source = "item", target = ".")
 	RamSearch toSearch(Product<Ram> ram);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

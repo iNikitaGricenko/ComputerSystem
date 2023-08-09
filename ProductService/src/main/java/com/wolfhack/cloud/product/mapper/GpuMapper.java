@@ -22,6 +22,7 @@ public interface GpuMapper {
 
 	Product<Gpu> toEntity(GpuSearch gpuSearch);
 
+	@Mapping(source = "item", target = ".")
 	GpuSearch toSearch(Product<Gpu> gpu);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

@@ -22,6 +22,7 @@ public interface MotherboardMapper {
 
 	Product<Motherboard> toEntity(MotherboardSearch motherboardSearch);
 
+	@Mapping(source = "item", target = ".")
 	MotherboardSearch toSearch(Product<Motherboard> motherboards);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
