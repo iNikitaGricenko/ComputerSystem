@@ -5,6 +5,7 @@ import com.wolfhack.cloud.product.exception.CpuNotFoundException;
 import com.wolfhack.cloud.product.mapper.CpuMapper;
 import com.wolfhack.cloud.product.model.Cpu;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
+import com.wolfhack.cloud.product.model.FileStorage;
 import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.repository.CpuRepository;
 import com.wolfhack.cloud.product.service.implement.CpuServiceInterface;
@@ -60,7 +61,9 @@ public class CpuService extends AbstractMongoEventListener<Product<Cpu>> impleme
 	@Override
 	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
 		Product<Cpu> cpu = cpuRepository.findById(id).orElseThrow(CpuNotFoundException::new);
-		return storageService.saveFileAndThen(multipartFile, cpu.getPhotos(), () -> update(id, cpu));
+		FileStorage fileStorage = storageService.saveFileAndThen(multipartFile, cpu.getPhotos(), () -> update(id, cpu));
+		cpu.getPhotos().add(fileStorage);
+		return fileStorage.getUrl();
 	}
 
 	@AopLog

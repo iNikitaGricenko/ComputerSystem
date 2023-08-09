@@ -65,14 +65,14 @@ public class StorageService implements AmazonStorageServiceInterface {
 		amazonS3Client.deleteObject(bucket, key);
 	}
 
-	public String saveFileAndThen(MultipartFile multipartFile, List<FileStorage> storageList, Runnable then) throws IOException {
+	public FileStorage saveFileAndThen(MultipartFile multipartFile, List<FileStorage> storageList, Runnable then) throws IOException {
 		String fileId = upload(multipartFile);
 		FileStorage fileStorage = fileDataStorage.get(fileId);
 
 		Optional.ofNullable(storageList).filter(Predicate.not(List::isEmpty)).ifPresent(storages -> storages.add(fileStorage));
 		then.run();
 
-		return fileStorage.getUrl();
+		return fileStorage;
 	}
 
 	private PutObjectRequest convertFileToPutRequest(MultipartFile file) throws IOException {

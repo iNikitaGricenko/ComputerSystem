@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.RamNotFoundException;
 import com.wolfhack.cloud.product.mapper.RamMapper;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
+import com.wolfhack.cloud.product.model.FileStorage;
 import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ram;
 import com.wolfhack.cloud.product.repository.RamRepository;
@@ -60,7 +61,9 @@ public class RamService extends AbstractMongoEventListener<Product<Ram>> impleme
 	@Override
 	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
 		Product<Ram> ram = ramRepository.findById(id).orElseThrow(RamNotFoundException::new);
-		return storageService.saveFileAndThen(multipartFile, ram.getPhotos(), () -> update(id, ram));
+		FileStorage fileStorage = storageService.saveFileAndThen(multipartFile, ram.getPhotos(), () -> update(id, ram));
+		ram.getPhotos().add(fileStorage);
+		return fileStorage.getUrl();
 	}
 
 	@AopLog

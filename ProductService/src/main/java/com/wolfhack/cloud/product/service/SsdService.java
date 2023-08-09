@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.SsdNotFoundException;
 import com.wolfhack.cloud.product.mapper.SsdMapper;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
+import com.wolfhack.cloud.product.model.FileStorage;
 import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.model.Ssd;
 import com.wolfhack.cloud.product.repository.SsdRepository;
@@ -60,7 +61,9 @@ public class SsdService extends AbstractMongoEventListener<Product<Ssd>> impleme
 	@Override
 	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
 		Product<Ssd> ssd = ssdRepository.findById(id).orElseThrow(SsdNotFoundException::new);
-		return storageService.saveFileAndThen(multipartFile, ssd.getPhotos(), () -> update(id, ssd));
+		FileStorage fileStorage = storageService.saveFileAndThen(multipartFile, ssd.getPhotos(), () -> update(id, ssd));
+		ssd.getPhotos().add(fileStorage);
+		return fileStorage.getUrl();
 	}
 
 	@AopLog

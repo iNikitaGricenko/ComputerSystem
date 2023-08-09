@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.GpuNotFoundException;
 import com.wolfhack.cloud.product.mapper.GpuMapper;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
+import com.wolfhack.cloud.product.model.FileStorage;
 import com.wolfhack.cloud.product.model.Gpu;
 import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.repository.GpuRepository;
@@ -60,7 +61,9 @@ public class GpuService extends AbstractMongoEventListener<Product<Gpu>> impleme
 	@Override
 	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
 		Product<Gpu> gpu = gpuRepository.findById(id).orElseThrow(GpuNotFoundException::new);
-		return storageService.saveFileAndThen(multipartFile, gpu.getPhotos(), () -> update(id, gpu));
+		FileStorage fileStorage = storageService.saveFileAndThen(multipartFile, gpu.getPhotos(), () -> update(id, gpu));
+		gpu.getPhotos().add(fileStorage);
+		return fileStorage.getUrl();
 	}
 
 	@AopLog

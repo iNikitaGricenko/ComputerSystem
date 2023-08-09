@@ -25,44 +25,39 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/order")
-@Tag(name = "Order API")
 @RequiredArgsConstructor
-public class OrderRestController {
+public class OrderRestController implements OrderEndpoint {
 
 	private final IOrderCreator orderCreator;
 	private final IOrderService orderService;
 
+	@Override
 	@GetMapping
-	@PageableAsQueryParam
 	public Page<CustomerOrderResponseDTO> getAll(Pageable pageable) {
 		return new RestPage<>(orderService.findAll(pageable).map(orderCreator::toResponse));
 	}
 
+	@Override
 	@GetMapping("/{id}")
-	@ApiResponses({
-			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CustomerOrderResponseDTO.class))), @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-	})
 	public CustomerOrderResponseDTO getOne(@PathVariable("id") Long id) {
 		return orderCreator.toResponse(orderService.findById(id));
 	}
 
+	@Override
 	@GetMapping("/analytics")
-	@ApiResponses({
-			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AnalyticsResponse.class))), @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorBody.class)))
-	})
 	public AnalyticsResponse getAnalytics(@ModelAttribute @Valid AnalyticsSearch analyticsSearchDTO) {
 		return orderService.getAnalytics(analyticsSearchDTO);
 	}
 
+	@Override
 	@PostMapping
-	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CustomerOrderResponseDTO.class)))
 	public CustomerOrderResponseDTO add(@Valid @RequestBody CustomerOrderRequestDTO requestDTO) {
 		CustomerOrder customerOrder = orderCreator.toOrder(requestDTO);
 		return orderCreator.toResponse(orderService.save(customerOrder));
 	}
 
+	@Override
 	@PutMapping("/{id}")
-	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CustomerOrderResponseDTO.class)))
 	public CustomerOrderResponseDTO update(@PathVariable Long id, @RequestParam("status") OrderStatus status) {
 		return orderCreator.toResponse(orderService.changeStatus(id, status));
 	}

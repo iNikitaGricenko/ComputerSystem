@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,6 +30,6 @@ public class Product<T> {
 
 	private T item;
 
-	private List<FileStorage> photos;
+	private List<FileStorage> photos = new ArrayList<>();
 
 }

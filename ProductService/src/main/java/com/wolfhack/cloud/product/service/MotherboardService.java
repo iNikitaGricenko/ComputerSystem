@@ -4,6 +4,7 @@ import com.wolfhack.cloud.product.annotations.AopLog;
 import com.wolfhack.cloud.product.exception.MotherboardNotFoundException;
 import com.wolfhack.cloud.product.mapper.MotherboardMapper;
 import com.wolfhack.cloud.product.model.DatabaseSequence;
+import com.wolfhack.cloud.product.model.FileStorage;
 import com.wolfhack.cloud.product.model.Motherboard;
 import com.wolfhack.cloud.product.model.Product;
 import com.wolfhack.cloud.product.repository.MotherboardRepository;
@@ -67,7 +68,9 @@ public class MotherboardService extends AbstractMongoEventListener<Product<Mothe
 	@Override
 	public String addPhoto(Long id, MultipartFile multipartFile) throws IOException {
 		Product<Motherboard> motherboard = motherboardRepository.findById(id).orElseThrow(MotherboardNotFoundException::new);
-		return storageService.saveFileAndThen(multipartFile, motherboard.getPhotos(), () -> update(id, motherboard));
+		FileStorage fileStorage = storageService.saveFileAndThen(multipartFile, motherboard.getPhotos(), () -> update(id, motherboard));
+		motherboard.getPhotos().add(fileStorage);
+		return fileStorage.getUrl();
 	}
 
 	@AopLog
