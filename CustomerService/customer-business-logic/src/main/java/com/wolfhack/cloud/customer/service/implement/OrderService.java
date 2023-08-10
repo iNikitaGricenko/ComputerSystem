@@ -41,13 +41,18 @@ public class OrderService implements IOrderService {
 		customerOrder.setChargeId(chargeId);
 		productService.reduceProductInStorage(customerOrder.getOrderItems());
 
-		sendToKafka(customerOrder);
+		sendCreationNotification(customerOrder);
 		return inputCustomerOrder.persist(customerOrder);
 	}
 
 	@Override
 	public CustomerOrder changeStatus(Long id, OrderStatus status) {
-		CustomerOrder customerOrder = outputCustomerOrder.get(id).map(order -> IOrderFactory.edit(order, CustomerOrder.builder().status(status).completed(order.isFinalDeal() ? LocalDateTime.now() : null).build())).orElseThrow(CustomerOrderNotFoundException::new);
+		CustomerOrder customerOrder = outputCustomerOrder.get(id)
+				.map(order -> IOrderFactory.edit(order, CustomerOrder.builder()
+						.status(status)
+						.completed(order.isFinalDeal() ? LocalDateTime.now() : null)
+						.build()))
+				.orElseThrow(CustomerOrderNotFoundException::new);
 		return inputCustomerOrder.persist(customerOrder);
 	}
 
@@ -74,7 +79,7 @@ public class OrderService implements IOrderService {
 		}
 	}
 
-	private void sendToKafka(CustomerOrder customerOrder) {
+	private void sendCreationNotification(CustomerOrder customerOrder) {
 		customerOrder.getOrderItems().forEach(notificationSender::send);
 	}
 }

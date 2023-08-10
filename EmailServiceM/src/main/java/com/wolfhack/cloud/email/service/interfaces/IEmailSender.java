@@ -4,10 +4,8 @@ import reactor.core.publisher.Mono;
 
 public interface IEmailSender<T> {
 
-	default Mono<Void> send(Mono<T> object, String subject, String template) {
-		return Mono.empty();
-	}
+	default void send(T object, String subject, String template) { }
 
-	Mono<Void> send(Mono<T> object, String subject);
+	void send(T object, String subject);
 
 }

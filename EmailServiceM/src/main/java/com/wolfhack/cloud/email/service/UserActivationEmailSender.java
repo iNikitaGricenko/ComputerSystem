@@ -22,8 +22,7 @@ public class UserActivationEmailSender implements IEmailSender<User> {
 	private static final String EMAIL_TEMPLATE = "activation_mail";
 
 	@Override
-	public Mono<Void> send(Mono<User> object, String subject) {
-		return object.<MimeMessage>handle((user, sink) -> {
+	public void send(User user, String subject) {
 			Context context = new Context();
 			context.setVariable("activationCode", user.getActivationCode());
 			context.setVariable("website", "localhost:8080/");
@@ -37,10 +36,9 @@ public class UserActivationEmailSender implements IEmailSender<User> {
 				helper.setSubject(subject);
 				helper.setText(process, true);
 
-				sink.next(helper.getMimeMessage());
+				mailSender.send(helper.getMimeMessage());
 			} catch (MessagingException e) {
-				sink.error(new RuntimeException("Could not send email"));
+				throw new RuntimeException("Could not send email");
 			}
-		}).doOnNext(mailSender::send).then();
 	}
 }
