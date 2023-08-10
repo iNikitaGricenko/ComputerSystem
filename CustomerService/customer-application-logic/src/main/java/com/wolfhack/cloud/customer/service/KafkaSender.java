@@ -1,6 +1,7 @@
 package com.wolfhack.cloud.customer.service;
 
 import com.wolfhack.cloud.customer.adapter.NotificationSender;
+import com.wolfhack.cloud.customer.dto.MessagePOJO;
 import com.wolfhack.cloud.customer.model.OrderItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -14,14 +15,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 class KafkaSender implements NotificationSender {
 
-	private final static String ORDER_TOPIC = "order";
+	private final static String ORDER_TOPIC = "single-message";
 	private final KafkaTemplate<String, OrderItem> kafkaTemplate;
 
 	@Override
 	@Async
 	public void send(OrderItem customerOrder) {
-		Message<OrderItem> message = MessageBuilder.withPayload(customerOrder).setHeader(KafkaHeaders.TOPIC, ORDER_TOPIC).build();
+		String itemMessage = getOrderItemMessage(customerOrder);
+		MessagePOJO messageBody = new MessagePOJO(itemMessage, "new-order");
+		Message<MessagePOJO> message = MessageBuilder.withPayload(messageBody).setHeader(KafkaHeaders.TOPIC, ORDER_TOPIC).build();
 		kafkaTemplate.send(message);
+	}
+
+	private String getOrderItemMessage(OrderItem orderItem) {
+		return "New Order for %s \nPrice per item %s \nQuantity %s".formatted(orderItem.getName(), orderItem.getUnitPrice(), orderItem.getQuantity());
 	}
 
 }
