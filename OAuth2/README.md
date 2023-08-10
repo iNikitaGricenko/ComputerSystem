@@ -4,6 +4,13 @@ Microservice that provides OpenAuthentication 2 scopes and authorization
 ![build](https://img.shields.io/github/actions/workflow/status/iNikitaGricenko/ComputerSystem/build.yml?style=for-the-badge/badge.svg)
 <br>
 
+# Sub Modules
+* ![Web Adapter](oauth2-adapter-web)
+* ![Application Logic Provider](oauth2-application-logic)
+* ![Main logic (Bussiness Logic)](oauth2-bussiness-logic)
+* ![Database Adapter](oauth2-persistence-gateway)
+* ![Server Main Class](oauth2-server)
+
 # Technologies
 
 ## Architecture
