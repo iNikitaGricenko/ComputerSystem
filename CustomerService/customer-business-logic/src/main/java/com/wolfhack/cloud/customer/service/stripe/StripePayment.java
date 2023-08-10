@@ -3,6 +3,7 @@ package com.wolfhack.cloud.customer.service.stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.wolfhack.cloud.customer.adapter.PaymentAdapter;
+import com.wolfhack.cloud.customer.client.EmailSenderClient;
 import com.wolfhack.cloud.customer.model.Customer;
 import com.wolfhack.cloud.customer.model.CustomerOrder;
 import com.wolfhack.cloud.customer.service.ICustomerService;
@@ -24,21 +25,28 @@ public class StripePayment implements PaymentAdapter {
 	private final ICustomerService customerService;
 	private final StripeCustomerService stripeCustomerService;
 	private final StripeCardService stripeCardService;
+	private final EmailSenderClient emailSenderClient;
 
 	@Override
 	public String pay(CustomerOrder order) {
-		Customer entityCustomer = Optional.ofNullable(order.getCustomer().getId()).map(customerService::findById).orElseGet(() -> customerService.findByEmail(order.getCustomer().getEmail()));
+		Customer entityCustomer = Optional.ofNullable(order.getCustomer().getId())
+				.map(customerService::findById)
+				.orElseGet(() -> customerService.findByEmail(order.getCustomer().getEmail()));
+
+		String email = entityCustomer.getEmail();
+
 		String customerReference = entityCustomer.getStripeReference();
 
 		try {
 			order.setCustomer(entityCustomer);
 			createPayment(order, entityCustomer, customerReference);
 
-			return Charge.create(stripeUtils.exctractChargeCreateParams(order, customerReference)).getId();
-		} catch (StripeException e) {
-			String email = entityCustomer.getEmail();
-			// TODO send failed email to user
-			throw new RuntimeException(e);
+			String id = Charge.create(stripeUtils.exctractChargeCreateParams(order, customerReference)).getId();
+			emailSenderClient.sendSuccessEmail(order.getOrderItems(), email);
+			return id;
+		} catch (StripeException exception) {
+			emailSenderClient.sendFailedEmail(order.getOrderItems(), email);
+			throw new RuntimeException(exception);
 		}
 	}
 

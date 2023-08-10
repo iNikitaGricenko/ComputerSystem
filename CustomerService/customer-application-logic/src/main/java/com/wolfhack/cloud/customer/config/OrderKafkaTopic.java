@@ -14,7 +14,8 @@ import java.util.Map;
 @Configuration
 public class OrderKafkaTopic {
 
-	@Value(value = "${spring.kafka.bootstrap-servers}") private String bootstrapAddress;
+	@Value(value = "${spring.kafka.bootstrap-servers}")
+	private String bootstrapAddress;
 
 	@Bean
 	public KafkaAdmin kafkaAdmin() {
@@ -25,6 +26,6 @@ public class OrderKafkaTopic {
 
 	@Bean
 	public NewTopic orderTopic() {
-		return TopicBuilder.name("order").build();
+		return TopicBuilder.name("single-message").build();
 	}
 }

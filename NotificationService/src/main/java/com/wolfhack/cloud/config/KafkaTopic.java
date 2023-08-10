@@ -1,4 +1,4 @@
-package com.wolfhack.cloud.product.config;
+package com.wolfhack.cloud.config;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class OrderKafkaTopic {
+public class KafkaTopic {
 
 	@Value(value = "${spring.kafka.bootstrap-servers}") private String bootstrapAddress;
 
@@ -24,7 +24,17 @@ public class OrderKafkaTopic {
 	}
 
 	@Bean
-	public NewTopic orderTopic() {
-		return TopicBuilder.name("order").build();
+	public NewTopic multicastMessageTopic() {
+		return TopicBuilder.name("multiple-message").build();
+	}
+
+	@Bean
+	public NewTopic subscriptionTopic() {
+		return TopicBuilder.name("subscribe").build();
+	}
+
+	@Bean
+	public NewTopic topicMessageTopic() {
+		return TopicBuilder.name("single-message").build();
 	}
 }
