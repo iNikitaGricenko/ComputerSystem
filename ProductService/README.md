@@ -1,5 +1,5 @@
-# ComputerSystem ``Portfolio project``
-Microservices for e-commerce computer components store
+# Product Service
+Microservice for products store
 
 ![build](https://img.shields.io/github/actions/workflow/status/iNikitaGricenko/ComputerSystem/build.yml?style=for-the-badge/badge.svg)
 <br>
@@ -13,30 +13,21 @@ Microservices for e-commerce computer components store
 * Spring Boot
 * Spring Web
 * Spring Cloud
-* Discovery Server (Netflix Eureka)
-* Gateway Server
-* OAuth2 Authorization Server
-* OAuth2 Resource Server
 * Spring Validation
-* Spring Mail
-* Apache Kafka
 * Swagger
 * Redis Caching
 * JPA
-
-#### Mail Templates
-* Template Engine - Thymeleaf
+* ElasticSearch
+* OpenFeign
+* EurekaClient
+* AWS S3
+* AOP
 
 ### Databases
-#### SQL
-* MySQL
 
 #### NoSQL
 * MongoDB
 * Redis
-
-#### Migrations
-* Flyway
 
 ### Code Write
 * Lombok
@@ -59,10 +50,7 @@ Microservices for e-commerce computer components store
 
 ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 ![ElasticSearch](https://img.shields.io/badge/-ElasticSearch-005571?style=for-the-badge&logo=elasticsearch)
 
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
-
-![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)
