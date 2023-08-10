@@ -4,6 +4,13 @@ Microservice that manages customers and customer orders. Handle charges to strip
 ![build](https://img.shields.io/github/actions/workflow/status/iNikitaGricenko/ComputerSystem/build.yml?style=for-the-badge/badge.svg)
 <br>
 
+# Sub Modules
+* ![Web Adapter](customer-adapter-web)
+* ![Application Logic Provider](customer-application-logic)
+* ![Main logic (Bussiness Logic)](customer-bussiness-logic)
+* ![Database Adapter](customer-persistence-gateway)
+* ![Server Main Class](customer-server)
+
 # Technologies
 
 ## Architecture

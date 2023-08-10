@@ -20,17 +20,27 @@ Microservices for e-commerce computer components store
 
 To stop docker containers exxecute command (in console from previous steps) "docker-compose stope"
 
+# Modules:
+* ![Product Service](ProductService)
+* ![Open Authentication 2 Server](OAuth2)
+* ![Notification Service](NotificationService)
+* ![Gateway Server](Gateway)
+* ![Eureka Server](Eureka)
+* ![Email Service](EmailServiceM)
+* ![Customer Service](CustomerService)
+* ![Jwt Authorization Server](AuthorizationServer)
+
 # Technologies
 
 ## Architecture
-* Microservices
+* Microservice
 
 ## Backend
 * Spring Boot
 * Spring Web
+* Gateway Server
 * Spring Cloud
 * Discovery Server (Netflix Eureka)
-* Gateway Server
 * OAuth2 Authorization Server
 * OAuth2 Resource Server
 * Spring Validation
@@ -61,6 +71,10 @@ To stop docker containers exxecute command (in console from previous steps) "doc
 
 #### Migrations
 * Flyway
+
+### Tests
+* JUnit 4/5
+* MockMVC
 
 ### Code Write
 * Lombok
