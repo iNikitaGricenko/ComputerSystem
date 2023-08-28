@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis
+  name: redis
+spec:
+  type: NodePort
+  ports:
+  - name: "http"
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    service: redis
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: redis
+      name: redis
+    spec:
+      containers:
+        image: bitnami/redis:latest:latest
+        name: redis
+        env:
+          - name: ALLOW_EMPTY_PASSWORD
+            value: yes
