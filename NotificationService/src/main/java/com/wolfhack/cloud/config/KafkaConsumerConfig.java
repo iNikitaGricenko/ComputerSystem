@@ -1,4 +1,4 @@
-package com.wolfhack.cloud.config;
+	package com.wolfhack.cloud.config;
 
 import com.wolfhack.cloud.model.MulticastMessagePOJO;
 import com.wolfhack.cloud.model.SubscriptionPOJO;
