@@ -183,7 +183,7 @@ services:
     container_name: eureka
     build:
       context: ./Eureka/
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "8761:8761"
@@ -191,11 +191,12 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     networks:
       - default
+
   gateway-server:
     container_name: gateway
     build:
       context: ./Gateway/
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -204,14 +205,33 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - eureka-server
-      - auth-server
+      - authorization-server
     networks:
       - default
-  auth-server:
-    container_name: auth-server
+
+  authorization-server:
+    container_name: authorization-server
+    build:
+      context: ./AuthorizationServer/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - eureka-server
+      - mysql
+    networks:
+      - mysql-eshop
+      - default
+
+  oauth2-server:
+    container_name: oauth2-server
     build:
       context: ./OAuth2/
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "8081:8081"
@@ -227,11 +247,43 @@ services:
   # End Cloud
 
   # Start Services
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ./NotificationService/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8085:8085"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - eureka-server
+    networks:
+      - default
+
+  email-service:
+    container_name: email-service
+    build:
+      context: ./EmailServiceM/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - eureka-server
+    networks:
+      - default
+
   product-service:
     container_name: product-service
     build:
       context: ./ProductService/
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "8091:8091"
@@ -246,11 +298,12 @@ services:
       - mongo-eshop
       - esnet
       - default
+
   customer-service:
     container_name: customer-service
     build:
       context: ./CustomerService/
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "8085:8085"

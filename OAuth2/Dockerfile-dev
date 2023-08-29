@@ -1,4 +1,0 @@
-FROM openjdk:17-alpine
-ARG JAR_FILE=oauth2-server/target/*.jar
-COPY ${JAR_FILE} auth-server.jar
-ENTRYPOINT ["java", "-jar", "auth-server.jar"]

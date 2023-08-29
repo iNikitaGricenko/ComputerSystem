@@ -7,7 +7,7 @@ mvn clean install
 ### build the docker images on minikube
 docker build -t gateway .
 
-### travel-agency-service
+### gateway-server
 kubectl delete -f ./gateway-deployment.yaml
 kubectl create -f ./gateway-deployment.yaml
 

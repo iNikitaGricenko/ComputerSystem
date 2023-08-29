@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data
+  labels:
+    app: elasticsearch
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  volumeName: elasticsearch
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,294 @@
+# Gateway
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: gateway-server
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        deploy: gateway
+  template:
+    metadata:
+      labels:
+        deploy: gateway
+    spec:
+      containers:
+        - name: gateway-server
+          image: inikitagricenko/computer-system-spring:gateway
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 8080
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+
+---
+
+# Eureka
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-service
+spec:
+  type: ClusterIP
+  selector:
+    app: eureka-server
+  ports:
+    - port: 8761
+      targetPort: 8761
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deploy: eureka
+  template:
+    metadata:
+      labels:
+        deploy: eureka
+    spec:
+      containers:
+        - name: eureka-server
+          image: inikitagricenko/computer-system-spring:eureka
+          imagePullPolicy: Never
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+
+---
+
+# Product Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  type: ClusterIP
+  selector:
+    app: product-service
+  ports:
+  - port: 8091
+    targetPort: 8091
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  selector:
+      matchLabels:
+        deploy: product-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        deploy: product-deployment
+    spec:
+      containers:
+        - name: product-service
+          image: inikitagricenko/computer-system-spring:product-service
+          imagePullPolicy: Never
+          resources:
+            requests:
+              memory: "1024Mi"
+            limits:
+              memory: "2048Mi"
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+            - name: spring.data.mongodb.username
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: mongo-secret
+            - name: spring.data.mongodb.password
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: mongo-secret
+
+---
+
+# Authorization Server
+apiVersion: v1
+kind: Service
+metadata:
+  name: authorization-service
+spec:
+  type: ClusterIP
+  selector:
+    app: authorization-server
+  ports:
+    - port: 8083
+      targetPort: 8083
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authorization-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deploy: authorization
+  template:
+    metadata:
+      labels:
+        deploy: authorization
+    spec:
+      containers:
+        - name: authorization-server
+          image: inikitagricenko/computer-system-spring:authorization-server
+          imagePullPolicy: Never
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+
+---
+
+# Customer Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-service
+spec:
+  type: ClusterIP
+  selector:
+    app: customer-service
+  ports:
+    - port: 8085
+      targetPort: 8085
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deploy: customer
+  template:
+    metadata:
+      labels:
+        deploy: customer
+    spec:
+      containers:
+        - name: customer-service
+          image: inikitagricenko/computer-system-spring:customer-service
+          imagePullPolicy: Never
+          resources:
+            requests:
+              memory: "1024Mi"
+            limits:
+              memory: "2048Mi"
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+
+---
+
+# Notification Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+spec:
+  type: ClusterIP
+  selector:
+    app: notification-service
+  ports:
+    - port: 8085
+      targetPort: 8085
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deploy: notification
+  template:
+    metadata:
+      labels:
+        deploy: notification
+    spec:
+      containers:
+        - name: notification-service
+          image: inikitagricenko/computer-system-spring:notification-service
+          imagePullPolicy: Never
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+
+---
+
+# Email Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-service
+spec:
+  type: ClusterIP
+  selector:
+    app: email-service
+  ports:
+    - port: 8085
+      targetPort: 8085
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deploy: email
+  template:
+    metadata:
+      labels:
+        deploy: email
+    spec:
+      containers:
+        - name: email-service
+          image: inikitagricenko/computer-system-spring:email-service
+          imagePullPolicy: Never
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-server:8761/eureka
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+
+#---
