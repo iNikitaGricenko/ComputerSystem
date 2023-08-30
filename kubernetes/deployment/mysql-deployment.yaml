@@ -52,6 +52,5 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: database
-      initContainers:
-      - name: auth-plugins
-        command: ["--default-authentication-plugin=mysql_native_password"]
+        - name: default-authentication-plugin
+          value: mysql_native_password

@@ -10,7 +10,7 @@ spec:
   ports:
   - name: zookeeper-port
     port: 2181
-    targetPort: 2181
+    targetPort: 22181
     nodePort: 30001
   selector:
     app: zookeeper
@@ -34,10 +34,10 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: library/zookeeper:3.4.13
+        image: confluentinc/cp-zookeeper:latest
         imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 2181
         env:
-        - name: ZOO_MY_ID
-          value: "1"
+        - name: ZOOKEEPER_CLIENT_PORT
+          value: '2181'
+        - name: ZOOKEEPER_TICK_TIME
+          value: '2000'

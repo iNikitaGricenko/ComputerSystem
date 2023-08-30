@@ -9,6 +9,8 @@ mvn clean package
 ### build the docker images on minikube
 
 ### Secret
+kubectl delete -f kubernetes/secret/reg-pod.yaml
+kubectl create -f kubernetes/secret/reg-pod.yaml
 kubectl apply -f kubernetes/secret/reg-pod.yaml
 kubectl get pod private-reg
 

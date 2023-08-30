@@ -35,7 +35,7 @@ public class AopConfiguration {
 	@Bean
 	public Advisor performanceMonitorAdvisor() {
 		AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-		pointcut.setExpression("com.wolfhack.cloud.product.config.AopConfiguration.monitor()");
+		pointcut.setExpression("com.wolfhack.cloud.customer.config.AopConfiguration.monitor()");
 		return new DefaultPointcutAdvisor(pointcut, performanceMonitorInterceptor());
 	}
 

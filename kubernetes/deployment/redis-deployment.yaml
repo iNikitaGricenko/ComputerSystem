@@ -1,43 +1,36 @@
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: v1
+kind: Service
 metadata:
-  name: redis-cluster
+  name: redis
+  namespace: default
+  labels:
+    app: redis
 spec:
-  serviceName: redis-cluster
-  replicas: 6
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: redis
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: redis-cluster
+      app: redis
   template:
     metadata:
       labels:
-        app: redis-cluster
+        app: redis
     spec:
       containers:
       - name: redis
-        image: redis:6.2.5
-        command: ["redis-server"]
-        args: ["/conf/redis.conf"]
+        image: 'bitnami/redis:latest'
         env:
-        - name: REDIS_CLUSTER_ANNOUNCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        ports:
-        - containerPort: 6379
-          name: client
-        - containerPort: 16379
-          name: gossip
-        volumeMounts:
-        - name: conf
-          mountPath: /conf
-        - name: data
-          mountPath: /data
-  volumeClaimTemplates:
-  - metadata:
-      name: data
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+        - name: ALLOW_EMPTY_PASSWORD
+          value: 'yes'

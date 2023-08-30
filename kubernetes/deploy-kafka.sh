@@ -5,6 +5,7 @@ kubectl delete -f deployment/kafka-deployment.yaml
 kubectl create -f deployment/zookeeper-deployment.yaml
 kubectl create -f deployment/kafka-deployment.yaml
 
+kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-ephemeral.yaml -n default
 kubectl apply -f deployment/zookeeper-deployment.yaml
 kubectl apply -f deployment/kafka-deployment.yaml
 

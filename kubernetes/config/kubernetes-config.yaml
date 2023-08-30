@@ -88,13 +88,13 @@ spec:
   selector:
     app: product-service
   ports:
-  - port: 8091
+  - port: 38091
     targetPort: 8091
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-service
+  name: product-deployment
 spec:
   selector:
       matchLabels:
@@ -111,9 +111,9 @@ spec:
           imagePullPolicy: Never
           resources:
             requests:
-              memory: "1024Mi"
-            limits:
               memory: "2048Mi"
+            limits:
+              memory: "4096Mi"
           env:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: http://eureka-server:8761/eureka
@@ -181,8 +181,8 @@ spec:
   selector:
     app: customer-service
   ports:
-    - port: 8085
-      targetPort: 8085
+    - port: 8088
+      targetPort: 8088
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -204,14 +204,16 @@ spec:
           imagePullPolicy: Never
           resources:
             requests:
-              memory: "1024Mi"
-            limits:
               memory: "2048Mi"
+            limits:
+              memory: "4096Mi"
           env:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: http://eureka-server:8761/eureka
             - name: SPRING_PROFILES_ACTIVE
               value: docker
+      imagePullSecrets:
+        - name: regcred
 
 ---
 
@@ -246,6 +248,11 @@ spec:
         - name: notification-service
           image: inikitagricenko/computer-system-spring:notification-service
           imagePullPolicy: Never
+          resources:
+            requests:
+              memory: "2048Mi"
+            limits:
+              memory: "4096Mi"
           env:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: http://eureka-server:8761/eureka
@@ -264,8 +271,8 @@ spec:
   selector:
     app: email-service
   ports:
-    - port: 8085
-      targetPort: 8085
+    - port: 8087
+      targetPort: 8087
 ---
 apiVersion: apps/v1
 kind: Deployment
