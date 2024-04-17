@@ -104,3 +104,6 @@ To stop docker containers exxecute command (in console from previous steps) "doc
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 
 ![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)
+
+
+Owner avatar ComputerSystem © 2024 by Nikita Hrytsenko is licensed under CC BY-NC-ND 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/
